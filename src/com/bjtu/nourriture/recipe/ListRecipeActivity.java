@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 
+import org.apache.commons.collections.Buffer;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -12,12 +13,14 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bjtu.nourriture.R;
 
@@ -27,20 +30,24 @@ public class ListRecipeActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recipe_list_all);
+		TextView testView = (TextView)findViewById(R.id.textView1);
 		String recipeRecult = getRecipeList();
-		/*try {
-			JSONObject jsonObject = new JSONObject(recipeRecult).getJSONObject("root");
+		try {
+			JSONObject jsonObject = new JSONObject(recipeRecult);
+			System.out.println("==============");
 			System.out.println(jsonObject);
-			ListView listview=(ListView) findViewById(R.id.listView1);  
+			testView.append(jsonObject.toString());
+			/*ListView listview=(ListView) findViewById(R.id.listView1);  
 	        String[] ss = new String[5];
 	        for(int i = 0 ; i < 5 ; i++){
 	        	ss[i] = "hi"+i;
 	        }
 	        ArrayAdapter aa=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,ss);    
-	        listview.setAdapter(aa);
+	        listview.setAdapter(aa);*/
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
-		}  */
+		} 
 		
 	}
 	
