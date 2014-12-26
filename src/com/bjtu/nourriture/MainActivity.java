@@ -1,9 +1,13 @@
 package com.bjtu.nourriture;
 
+import com.bjtu.nourriture.recipe.ListRecipeActivity;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 //hihihi
 //da ping guo
 public class MainActivity extends Activity {
@@ -31,5 +35,11 @@ public class MainActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void toListRecipe(View view){
+		Intent intent = new Intent();
+		intent.setClass(MainActivity.this,ListRecipeActivity.class);
+		startActivity(intent);
 	}
 }
