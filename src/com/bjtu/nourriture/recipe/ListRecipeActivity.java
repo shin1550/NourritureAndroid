@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.util.ArrayList;
 
-import org.apache.commons.collections.Buffer;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -13,16 +13,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bjtu.nourriture.R;
+import com.bjtu.nourriture.recipe.adapter.ListRecipeAdapter;
 
 public class ListRecipeActivity extends Activity{
 
@@ -35,15 +34,21 @@ public class ListRecipeActivity extends Activity{
 		try {
 			JSONObject jsonObject = new JSONObject(recipeRecult);
 			System.out.println("==============");
-			System.out.println(jsonObject);
-			testView.append(jsonObject.toString());
-			/*ListView listview=(ListView) findViewById(R.id.listView1);  
-	        String[] ss = new String[5];
-	        for(int i = 0 ; i < 5 ; i++){
-	        	ss[i] = "hi"+i;
-	        }
-	        ArrayAdapter aa=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,ss);    
-	        listview.setAdapter(aa);*/
+			JSONArray jsonArray = jsonObject.getJSONArray("root");
+			//System.out.println(jsonArray);
+			//testView.append(jsonArray.toString());
+			ArrayList<String> list = new ArrayList<String>();
+			for(int i=0;i<jsonArray.length();i++){   
+                JSONObject jo = (JSONObject)jsonArray.opt(i);
+                list.add(jo.toString());
+                //ss[i]=jo.getInt("id")+"  "+jo.getString("name")+"  "+jo.getString("地址");  
+            }
+			
+			 //(ArrayList)JSONArray.toList(jsonArray, String.class);
+			ListView listview=(ListView) findViewById(R.id.listView1);   
+	        ListRecipeAdapter adapter = new ListRecipeAdapter(this,list);
+	        //adapter.setArrayList(list);
+			listview.setAdapter(adapter);
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
