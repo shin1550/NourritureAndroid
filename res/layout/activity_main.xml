@@ -1,5 +1,48 @@
+<com.bjtu.nourriture.SlidingMenu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:silding="http://schemas.android.com/apk/res/com.bjtu.nourriture"
+    android:id="@+id/id_menu"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:scrollbars="none"
+    silding:rightPadding="100dp"
+    tools:context="com.bjtu.nourriture.MainActivity" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" >
+
+        <include layout="@layout/layout_menu" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ccc" >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="toggleMenu"
+                android:text="切换菜单" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textView1"
+                android:layout_below="@+id/textView1"
+                android:layout_marginTop="16dp"
+                android:onClick="toListRecipe"
+                android:text="to list recipe" />
+        </LinearLayout>
+    </LinearLayout>
+
+</com.bjtu.nourriture.SlidingMenu><!--
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:silding="http://schemas.android.com/apk/res/com.bjtu.nourriture"
+    android:id="@+id/id_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -8,11 +51,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.bjtu.nourriture.MainActivity" >
 
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="toggleMenu"
+        android:text="切换菜单" />
 
     <Button
         android:id="@+id/button1"
@@ -21,7 +71,8 @@
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="16dp"
-        android:text="to list recipe"
-        android:onClick="toListRecipe" />
+        android:onClick="toListRecipe"
+        android:text="to list recipe" />
 
 </RelativeLayout>
+-->

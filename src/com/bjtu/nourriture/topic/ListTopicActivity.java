@@ -1,23 +1,18 @@
-package com.bjtu.nourriture;
+package com.bjtu.nourriture.topic;
 
-import com.bjtu.nourriture.recipe.ListRecipeActivity;
+import com.bjtu.nourriture.R;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-//hihihi
-//da ping guo
-public class MainActivity extends Activity {
 
-	private SlidingMenu mMenu;
+public class ListTopicActivity extends Activity{
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mMenu = (SlidingMenu) findViewById(R.id.id_menu);
 	}
 
 	@Override
@@ -39,15 +34,7 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void toListRecipe(View view){
-		Intent intent = new Intent();
-		intent.setClass(MainActivity.this,ListRecipeActivity.class);
-		startActivity(intent);
-	}
 	
-	public void toggleMenu(View view)
-	{
-		mMenu.toggle();
-	}
 	
+
 }

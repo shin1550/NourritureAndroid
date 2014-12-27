@@ -145,19 +145,23 @@ public class ListRecipeActivity extends Activity{
 			this.list = list;
 		}
 		
+		@Override
 		public int getCount(){
 			return list.size();
 		}
 		
+		@Override
 		public JSONObject getItem(int positon){
 			JSONObject item = list.get(positon);
 			return item;
 		}
 		
+		@Override
 		public long getItemId(int position){
 			return position;
 		}
 		
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent){
 			/*TextView textView = new TextView(context);
 			textView.setTextSize(1,30);
