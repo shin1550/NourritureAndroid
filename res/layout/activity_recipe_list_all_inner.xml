@@ -14,57 +14,56 @@
         android:layout_marginRight="5dp">  
           
         <ImageView       
-            android:id="@+id/list_image"     
-            android:layout_width="50dp"
-            android:layout_height="50dp"  
+            android:id="@+id/list_image"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
             android:src="@drawable/ic_launcher"/>  
           
     </LinearLayout>  
       
-    <!-- 歌曲名-->  
+    <!-- 菜谱名 -->  
     <TextView  
-        android:id="@+id/recipe_name"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content"  
-        android:layout_alignTop="@+id/thumbnail"  
-        android:layout_toRightOf="@+id/thumbnail"  
-        android:text="Rihanna Love the way lie"  
-        android:textColor="#040404"  
-        android:typeface="sans"   
-        android:textSize="15dip"  
-        android:textStyle="bold"/>  
+        android:id="@+id/recipe_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Rihanna Love the way lie"
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
   
-    <!-- 歌手名 -->  
+    <!-- 菜谱材料 -->  
     <TextView  
-        android:id="@+id/recipe_material"  
-        android:layout_width="fill_parent"  
-        android:layout_height="wrap_content"  
-        android:layout_below="@id/recipe_name"  
-        android:textColor="#343434"  
-        android:textSize="10dp"  
-        android:layout_marginTop="1dp"  
-        android:layout_toRightOf="@+id/thumbnail"  
-        android:text="Just gona stand there and ..." />  
+        android:id="@+id/recipe_material"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipe_name"
+        android:textColor="#343434"
+        android:textSize="13sp" 
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Just gona stand there and ..." />
   
-    <!-- 歌曲播放时间 -->  
+    <!-- 其他信息 -->  
     <TextView  
-        android:id="@+id/recipe_hot"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content"  
-        android:layout_alignParentRight="true"  
-        android:layout_alignTop="@id/recipe_name"  
-        android:gravity="right"  
-        android:text="5:45"  
-        android:layout_marginRight="5dp"  
-        android:textSize="10dp"  
-        android:textColor="#10bcc9"  
-        android:textStyle="bold"/>  
+        android:id="@+id/recipe_hot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/recipe_name"
+        android:layout_alignBottom="@id/thumbnail"
+        android:text="5:45"
+        android:layout_marginRight="5dp"
+        android:textSize="12sp"
+        android:textColor="#343434" />  
         
      <!-- 进入播放 -->      
-     <ImageView android:layout_width="wrap_content"  
-        android:layout_height="wrap_content"  
-        android:src="@drawable/ic_launcher"  
-        android:layout_alignParentRight="true"  
-        android:layout_centerVertical="true"/>  
+     <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
 
 </RelativeLayout>
