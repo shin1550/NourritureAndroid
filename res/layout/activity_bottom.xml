@@ -27,8 +27,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="状态"
-                android:textColor="#fff"
+                android:text="Back"
+                android:textColor="#ccc"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -46,6 +46,12 @@
                 android:clickable="true"
                 android:scaleType="matrix"
                 android:src="@drawable/ic_launcher" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="#ccc"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -67,8 +73,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="好友"
-                android:textColor="#fff"
+                android:text="meixianghao"
+                android:textColor="#ccc"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
