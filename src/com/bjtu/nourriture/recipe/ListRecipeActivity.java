@@ -17,11 +17,14 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -37,7 +40,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
-public class ListRecipeActivity extends Activity{
+public class ListRecipeActivity extends Activity implements AdapterView.OnItemClickListener{
 
 	DisplayImageOptions options;
 	
@@ -45,6 +48,14 @@ public class ListRecipeActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())  
+        .threadPriority(Thread.NORM_PRIORITY - 2)
+        .denyCacheImageMultipleSizesInMemory()  
+        .discCacheFileNameGenerator(new Md5FileNameGenerator())  
+        .tasksProcessingOrder(QueueProcessingType.LIFO)  
+        .build();  
+    	ImageLoader.getInstance().init(config);
+    	
 		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(R.drawable.ic_launcher)
 		.showImageForEmptyUri(R.drawable.ic_launcher)
@@ -56,31 +67,16 @@ public class ListRecipeActivity extends Activity{
 		.build();
 		
 		setContentView(R.layout.activity_recipe_list_all);
-		TextView testView = (TextView)findViewById(R.id.textView1);
 		
-		String recipeRecult = getRecipeList();
-		try {
-			JSONObject jsonObject = new JSONObject(recipeRecult);
-			System.out.println("==============");
-			JSONArray jsonArray = jsonObject.getJSONArray("root");
-			//System.out.println(jsonArray);
-			//testView.append(jsonArray.toString());
-			ArrayList<JSONObject> list = new ArrayList<JSONObject>();
-			for(int i=0;i<jsonArray.length();i++){   
-                JSONObject jo = (JSONObject)jsonArray.opt(i);
-                list.add(jo);
-            }
-			
-			 //(ArrayList)JSONArray.toList(jsonArray, String.class);
-			ListView listview=(ListView) findViewById(R.id.listView1);   
-	        ListRecipeAdapter adapter = new ListRecipeAdapter(this,list);
-	        //adapter.setArrayList(list);
-			listview.setAdapter(adapter);
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} 
+		ListRecipeTask task = new ListRecipeTask();
+		ListView listview=(ListView) findViewById(R.id.listView1);
+		ArrayList<JSONObject> list = new ArrayList<JSONObject>();
+		task.listView = listview;
+		task.activity = this;
+		task.list = list;
+		task.execute();
 		
+		listview.setOnItemClickListener(this);
 	}
 	
 	public String getRecipeList(){
@@ -92,7 +88,7 @@ public class ListRecipeActivity extends Activity{
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
             request.setURI(new URI(
-                    "http://123.57.38.31:3000/service/recipe/listAll?pageNo=1&pageSize=3"));
+                    "http://123.57.38.31:3000/service/recipe/listAll?pageNo=1&pageSize=10"));
             HttpResponse response = client.execute(request);
             reader = new BufferedReader(new InputStreamReader(response
                     .getEntity().getContent()));
@@ -120,12 +116,14 @@ public class ListRecipeActivity extends Activity{
         return result;
 	}
 	
+	public void onItemClick(AdapterView parent, View view, int pos, long id){
+		System.out.println("----------click--------------");
+	}
+	
 	class ListRecipeAdapter extends BaseAdapter{
-
 		ArrayList<JSONObject> list;
 		Context context;
 		private Activity activity;  
-	    //private ArrayList<HashMap<String, String>> data;  
 	    private LayoutInflater inflater=null;  
 	    public ImageLoader imageLoader;
 	    
@@ -133,8 +131,6 @@ public class ListRecipeActivity extends Activity{
 	    	activity = a;  
 	        list=d;
 	        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        //imageLoader=new ImageLoader();
-	        //imageLoader=new ImageLoader(activity.getApplicationContext());
 	    }
 	    
 		public void setContext(Context context){
@@ -163,13 +159,8 @@ public class ListRecipeActivity extends Activity{
 		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent){
-			/*TextView textView = new TextView(context);
-			textView.setTextSize(1,30);
-			String string = getItem(position);
-			textView.setText(string);
-			return textView;*/
-			
 			View vi=convertView;
+			JSONObject oneRecipe = list.get(position);
 	        if(convertView==null)
 	            vi = inflater.inflate(R.layout.activity_recipe_list_all_inner, null);
 	  
@@ -178,63 +169,60 @@ public class ListRecipeActivity extends Activity{
 	        TextView hot = (TextView)vi.findViewById(R.id.recipe_hot);
 	        ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image); // 缩略图  
 	          
-	        //HashMap<String, String> song = new HashMap<String, String>();  
-	        //item = list.get(position);
-	          
 	        // 设置ListView的相关值  
 	        name.setText("recipe name here");
 	        try {
-	        	name.setText(list.get(position).getString("recipeName"));
+	        	name.setText(oneRecipe.getString("recipeName"));
 	        	String mString = "";
-	        	JSONArray mArray = list.get(position).getJSONArray("material");
+	        	JSONArray mArray = oneRecipe.getJSONArray("material");
 	        	for(int i=0;i<mArray.length();i++){
 	                JSONObject jo = (JSONObject)mArray.opt(i);
 	                mString +=jo.getString("materialName")+"  ";
 	            }
 				material.setText(mString);
-				hot.setText("Collect Num : " + list.get(position).getString("collectNum")+"    Comment Num : "+list.get(position).getString("commentNum"));
+				hot.setText("Collect Num : " +oneRecipe.getString("collectNum")+"    Comment Num : "+list.get(position).getString("commentNum"));
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}  
-	        //hot.setText(song.get(CustomizedListView.KEY_DURATION));
 	        
 	        try {
-	        	File cacheDir = StorageUtils.getOwnCacheDirectory(getApplicationContext(), "imageloader/Cache");
-	        	
-	        	ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())  
-                .threadPriority(Thread.NORM_PRIORITY - 2)  
-                .denyCacheImageMultipleSizesInMemory()  
-                .discCacheFileNameGenerator(new Md5FileNameGenerator())  
-                .tasksProcessingOrder(QueueProcessingType.LIFO)  
-                //.enableLogging() // Not necessary in common  
-                .build();  
-	        	ImageLoader.getInstance().init(config);
-	        	
 				ImageLoader.getInstance()
 				.displayImage("http://123.57.38.31:3000/"+list.get(position).getString("photo").trim(), thumb_image, options, new SimpleImageLoadingListener() {
-					/*@Override
-					public void onLoadingStarted(String imageUri, View view) {
-						holder.progressBar.setProgress(0);
-						holder.progressBar.setVisibility(View.VISIBLE);
-					}
-
-					@Override
-					public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-						holder.progressBar.setVisibility(View.GONE);
-					}
-
-					@Override
-					public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-						holder.progressBar.setVisibility(View.GONE);
-					}*/
 				});
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	        //imageLoader.DisplayImage(list.get(position).getString("photo"), thumb_image);
 	        return vi;
 		}
 	}
+	
+	class ListRecipeTask extends AsyncTask<Object, Object, Object>{
+		ListView listView;
+		ListRecipeActivity activity;
+		ArrayList<JSONObject> list;
+		
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			String recipeRecult = getRecipeList();
+			try {
+				JSONObject jsonObject = new JSONObject(recipeRecult);
+				JSONArray jsonArray = jsonObject.getJSONArray("root");
+				for(int i=0;i<jsonArray.length();i++){   
+	                JSONObject jo = (JSONObject)jsonArray.opt(i);
+	                list.add(jo);
+	            }
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		public void onPostExecute(Object result){
+			ListRecipeAdapter adapter = new ListRecipeAdapter(activity,list);
+	        listView.setAdapter(adapter);
+		}
+	}
+	
 }
