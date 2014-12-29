@@ -1,7 +1,6 @@
 package com.bjtu.nourriture.recipe;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -17,10 +16,10 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bjtu.nourriture.R;
+import com.bjtu.nourriture.common.Constants;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -38,11 +38,11 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 
 public class ListRecipeActivity extends Activity implements AdapterView.OnItemClickListener{
 
 	DisplayImageOptions options;
+	ArrayList<JSONObject> list = new ArrayList<JSONObject>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +67,9 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		.build();
 		
 		setContentView(R.layout.activity_recipe_list_all);
-		
 		ListRecipeTask task = new ListRecipeTask();
 		ListView listview=(ListView) findViewById(R.id.listView1);
-		ArrayList<JSONObject> list = new ArrayList<JSONObject>();
+		
 		task.listView = listview;
 		task.activity = this;
 		task.list = list;
@@ -116,8 +115,15 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
         return result;
 	}
 	
-	public void onItemClick(AdapterView parent, View view, int pos, long id){
+	public void onItemClick(AdapterView<?> arg0, View view, int pos, long id){
 		System.out.println("----------click--------------");
+		System.out.println(list.get(pos).toString());
+		
+		list.get(pos);
+		Intent intent = new Intent(this, SingleRecipeActivity.class);
+		
+		intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, list.get(pos).toString());
+		startActivity(intent);
 	}
 	
 	class ListRecipeAdapter extends BaseAdapter{
