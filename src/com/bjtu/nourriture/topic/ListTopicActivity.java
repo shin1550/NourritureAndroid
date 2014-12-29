@@ -1,18 +1,52 @@
 package com.bjtu.nourriture.topic;
 
+
+import com.bjtu.nourriture.ConnectToServer;
 import com.bjtu.nourriture.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class ListTopicActivity extends Activity{
+	
+	DisplayImageOptions options;
+	ConnectToServer connect;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		options = new DisplayImageOptions.Builder()
+		.showImageOnLoading(R.drawable.ic_launcher)
+		.showImageForEmptyUri(R.drawable.ic_launcher)
+		.showImageOnFail(R.drawable.ic_launcher)
+		.cacheInMemory(true)
+		.cacheOnDisk(true)
+		.considerExifParams(true)
+		.displayer(new RoundedBitmapDisplayer(20))
+		.build();
+		
+		setContentView(R.layout.activity_topic_list_all);
+		
+		
+		
+		//get topic list
+		String topicList;
+		try {
+			String url="/topic/showTopicList?pageNo=1&pageSize=6";
+			String method ="GET";
+			topicList = connect.testURLConn(url,method);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	
 	}
 
 	@Override
@@ -33,8 +67,6 @@ public class ListTopicActivity extends Activity{
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
 	
 
 }
