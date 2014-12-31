@@ -1,30 +1,22 @@
 package com.bjtu.nourriture;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.bjtu.nourriture.recipe.ListRecipeActivity;
-import com.bjtu.nourriture.topic.ListTopicActivity;
-//hihihi
-//da ping guo
-public class MainActivity extends Activity {
+public class TopicDetailActivity extends Activity {
 
-	private SlidingMenu mMenu;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		mMenu = (SlidingMenu) findViewById(R.id.id_menu);
+		setContentView(R.layout.activity_topic_detail);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.topic_detail, menu);
 		return true;
 	}
 
@@ -39,21 +31,4 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	public void toListRecipe(View view){
-		Intent intent = new Intent();
-		intent.setClass(MainActivity.this,ListRecipeActivity.class);
-		startActivity(intent);
-	}
-	public void toListTopic(View view){
-		Intent intent = new Intent();
-		intent.setClass(MainActivity.this,ListTopicActivity.class);
-		startActivity(intent);
-	}
-	
-	public void toggleMenu(View view)
-	{
-		mMenu.toggle();
-	}
-	
 }
