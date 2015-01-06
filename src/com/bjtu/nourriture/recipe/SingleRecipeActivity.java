@@ -12,8 +12,10 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class SingleRecipeActivity extends Activity{
 
@@ -36,22 +38,42 @@ public class SingleRecipeActivity extends Activity{
 		
 		Intent intent = getIntent();
 		String singleData = intent.getStringExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE);
-		JSONObject sinngleObject = null;
+		JSONObject singleObject = null;
 		try {
-			sinngleObject = new JSONObject(singleData);
+			singleObject = new JSONObject(singleData);
 			System.out.println("-----it's ok-------------");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		ImageView recipePhoto = (ImageView) findViewById(R.id.singleRecipePhoto);
+		ImageView recipeAuthorHead = (ImageView) findViewById(R.id.singleRecipeAuthorHead);
+		
 		try {
 			ImageLoader.getInstance()
-			.displayImage("http://123.57.38.31:3000/"+sinngleObject.getString("photo").trim(), recipePhoto, options, new SimpleImageLoadingListener() {
+			.displayImage("http://123.57.38.31:3000/"+singleObject.getString("photo").trim(), recipePhoto, options, new SimpleImageLoadingListener() {
 			});
+
+			ImageLoader.getInstance()
+			.displayImage("http://123.57.38.31:3000"+singleObject.getJSONObject("author").getString("head").trim(), recipeAuthorHead, options, new SimpleImageLoadingListener() {
+			});
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//recipePhoto.setImageResource("http://123.57.38.31:3000/"+sinngleObject.getString("photo").trim());
+		
+		TextView recipeNameTextView = (TextView) findViewById(R.id.singleRecipeName);
+		TextView singleRecipeAuthor = (TextView) findViewById(R.id.singleRecipeAuthor);
+		TextView singleRecipeCollectNum = (TextView) findViewById(R.id.singleRecipeCollectNum);
+		TextView singleRecipeCommentNum = (TextView) findViewById(R.id.singleRecipeCommentNum);
+		try {
+			recipeNameTextView.setText(singleObject.getString("recipeName"));
+			singleRecipeAuthor.setText(singleObject.getJSONObject("author").getString("account"));
+			singleRecipeCollectNum.setText(singleObject.getString("collectNum"));
+			singleRecipeCommentNum.setText(singleObject.getString("commentNum"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

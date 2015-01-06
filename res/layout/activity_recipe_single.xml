@@ -7,54 +7,93 @@
     <ImageView
         android:id="@+id/singleRecipePhoto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
         android:src="@drawable/ic_launcher" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/singleRecipeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:paddingLeft="3dp"
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="@string/recipe_recipeName" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher" />
+                android:id="@+id/singleRecipeAuthorHead"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+        		android:adjustViewBounds="true"
+        		android:scaleType="centerInside"
+                android:src="@drawable/ic_launcher"
+                android:layout_alignParentLeft="true" />
+            
+            <TextView
+		        android:id="@+id/singleRecipeAuthor"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:paddingLeft="3dp"
+		        android:textColor="#040404"
+		        android:typeface="sans"
+		        android:textSize="15sp"
+		        android:layout_toRightOf="@id/singleRecipeAuthorHead"
+		        android:layout_centerVertical="true"
+		        android:text="@string/recipe_recipeAuthor" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/singleCollectNumPic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/singleRecipeAuthorHead"
                 android:src="@drawable/ic_launcher" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/singleRecipeCollectNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:paddingLeft="3dp"
+		        android:textColor="#040404"
+		        android:typeface="sans"
+		        android:textSize="15sp"
+                android:layout_toRightOf="@id/singleCollectNumPic"
+                android:layout_centerVertical="true"
+                android:text="@string/recipe_recipeCollectNum" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/singleCommentNumPic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/singleRecipeAuthorHead"
+                android:layout_toRightOf="@id/singleRecipeCollectNum"
+                android:paddingTop="5dp"
                 android:src="@drawable/ic_launcher" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/singleRecipeCommentNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:paddingLeft="3dp"
+		        android:textColor="#040404"
+		        android:typeface="sans"
+		        android:textSize="15sp"
+                android:layout_toRightOf="@id/singleCommentNumPic"
+                android:layout_centerVertical="true"
+                android:text="@string/recipe_recipeCommentNum" />
         </RelativeLayout>
 
         <LinearLayout
@@ -76,7 +115,7 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="collect" />
             </LinearLayout>
             
             <LinearLayout
