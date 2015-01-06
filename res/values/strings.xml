@@ -10,4 +10,9 @@
 	<string name="recipe_recipeAuthor">Recipe Author Name</string>
 	<string name="recipe_recipeCommentNum">Recipe Comment Num</string>
 	<string name="recipe_recipeCollectNum">Recipe Collect Num</string>
+	<string name="recipe_collectRecipe">Collect</string>
+	<string name="recipe_difficultity">Difficultity:</string>
+	<string name="recipe_cookTime">Cook Time:</string>
+	<string name="recipe_material">Material</string>
+	
 </resources>

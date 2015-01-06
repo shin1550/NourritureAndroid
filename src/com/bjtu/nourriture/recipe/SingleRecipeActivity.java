@@ -66,11 +66,18 @@ public class SingleRecipeActivity extends Activity{
 		TextView singleRecipeAuthor = (TextView) findViewById(R.id.singleRecipeAuthor);
 		TextView singleRecipeCollectNum = (TextView) findViewById(R.id.singleRecipeCollectNum);
 		TextView singleRecipeCommentNum = (TextView) findViewById(R.id.singleRecipeCommentNum);
+		TextView singleRecipeDescription = (TextView) findViewById(R.id.singleRecipeDescription);
+		TextView singleRecipeDifficultity = (TextView) findViewById(R.id.singleRecipeDifficultity);
+		TextView singleRecipeTime = (TextView) findViewById(R.id.singleRecipeTime);
+		
 		try {
 			recipeNameTextView.setText(singleObject.getString("recipeName"));
 			singleRecipeAuthor.setText(singleObject.getJSONObject("author").getString("account"));
 			singleRecipeCollectNum.setText(singleObject.getString("collectNum"));
 			singleRecipeCommentNum.setText(singleObject.getString("commentNum"));
+			singleRecipeDescription.setText(singleObject.getString("description"));
+			singleRecipeDifficultity.append("   "+singleObject.getString("difficult"));
+			singleRecipeTime.append("   "+singleObject.getString("cookTime"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
