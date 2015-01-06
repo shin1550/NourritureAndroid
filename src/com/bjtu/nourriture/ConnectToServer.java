@@ -15,14 +15,11 @@ public class ConnectToServer {
 	final static String ipaddress="http://123.57.38.31:3000/";
 	@SuppressLint("NewApi")
 	public String testURLConn(String urlAdd,String method) throws Exception{
+		System.out.println("yes1---------");
 		
-		/*StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-		.detectDiskReads().detectDiskWrites().detectNetwork()
-		.penaltyLog().build());
-	    StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-		.detectLeakedSqlLiteObjects().detectLeakedClosableObjects()
-		.penaltyLog().penaltyDeath().build());*/
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
 	   
+	    System.out.println("yes---------");
 	    URL url=new URL(ipaddress+urlAdd);		
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setConnectTimeout(5 * 1000);		
@@ -31,7 +28,7 @@ public class ConnectToServer {
 			throw new RuntimeException("失败");
 		InputStream is = conn.getInputStream();
 		String result=readData(is, "UTF-8");
-		
+		System.out.println(result);
 		conn.disconnect();
 		return result;
 		

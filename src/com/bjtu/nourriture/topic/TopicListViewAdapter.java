@@ -1,30 +1,20 @@
 package com.bjtu.nourriture.topic;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bjtu.nourriture.GetImage;
 import com.bjtu.nourriture.R;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.utils.StorageUtils;
+
 
 public class TopicListViewAdapter extends BaseAdapter {
 	
@@ -33,14 +23,13 @@ public class TopicListViewAdapter extends BaseAdapter {
 	private Activity activity;  
     //private ArrayList<HashMap<String, String>> data;  
     private LayoutInflater inflater=null;  
-    public ImageLoader imageLoader;
+   
     
     public TopicListViewAdapter(Activity a, ArrayList<JSONObject> d){
     	activity = a;  
         list=d;
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //imageLoader=new ImageLoader();
-        //imageLoader=new ImageLoader(activity.getApplicationContext());
+       
     }
     
 	public void setContext(Context context){
@@ -74,10 +63,10 @@ public class TopicListViewAdapter extends BaseAdapter {
         if(convertView==null)
             vi = inflater.inflate(R.layout.activity_topic_list_all_inner, null);
   
-        TextView name = (TextView)vi.findViewById(R.id.recipe_name); 
-        TextView material = (TextView)vi.findViewById(R.id.recipe_material); 
-        TextView hot = (TextView)vi.findViewById(R.id.recipe_hot);
-        ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image); // 缩略图  
+        TextView name = (TextView)vi.findViewById(R.id.topic_name); 
+        TextView short_content = (TextView)vi.findViewById(R.id.topic_short_content); 
+        TextView author_and_hot = (TextView)vi.findViewById(R.id.topic_upload);
+        // 缩略图  
           
         //HashMap<String, String> song = new HashMap<String, String>();  
         //item = list.get(position);
@@ -85,15 +74,14 @@ public class TopicListViewAdapter extends BaseAdapter {
         // 设置ListView的相关值  
         name.setText("recipe name here");
         try {
-        	name.setText(list.get(position).getString("recipeName"));
-        	String mString = "";
-        	JSONArray mArray = list.get(position).getJSONArray("material");
-        	for(int i=0;i<mArray.length();i++){
-                JSONObject jo = (JSONObject)mArray.opt(i);
-                mString +=jo.getString("materialName")+"  ";
-            }
-			material.setText(mString);
-			hot.setText("Collect Num : " + list.get(position).getString("collectNum")+"    Comment Num : "+list.get(position).getString("commentNum"));
+        	name.setText("#"+list.get(position).getString("topicName")+"#");
+        	String topic_content = list.get(position).getString("content");
+        	if(topic_content.length()>105){//如果长度大于100则截取
+        		topic_content = topic_content.substring(0, 100);
+        	}
+        	
+        	short_content.setText(topic_content+"...");
+        	author_and_hot.setText(" Upload Count : "+list.get(position).getString("upload_count"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -104,7 +92,7 @@ public class TopicListViewAdapter extends BaseAdapter {
         return vi;
 	}
 	
-public void setViewImage(ImageView v, String value) {
+/*public void setViewImage(ImageView v, String value) {
 		
 		System.out.println("value---"+value);
 		if(value.equals("null")){
@@ -116,6 +104,6 @@ public void setViewImage(ImageView v, String value) {
 		}
 	 
 	 }
-	
+	*/
 
 }
