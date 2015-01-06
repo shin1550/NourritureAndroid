@@ -46,7 +46,6 @@ containing a value of this type.
         public static final int five=0x7f08001b;
         public static final int four=0x7f08001a;
         public static final int id_menu=0x7f080003;
-        public static final int imageView1=0x7f08000c;
         public static final int imageView2=0x7f08000d;
         public static final int imageView3=0x7f08000e;
         public static final int imageView4=0x7f080010;
@@ -61,6 +60,7 @@ containing a value of this type.
         public static final int recipe_hot=0x7f08000b;
         public static final int recipe_material=0x7f08000a;
         public static final int recipe_name=0x7f080009;
+        public static final int singleRecipePhoto=0x7f08000c;
         public static final int textView1=0x7f080004;
         public static final int textView2=0x7f08000f;
         public static final int textView3=0x7f080011;
