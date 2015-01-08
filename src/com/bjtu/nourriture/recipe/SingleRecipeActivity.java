@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
@@ -274,11 +275,11 @@ public class SingleRecipeActivity extends Activity{
 					e.printStackTrace();
 				}
 				commentHeadImageView.setPadding(10, 0, 0, 0);
-				commentUserAccount.setPadding(10, 3, 0, 0);
+				commentUserAccount.setPadding(10, 0, 0, 0);
 				commentUserAccount.setTextSize(12);
-				commentUserLayout.addView(commentHeadImageView,60,60);
+				commentUserLayout.addView(commentHeadImageView,70,60);
 				commentUserLayout.addView(commentUserAccount);
-				tablerow.addView(commentUserLayout);
+				tablerow.addView(commentUserLayout,70,88);
 				commentTime.setTextSize(12);
 				commentInfoLayout.addView(commentTime);
 				commentInfoLayout.addView(commentContent);
@@ -293,9 +294,9 @@ public class SingleRecipeActivity extends Activity{
 	public void commentIt(View view){
 		EditText newCommentEditText = (EditText) findViewById(R.id.singleNewComment);
 		String commentString = newCommentEditText.getText().toString();
-		System.out.println("-----"+commentString);
 		if(commentString == null || commentString.trim().equals("")){
-			System.out.println("-----empty comment");
+			Toast.makeText(getApplicationContext(), "Empty comment",
+				     Toast.LENGTH_SHORT).show();
 		}
  	}
 	
