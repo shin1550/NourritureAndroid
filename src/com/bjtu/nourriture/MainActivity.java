@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.bjtu.edu.nourriture.attention.ListAttentionActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 //hihihi
@@ -48,6 +49,11 @@ public class MainActivity extends Activity {
 	public void toListTopic(View view){
 		Intent intent = new Intent();
 		intent.setClass(MainActivity.this,ListTopicActivity.class);
+		startActivity(intent);
+	}
+	public void toListAttention(View view){
+		Intent intent = new Intent();
+		intent.setClass(MainActivity.this, ListAttentionActivity.class);
 		startActivity(intent);
 	}
 	
