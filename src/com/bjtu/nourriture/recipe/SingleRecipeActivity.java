@@ -294,7 +294,7 @@ public class SingleRecipeActivity extends Activity{
 		EditText newCommentEditText = (EditText) findViewById(R.id.singleNewComment);
 		String commentString = newCommentEditText.getText().toString();
 		System.out.println("-----"+commentString);
-		if(commentString == null || commentString.trim() == ""){
+		if(commentString == null || commentString.trim().equals("")){
 			System.out.println("-----empty comment");
 		}
  	}
