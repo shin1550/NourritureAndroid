@@ -81,7 +81,7 @@ public class TopicListViewAdapter extends BaseAdapter {
         	}
         	
         	short_content.setText(topic_content+"...");
-        	author_and_hot.setText(" Upload Count : "+list.get(position).getString("upload_count"));
+        	author_and_hot.setText("Upload Count : "+list.get(position).getString("upload_count"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
