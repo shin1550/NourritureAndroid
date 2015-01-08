@@ -32,6 +32,7 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bjtu.nourriture.attention.ListAttentionActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -130,6 +131,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	public void toListTopic(View view){
 		Intent intent = new Intent();
 		intent.setClass(MainActivity.this,ListTopicActivity.class);
+		startActivity(intent);
+	}
+	public void toListAttention(View view){
+		Intent intent = new Intent();
+		intent.setClass(MainActivity.this, ListAttentionActivity.class);
 		startActivity(intent);
 	}
 	
