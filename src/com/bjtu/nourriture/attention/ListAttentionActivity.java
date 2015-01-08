@@ -1,4 +1,4 @@
-package com.bjtu.edu.nourriture.attention;
+package com.bjtu.nourriture.attention;
 
 import java.io.BufferedReader;
 import java.io.IOException;

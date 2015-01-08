@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.bjtu.edu.nourriture.attention.ListAttentionActivity;
+import com.bjtu.nourriture.attention.ListAttentionActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 //hihihi
