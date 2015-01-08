@@ -23,10 +23,11 @@
             <Gallery
 	            android:id="@+id/homeRecipeGallery"
 	            android:layout_width="match_parent"
-	            android:layout_height="0dp"
-	            android:layout_weight="1"
+	            android:layout_height="wrap_content"
 	            android:layout_gravity="center_vertical"
-				android:spacing="1dip" />
+				android:spacing="1dip">
+                
+            </Gallery>
 
             <TextView
                 android:id="@+id/textView1"

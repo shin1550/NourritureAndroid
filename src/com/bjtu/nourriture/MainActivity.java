@@ -1,24 +1,87 @@
 package com.bjtu.nourriture;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.util.ArrayList;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Gallery;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
-//hihihi
-//da ping guo
-public class MainActivity extends Activity {
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
+public class MainActivity extends Activity implements AdapterView.OnItemClickListener{
 
 	private SlidingMenu mMenu;
+	ArrayList<JSONObject> galleryRecipeList = new ArrayList<JSONObject>();
+	DisplayImageOptions options;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mMenu = (SlidingMenu) findViewById(R.id.id_menu);
+		
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())  
+        .threadPriority(Thread.NORM_PRIORITY - 2)
+        .denyCacheImageMultipleSizesInMemory()  
+        .discCacheFileNameGenerator(new Md5FileNameGenerator())  
+        .tasksProcessingOrder(QueueProcessingType.LIFO)  
+        .build();  
+    	ImageLoader.getInstance().init(config);
+		
+		options = new DisplayImageOptions.Builder()
+		.showImageOnLoading(R.drawable.ic_launcher)
+		.showImageForEmptyUri(R.drawable.ic_launcher)
+		.showImageOnFail(R.drawable.ic_launcher)
+		.cacheInMemory(true)
+		.cacheOnDisk(true)
+		.considerExifParams(true)
+		.displayer(new RoundedBitmapDisplayer(20))
+		.build();
+		
+		GalleryRecipeTask task = new GalleryRecipeTask();
+		@SuppressWarnings("deprecation")
+		Gallery gallery=(Gallery) findViewById(R.id.homeRecipeGallery);
+		
+		task.list = galleryRecipeList;
+		task.gallery = gallery;
+		task.activity = this;
+		task.execute();
+		
+		gallery.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -40,6 +103,25 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View view, int pos, long id){
+		System.out.println("----------click--------------");
+		System.out.println(pos);
+		
+		/*galleryRecipeList.get(pos);
+		Intent intent = new Intent(this, SingleRecipeActivity.class);
+		
+		try {
+			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID, galleryRecipeList.get(pos).getString("_id"));
+			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, galleryRecipeList.get(pos).toString());
+			startActivity(intent);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+	}
+	
 	public void toListRecipe(View view){
 		Intent intent = new Intent();
 		intent.setClass(MainActivity.this,ListRecipeActivity.class);
@@ -54,6 +136,140 @@ public class MainActivity extends Activity {
 	public void toggleMenu(View view)
 	{
 		mMenu.toggle();
+	}
+	
+	private class RecipeGalleryImageAdapter extends BaseAdapter {
+		private LayoutInflater inflater;
+		Context context;
+		Activity activity;
+		ArrayList<JSONObject> list;
+		
+		public RecipeGalleryImageAdapter(Activity a, ArrayList<JSONObject> d){
+	    	activity = a;  
+	        list=d;
+	        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    }
+
+		public void setContext(Context context){
+			this.context = context;
+		}
+
+		public void setArrayList(ArrayList<JSONObject> list){
+			this.list = list;
+		}
+		
+		@Override
+		public int getCount(){
+			return list.size();
+		}
+		
+		@Override
+		public JSONObject getItem(int positon){
+			JSONObject item = list.get(positon);
+			return item;
+		}
+		
+		@Override
+		public long getItemId(int position){
+			if(position >= 5){
+				position = position%5;
+			}
+			return position;
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent){
+			View vi=convertView;
+			if(position >= 5){
+				position = position%5;
+			}
+			/*if(vi == null){
+				vi = ViewScaleType.get(position);
+			}*/
+			JSONObject oneRecipe = list.get(position);
+	        if(convertView==null)
+	            vi = inflater.inflate(R.layout.activity_main_recipe_gallery_inner, null);
+	  
+	        ImageView recipeGalleryImageView=(ImageView)vi.findViewById(R.id.recipeGalleryImage); // 缩略图
+	        TextView recipeGalleryName = (TextView)vi.findViewById(R.id.recipeGalleryName);
+	          
+	        try {
+	        	recipeGalleryName.setText(oneRecipe.getString("recipeName"));
+	        	ImageLoader.getInstance()
+				.displayImage("http://123.57.38.31:3000/"+list.get(position).getString("photo").trim(), recipeGalleryImageView, options, new SimpleImageLoadingListener() {
+				});
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}  
+	        
+	        return vi;
+		}
+	}
+	
+	class GalleryRecipeTask extends AsyncTask<Object, Object, Object>{
+		Gallery gallery;
+		MainActivity activity;
+		ArrayList<JSONObject> list;
+		
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			String recipeRecult = getRecipeGaleryList();
+			try {
+				JSONObject jsonObject = new JSONObject(recipeRecult);
+				JSONArray jsonArray = jsonObject.getJSONArray("root");
+				for(int i=0;i<jsonArray.length();i++){   
+	                JSONObject jo = (JSONObject)jsonArray.opt(i);
+	                list.add(jo);
+	            }
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		public void onPostExecute(Object result){
+			RecipeGalleryImageAdapter adapter = new RecipeGalleryImageAdapter(activity,list);
+			gallery.setAdapter(adapter);
+		}
+	}
+	
+	public String getRecipeGaleryList(){
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+		
+		String result = null;
+        BufferedReader reader = null;
+        try {
+            HttpClient client = new DefaultHttpClient();
+            HttpGet request = new HttpGet();
+            request.setURI(new URI(
+                    "http://123.57.38.31:3000/service/recipe/listAll?pageNo=1&pageSize=5"));
+            HttpResponse response = client.execute(request);
+            reader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+ 
+            StringBuffer strBuffer = new StringBuffer("");
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                strBuffer.append(line);
+            }
+            result = strBuffer.toString();
+ 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                    reader = null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        return result;
 	}
 	
 }

@@ -69,7 +69,7 @@ public class SingleRecipeActivity extends Activity{
 		.cacheInMemory(true)
 		.cacheOnDisk(true)
 		.considerExifParams(true)
-		.displayer(new RoundedBitmapDisplayer(20))
+		.displayer(new RoundedBitmapDisplayer(0))
 		.build();
 		
 		Intent intent = getIntent();
