@@ -14,10 +14,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -115,6 +117,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
         return result;
 	}
 	
+	@Override
 	public void onItemClick(AdapterView<?> arg0, View view, int pos, long id){
 		System.out.println("----------click--------------");
 		System.out.println(list.get(pos).toString());
@@ -122,8 +125,15 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		list.get(pos);
 		Intent intent = new Intent(this, SingleRecipeActivity.class);
 		
-		intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, list.get(pos).toString());
-		startActivity(intent);
+		try {
+			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID, list.get(pos).getString("_id"));
+			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, list.get(pos).toString());
+			startActivity(intent);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	class ListRecipeAdapter extends BaseAdapter{
@@ -225,6 +235,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 			return null;
 		}
 		
+		@Override
 		public void onPostExecute(Object result){
 			ListRecipeAdapter adapter = new ListRecipeAdapter(activity,list);
 	        listView.setAdapter(adapter);
