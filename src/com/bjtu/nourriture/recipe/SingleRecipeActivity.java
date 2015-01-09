@@ -4,12 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +36,7 @@ import android.widget.Toast;
 
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
+import com.bjtu.nourriture.common.Session;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -82,40 +87,7 @@ public class SingleRecipeActivity extends Activity{
 	}
 	
 	public String getCommentList(){
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-		
-		String result = null;
-        BufferedReader reader = null;
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet();
-            request.setURI(new URI(
-                    "http://123.57.38.31:3000/service/recipe/listComment?pageNo=1&pageSize=5&recipeId="+singleRecipeId));
-            HttpResponse response = client.execute(request);
-            reader = new BufferedReader(new InputStreamReader(response
-                    .getEntity().getContent()));
- 
-            StringBuffer strBuffer = new StringBuffer("");
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                strBuffer.append(line);
-            }
-            result = strBuffer.toString();
- 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                    reader = null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        return result;
+		return RecipeTalkToServer.recipeGet("recipe/listComment?pageNo=1&pageSize=5&recipeId="+singleRecipeId);
 	}
 	
 	class SingleRecipeTask extends AsyncTask<Object, Object, Object>{
@@ -297,6 +269,18 @@ public class SingleRecipeActivity extends Activity{
 		if(commentString == null || commentString.trim().equals("")){
 			Toast.makeText(getApplicationContext(), "Empty comment",
 				     Toast.LENGTH_SHORT).show();
+		}else{
+			Session session = Session.getSession();
+			if(session == null){
+				System.out.println("--------------no session----------");
+			}else{
+				System.out.println("------------"+session.get("username"));
+			}
+			List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_CONENT, commentString));
+            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_REPLYID, singleRecipeId));
+            String aString = RecipeTalkToServer.recipePost("recipe/comment",postParameters);
+            System.out.println("++++++++"+aString);
 		}
  	}
 	
