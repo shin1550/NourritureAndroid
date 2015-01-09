@@ -89,16 +89,14 @@ public class RegisterActivity extends Activity {
 						try {
 							registerConnection(accounts, emailString, pass);
 							handler.post(new Runnable() {
-								
 								@Override
 								public void run() {
-									proDia.dismiss();
 									Toast.makeText(RegisterActivity.this, "注册成功",Toast.LENGTH_SHORT).show();
 								}
 							});
-							
 						} catch (Exception e) {
 						} finally {
+							proDia.dismiss();
 							Intent intent = new Intent();
 							intent.setClass(RegisterActivity.this,MainActivity.class);
 							startActivity(intent);

@@ -65,6 +65,7 @@ public class LoginActivity extends Activity {
 				password = passText.getText().toString();
 				System.out.println("Account:" + username + "---------Password:"+ password);
 				proDia = ProgressDialog.show(LoginActivity.this, "登录","正在登录，请耐心等候");
+				proDia.show();
 				new Thread() {
 					@Override
 					public void run() {
@@ -74,20 +75,19 @@ public class LoginActivity extends Activity {
 							handler.post(new Runnable() {
 								@Override
 								public void run() {
-									// TODO Auto-generated method stub
-									proDia.dismiss();
-									Toast.makeText(LoginActivity.this,isSuccess, Toast.LENGTH_LONG).show();
+									Toast.makeText(LoginActivity.this,isSuccess, Toast.LENGTH_SHORT).show();
 								}
 							});
 						} catch (Exception e) {
 						} finally {
+							proDia.dismiss();
 							Intent intent = new Intent();
 							intent.setClass(LoginActivity.this,MainActivity.class);
 							startActivity(intent);
 						}
 					}
 				}.start();
-				proDia.show();
+				
 			}
 		});
 
