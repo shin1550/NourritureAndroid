@@ -18,7 +18,7 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="返回"
+            android:text="Back"
             android:textSize="14sp"
             android:textColor="#fff"
             android:onClick="login_back"
@@ -30,7 +30,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#ffffff"
-            android:text="登录"
+            android:text="Login"
            />
 
          <Button
@@ -38,14 +38,12 @@
              android:layout_width="70dp"
              android:layout_height="wrap_content"
              android:layout_alignParentRight="true"
-             android:layout_alignParentTop="true"
-             android:layout_marginRight="10dp"
+             android:background="@drawable/title_btn_right"
              android:onClick="login_back"
-             android:text="注册"
-             android:textStyle="bold"
+             android:text="Register"
              android:textColor="#fff"
-             android:textSize="14sp" 
-             android:background="@drawable/title_btn_right" />
+             android:textSize="14sp"
+             android:textStyle="bold" />
         
     </RelativeLayout>
     
@@ -61,7 +59,7 @@
 	    android:layout_marginRight="20dp"
 	    android:singleLine="true"
 	    android:background="@drawable/login_editbox"
-	    android:hint="账号"/>
+	    android:hint="Account"/>
 	<EditText 
 	    android:id="@+id/login_passwd_edit"
 	    android:layout_width="fill_parent"
@@ -75,7 +73,7 @@
 	    android:background="@drawable/login_editbox"
 	    android:password="true"
 	    android:singleLine="true"
-	    android:hint="请输入密码"/>
+	    android:hint="Password"/>
 	<RelativeLayout 
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
@@ -89,7 +87,7 @@
 	        android:layout_marginLeft="20dp"
 	        android:layout_marginRight="20dp"
 	        android:layout_alignParentRight="true"
-	        android:text="登录"
+	        android:text="Login"
 	        android:background="@drawable/btn_style_green"
 	        android:textColor="#ffffff"
 	        android:textSize="22sp"
