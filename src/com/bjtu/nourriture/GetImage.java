@@ -17,7 +17,7 @@ import android.graphics.BitmapFactory;
 public class GetImage {
 	
 	public static Bitmap getBitmapFromServer(String imagePath)
-	{  
+	{  		
 		String path="http://123.57.38.31:3000/"+imagePath;
 		HttpGet get = new HttpGet(path); 
 		HttpClient client = new DefaultHttpClient(); 

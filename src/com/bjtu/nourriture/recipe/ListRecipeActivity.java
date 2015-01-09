@@ -20,14 +20,18 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
@@ -43,6 +47,10 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 
 	DisplayImageOptions options;
 	ArrayList<JSONObject> list = new ArrayList<JSONObject>();
+	ListRecipeAdapter adapter;
+	int pageNo = 1;
+	int totalNumber;
+	int number;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +75,33 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		.build();
 		
 		setContentView(R.layout.activity_recipe_list_all);
-		ListRecipeTask task = new ListRecipeTask();
 		ListView listview=(ListView) findViewById(R.id.listView1);
-		
+		View loadMoreView;
+		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_list_loadmore, null);  
+    	listview.addFooterView(loadMoreView);
+    	
+    	adapter = new ListRecipeAdapter(this,list);
+    	listview.setAdapter(adapter);
+    	
+    	ListRecipeTask task = new ListRecipeTask();
 		task.listView = listview;
 		task.activity = this;
-		task.list = list;
+		//task.list = list;
+		//task.pageNo = pageNo;
 		task.execute();
 		
+		EditText searchEditText = (EditText) findViewById(R.id.listRecipeSearch);
+		searchEditText.setOnKeyListener(new OnKeyListener() {  
+            @Override  
+            public boolean onKey(View v, int keyCode, KeyEvent event) {  
+                if (KeyEvent.KEYCODE_ENTER == keyCode && event.getAction() == KeyEvent.ACTION_DOWN) {  
+                    searchRecipe1();
+                    return true;  
+                }  
+                return false;  
+  
+            }  
+        });
 		listview.setOnItemClickListener(this);
 	}
 	
@@ -87,7 +114,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
             request.setURI(new URI(
-                    "http://123.57.38.31:3000/service/recipe/listAll?pageNo=1&pageSize=10"));
+                    "http://123.57.38.31:3000/service/recipe/listAll?pageNo="+pageNo+"&pageSize=10"));
             HttpResponse response = client.execute(request);
             reader = new BufferedReader(new InputStreamReader(response
                     .getEntity().getContent()));
@@ -174,9 +201,12 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent){
 			View vi=convertView;
+			
 			JSONObject oneRecipe = list.get(position);
-	        if(convertView==null)
-	            vi = inflater.inflate(R.layout.activity_recipe_list_all_inner, null);
+	        if(convertView==null){
+	        	vi = inflater.inflate(R.layout.activity_recipe_list_all_inner, null);
+	        	
+	        }
 	  
 	        TextView name = (TextView)vi.findViewById(R.id.recipe_name); 
 	        TextView material = (TextView)vi.findViewById(R.id.recipe_material); 
@@ -215,14 +245,23 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	class ListRecipeTask extends AsyncTask<Object, Object, Object>{
 		ListView listView;
 		ListRecipeActivity activity;
-		ArrayList<JSONObject> list;
+		String search;
+		String recipeRecult;
 		
 		@Override
 		protected Object doInBackground(Object... arg0) {
-			String recipeRecult = getRecipeList();
+			if(search == null){
+				recipeRecult = getRecipeList();
+			}else{
+				recipeRecult = getSearchRecipeList(search);
+			}
+			
 			try {
 				JSONObject jsonObject = new JSONObject(recipeRecult);
 				JSONArray jsonArray = jsonObject.getJSONArray("root");
+				String totalString = jsonObject.getString("total");
+				totalNumber = Integer.parseInt(totalString);
+				number += jsonArray.length();
 				for(int i=0;i<jsonArray.length();i++){   
 	                JSONObject jo = (JSONObject)jsonArray.opt(i);
 	                list.add(jo);
@@ -235,9 +274,90 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		
 		@Override
 		public void onPostExecute(Object result){
-			ListRecipeAdapter adapter = new ListRecipeAdapter(activity,list);
-	        listView.setAdapter(adapter);
+			adapter.notifyDataSetChanged();
 		}
+	}
+	
+	public void loadMore(View view){
+		if(totalNumber <= number){
+			Toast.makeText(getApplicationContext(), "No more",
+				     Toast.LENGTH_SHORT).show();
+		}else{
+			pageNo += 1;
+			ListView listview=(ListView) findViewById(R.id.listView1);
+			ListRecipeTask task = new ListRecipeTask();
+			task.listView = listview;
+			task.activity = this;
+			task.execute();
+		}
+	}
+	
+	public void searchRecipe(View view){
+		searchRecipe1();
+	}
+	
+	public void searchRecipe1(){
+		EditText searchEditText = (EditText) findViewById(R.id.listRecipeSearch);
+		String searchString = searchEditText.getText().toString();
+		 
+		if(searchString == null || searchString.trim().equals("")){
+			/*Toast.makeText(getApplicationContext(), "Please enter something",
+				     Toast.LENGTH_SHORT).show();*/
+			pageNo = 1;
+			list.clear();
+			ListView listview=(ListView) findViewById(R.id.listView1);
+			ListRecipeTask task = new ListRecipeTask();
+			task.listView = listview;
+			task.activity = this;
+			task.search = null;
+			task.execute();
+		}else{
+			pageNo = 1;
+			list.clear();
+			ListView listview=(ListView) findViewById(R.id.listView1);
+			ListRecipeTask task = new ListRecipeTask();
+			task.listView = listview;
+			task.activity = this;
+			task.search = searchString;
+			task.execute();
+		}
+	}
+	
+	public String getSearchRecipeList(String search){
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+		
+		String result = null;
+        BufferedReader reader = null;
+        try {
+            HttpClient client = new DefaultHttpClient();
+            HttpGet request = new HttpGet();
+            request.setURI(new URI(
+            		"http://123.57.38.31:3000/service/recipe/search?pageNo="+pageNo+"&pageSize=10&queryStr="+search));
+            HttpResponse response = client.execute(request);
+            reader = new BufferedReader(new InputStreamReader(response
+                    .getEntity().getContent()));
+ 
+            StringBuffer strBuffer = new StringBuffer("");
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                strBuffer.append(line);
+            }
+            result = strBuffer.toString();
+ 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                    reader = null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        return result;
 	}
 	
 }
