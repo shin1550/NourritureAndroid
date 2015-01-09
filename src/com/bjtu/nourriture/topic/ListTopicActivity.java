@@ -8,8 +8,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+<<<<<<< HEAD
 import android.content.Context;
 import android.content.Intent;
+=======
+>>>>>>> 665bb41193233bd09d0028069dd34700e02723c4
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;

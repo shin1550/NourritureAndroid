@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.bjtu.nourriture.ConnectToServer;
-import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
