@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.bjtu.nourriture.TopicDetailActivity" >
+    tools:context="com.bjtu.nourriture.topic.TopicDetailActivity" >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -15,30 +15,38 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold" 
             android:text="Large Text"
+            android:textColor="#ff8000"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge" />
          <TextView
-	        android:id="@+id/textView2"
+	        android:id="@+id/content"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:text="TextView" />
          
           <TextView
-	        android:id="@+id/textView3"
+	        android:id="@+id/uploadcount"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:gravity="center"
+	        android:layout_marginTop="5dp"
 	        android:text="TextView"/>
     </LinearLayout>
 
     <GridView
         android:id="@+id/gridView1"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:verticalSpacing="1dp"
+        android:horizontalSpacing="1dp"
+        android:columnWidth="90dp"
+        android:gravity="center"
         android:layout_below="@+id/linearLayout1"
         android:numColumns="2" >
     </GridView>
