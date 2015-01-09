@@ -1,8 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffecec"
+     android:gravity="center"
     android:orientation="vertical" >
-    
+
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:gravity="center"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/upload_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="17dp"
+        android:text="name"
+        android:textColor="#ff8000"
+        android:textStyle="bold"  />
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Medium Text"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"        
+        android:gravity="center" >
+        
+         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+        	android:paddingRight="10dp"
+            android:background="@drawable/corners_bg"  >
+            
+             <ImageView
+            android:id="@+id/likeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:onClick=""
+            android:src="@drawable/like1" />
+
+       
+
+        <TextView
+            android:id="@+id/likeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/likeView"
+            android:textSize="13dp"
+            android:text="1" />
+        </LinearLayout>
+
+        
+    </LinearLayout>
 
 </LinearLayout>
