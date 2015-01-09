@@ -205,63 +205,6 @@ containing a value of this type.
         public static final int yellowb=0x7f0200aa;
     }
     public static final class id {
-<<<<<<< HEAD
-        public static final int action_settings=0x7f080036;
-        public static final int button1=0x7f08000c;
-        public static final int button2=0x7f08000d;
-        public static final int button3=0x7f08000e;
-        public static final int five=0x7f080035;
-        public static final int four=0x7f080034;
-        public static final int gridView1=0x7f08002c;
-        public static final int homeRecipeGallery=0x7f08000a;
-        public static final int id_menu=0x7f080009;
-        public static final int image=0x7f08000f;
-        public static final int imageView5=0x7f08001a;
-        public static final int img_address=0x7f080007;
-        public static final int img_friends=0x7f080008;
-        public static final int img_weixin=0x7f080006;
-        public static final int linearLayout1=0x7f080029;
-        public static final int listView1=0x7f080010;
-        public static final int listViewAttention=0x7f080000;
-        public static final int list_image=0x7f080002;
-        public static final int one=0x7f080031;
-        public static final int recipe_hot=0x7f080005;
-        public static final int recipe_material=0x7f080004;
-        public static final int recipe_name=0x7f080003;
-        public static final int singleAuthorInfo=0x7f080013;
-        public static final int singleCollectNumPic=0x7f080016;
-        public static final int singleCommentNumPic=0x7f080018;
-        public static final int singleCommentTable=0x7f080027;
-        public static final int singleMaterialTable=0x7f080022;
-        public static final int singleNewComment=0x7f080028;
-        public static final int singleRecipeAuthor=0x7f080015;
-        public static final int singleRecipeAuthorHead=0x7f080014;
-        public static final int singleRecipeCollectNum=0x7f080017;
-        public static final int singleRecipeComment=0x7f080026;
-        public static final int singleRecipeCommentNum=0x7f080019;
-        public static final int singleRecipeDescription=0x7f08001c;
-        public static final int singleRecipeDifficultity=0x7f08001f;
-        public static final int singleRecipeName=0x7f080012;
-        public static final int singleRecipePhoto=0x7f080011;
-        public static final int singleRecipeTime=0x7f080020;
-        public static final int singleStepTable=0x7f080025;
-        public static final int surfaceView1=0x7f08001d;
-        public static final int surfaceView2=0x7f080021;
-        public static final int surfaceView3=0x7f080023;
-        public static final int surfaceView4=0x7f080024;
-        public static final int tableRow1=0x7f08001e;
-        public static final int textView1=0x7f08000b;
-        public static final int textView2=0x7f08002a;
-        public static final int textView3=0x7f08002b;
-        public static final int textView4=0x7f08001b;
-        public static final int three=0x7f080033;
-        public static final int thumbnail=0x7f080001;
-        public static final int topic_list_view=0x7f08002d;
-        public static final int topic_name=0x7f08002e;
-        public static final int topic_short_content=0x7f08002f;
-        public static final int topic_upload=0x7f080030;
-        public static final int two=0x7f080032;
-=======
         public static final int action_settings=0x7f08004e;
         public static final int aggre=0x7f080035;
         public static final int author=0x7f08003d;
@@ -341,24 +284,11 @@ containing a value of this type.
         public static final int two=0x7f08004a;
         public static final int upload_name=0x7f08003c;
         public static final int uploadcount=0x7f080039;
->>>>>>> f7883bc508aa2c1f9d2098f3bdbe322ae9e9754a
     }
     public static final class layout {
         public static final int activity_attention_list_all=0x7f030000;
         public static final int activity_attention_list_all_inner=0x7f030001;
         public static final int activity_bottom=0x7f030002;
-<<<<<<< HEAD
-        public static final int activity_main=0x7f030003;
-        public static final int activity_main_recipe_gallery_inner=0x7f030004;
-        public static final int activity_recipe_list_all=0x7f030005;
-        public static final int activity_recipe_list_all_inner=0x7f030006;
-        public static final int activity_recipe_single=0x7f030007;
-        public static final int activity_topic_detail=0x7f030008;
-        public static final int activity_topic_detail_inner=0x7f030009;
-        public static final int activity_topic_list_all=0x7f03000a;
-        public static final int activity_topic_list_all_inner=0x7f03000b;
-        public static final int layout_menu=0x7f03000c;
-=======
         public static final int activity_login=0x7f030003;
         public static final int activity_main=0x7f030004;
         public static final int activity_main_recipe_gallery_inner=0x7f030005;
@@ -372,7 +302,6 @@ containing a value of this type.
         public static final int activity_topic_list_all=0x7f03000d;
         public static final int activity_topic_list_all_inner=0x7f03000e;
         public static final int layout_menu=0x7f03000f;
->>>>>>> f7883bc508aa2c1f9d2098f3bdbe322ae9e9754a
     }
     public static final class menu {
         public static final int main=0x7f070000;
@@ -382,19 +311,6 @@ containing a value of this type.
         public static final int action_settings=0x7f050002;
         public static final int app_name=0x7f050000;
         public static final int hello_world=0x7f050001;
-<<<<<<< HEAD
-        public static final int recipe_collectRecipe=0x7f050008;
-        public static final int recipe_comment=0x7f05000d;
-        public static final int recipe_comment_hint=0x7f05000e;
-        public static final int recipe_cookTime=0x7f05000a;
-        public static final int recipe_difficultity=0x7f050009;
-        public static final int recipe_material=0x7f05000b;
-        public static final int recipe_recipeAuthor=0x7f050005;
-        public static final int recipe_recipeCollectNum=0x7f050007;
-        public static final int recipe_recipeCommentNum=0x7f050006;
-        public static final int recipe_recipeName=0x7f050004;
-        public static final int recipe_step=0x7f05000c;
-=======
         public static final int menu_1=0x7f050004;
         public static final int recipe_collectRecipe=0x7f050009;
         public static final int recipe_comment=0x7f05000e;
@@ -407,7 +323,6 @@ containing a value of this type.
         public static final int recipe_recipeCommentNum=0x7f050007;
         public static final int recipe_recipeName=0x7f050005;
         public static final int recipe_step=0x7f05000d;
->>>>>>> f7883bc508aa2c1f9d2098f3bdbe322ae9e9754a
         public static final int title_activity_topic_detail=0x7f050003;
     }
     public static final class style {
