@@ -64,14 +64,13 @@
 
                 <ImageView
                     android:id="@+id/singleCollectNumPic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_width="35dp"
+                    android:layout_height="25dp"
                     android:layout_below="@id/singleRecipeAuthorHead"
                     android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:paddingTop="5dp"
-                    android:src="@drawable/ic_launcher" />
+                    android:src="@drawable/already_collect" />
 
                 <TextView
                     android:id="@+id/singleRecipeCollectNum"
@@ -88,14 +87,14 @@
 
                 <ImageView
                     android:id="@+id/singleCommentNumPic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="35dp"
+                    android:layout_height="25dp"
                     android:layout_below="@id/singleRecipeAuthorHead"
                     android:layout_toRightOf="@id/singleRecipeCollectNum"
                     android:paddingLeft="10dp"
                     android:paddingRight="0dp"
                     android:paddingTop="5dp"
-                    android:src="@drawable/ic_launcher" />
+                    android:src="@drawable/comment" />
 
                 <TextView
                     android:id="@+id/singleRecipeCommentNum"
@@ -117,12 +116,6 @@
                 android:layout_alignBottom="@id/singleAuthorInfo"
                 android:layout_alignParentRight="true"
                 android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher" />
 
                 <TextView
                     android:id="@+id/textView4"
@@ -244,10 +237,10 @@
 	            />
 	        
 	        <ImageView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
+	            android:layout_width="25dp"
+	            android:layout_height="25dp"
 	            android:layout_alignParentRight="true"
-	            android:src="@drawable/ic_launcher"
+	            android:src="@drawable/go"
 	            android:onClick="commentIt"/>
         </RelativeLayout>
     </LinearLayout>

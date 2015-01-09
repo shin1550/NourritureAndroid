@@ -251,7 +251,7 @@ public class SingleRecipeActivity extends Activity{
 				commentUserAccount.setTextSize(12);
 				commentUserLayout.addView(commentHeadImageView,70,60);
 				commentUserLayout.addView(commentUserAccount);
-				tablerow.addView(commentUserLayout,70,88);
+				tablerow.addView(commentUserLayout,70,95);
 				commentTime.setTextSize(12);
 				commentInfoLayout.addView(commentTime);
 				commentInfoLayout.addView(commentContent);
