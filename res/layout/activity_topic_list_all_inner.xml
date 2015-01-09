@@ -5,11 +5,29 @@
     android:orientation="horizontal"  
     android:padding="5dp" >
     
+    <LinearLayout android:id="@+id/thumbnail"   
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content"  
+        android:padding="3dp"        
+        android:layout_alignParentLeft="true"  
+        android:background="@drawable/ic_launcher" 
+        android:layout_marginRight="5dp">  
+          
+        <ImageView       
+            android:id="@+id/list_image"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_launcher"/>  
+          
+    </LinearLayout>  
+    
     <!-- 话题名 -->  
     <TextView  
         android:id="@+id/topic_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"    
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
         android:text="Rihanna Love the way lie"
         android:textColor="#040404"
         android:typeface="sans"
@@ -24,6 +42,7 @@
         android:layout_below="@id/topic_name"
         android:textColor="#343434"
         android:textSize="13sp" 
+        android:layout_toRightOf="@+id/thumbnail"
         android:layout_marginTop="1dp"
         android:layout_marginRight="55dp"
         android:text="Just gona stand there and ..." />
@@ -34,6 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/topic_short_content"
+        android:layout_toRightOf="@+id/thumbnail"
         android:text="5:45"
         android:layout_marginRight="5dp"
         android:textSize="12sp"

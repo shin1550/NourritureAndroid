@@ -16,11 +16,12 @@
            android:hint="search"/>
        
        <ImageView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
+           android:layout_width="30dp"
+           android:layout_height="30dp"
            android:layout_toRightOf="@id/listRecipeSearch"
+           android:scaleType="centerInside"
            android:layout_alignParentRight="true"
-           android:src="@drawable/ic_launcher"
+           android:src="@drawable/search_64"
            android:onClick="searchRecipe"/>
    </RelativeLayout>
    
