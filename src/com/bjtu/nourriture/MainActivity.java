@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,10 +32,12 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.attention.ListAttentionActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
+import com.bjtu.nourriture.user.LoginActivity;
+
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -46,6 +49,8 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener{
 
 	private SlidingMenu mMenu;
+	private View layout_1,layout_1_1;
+	private TextView menu_1_1;
 	ArrayList<JSONObject> galleryRecipeList = new ArrayList<JSONObject>();
 	DisplayImageOptions options;
 	
@@ -53,6 +58,22 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		layout_1 = this.findViewById(R.id.layout_1);
+		layout_1_1 = this.findViewById(R.id.layout_1_1);
+		menu_1_1 = (TextView)this.findViewById(R.id.menu_1_1);
+		//逻辑还存在问题，待修改
+		Session session = Session.getSession();
+		Boolean islogin=(Boolean)session.get("islogin");
+		System.out.println("islogin----"+islogin);
+		if(islogin!=null){
+			if(islogin){
+				layout_1.setVisibility(View.GONE);
+				layout_1_1.setVisibility(View.VISIBLE);
+				String username = (String) session.get("username");
+				String head = (String) session.get("head");
+				menu_1_1.setText(username);
+			}
+		}
 		mMenu = (SlidingMenu) findViewById(R.id.id_menu);
 		
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())  
@@ -136,6 +157,13 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	public void toListAttention(View view){
 		Intent intent = new Intent();
 		intent.setClass(MainActivity.this, ListAttentionActivity.class);
+		startActivity(intent);
+	}
+	
+	public void toMenu1(View view){
+		System.out.println("1");
+		Intent intent = new Intent();
+		intent.setClass(MainActivity.this,LoginActivity.class);
 		startActivity(intent);
 	}
 	
