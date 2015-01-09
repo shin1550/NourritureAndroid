@@ -106,40 +106,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	}
 	
 	public String getRecipeList(){
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-		
-		String result = null;
-        BufferedReader reader = null;
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet();
-            request.setURI(new URI(
-                    "http://123.57.38.31:3000/service/recipe/listAll?pageNo="+pageNo+"&pageSize=10"));
-            HttpResponse response = client.execute(request);
-            reader = new BufferedReader(new InputStreamReader(response
-                    .getEntity().getContent()));
- 
-            StringBuffer strBuffer = new StringBuffer("");
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                strBuffer.append(line);
-            }
-            result = strBuffer.toString();
- 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                    reader = null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        return result;
+		return RecipeTalkToServer.recipeGet("recipe/listAll?pageNo="+pageNo+"&pageSize=10");
 	}
 	
 	@Override
@@ -324,40 +291,8 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	}
 	
 	public String getSearchRecipeList(String search){
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+		return RecipeTalkToServer.recipeGet("recipe/search?pageNo="+pageNo+"&pageSize=10&queryStr="+search);
 		
-		String result = null;
-        BufferedReader reader = null;
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet();
-            request.setURI(new URI(
-            		"http://123.57.38.31:3000/service/recipe/search?pageNo="+pageNo+"&pageSize=10&queryStr="+search));
-            HttpResponse response = client.execute(request);
-            reader = new BufferedReader(new InputStreamReader(response
-                    .getEntity().getContent()));
- 
-            StringBuffer strBuffer = new StringBuffer("");
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                strBuffer.append(line);
-            }
-            result = strBuffer.toString();
- 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                    reader = null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        return result;
 	}
 	
 }
