@@ -23,10 +23,11 @@
             <Gallery
 	            android:id="@+id/homeRecipeGallery"
 	            android:layout_width="match_parent"
-	            android:layout_height="0dp"
-	            android:layout_weight="1"
+	            android:layout_height="wrap_content"
 	            android:layout_gravity="center_vertical"
-				android:spacing="1dip" />
+				android:spacing="1dip">
+                
+            </Gallery>
 
             <TextView
                 android:id="@+id/textView1"
@@ -59,6 +60,16 @@
                 android:layout_marginTop="16dp"
                 android:onClick="toListTopic"
                 android:text="to list topic" />
+            
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+    
+                android:layout_below="@+id/button2"
+                android:layout_marginTop="16dp"
+                android:onClick="toListAttention"
+                android:text="to list attention" />
         </LinearLayout>
 
         

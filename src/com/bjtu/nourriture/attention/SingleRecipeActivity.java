@@ -1,4 +1,4 @@
-package com.bjtu.nourriture.recipe;
+package com.bjtu.nourriture.attention;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -69,7 +69,7 @@ public class SingleRecipeActivity extends Activity{
 		.cacheInMemory(true)
 		.cacheOnDisk(true)
 		.considerExifParams(true)
-		.displayer(new RoundedBitmapDisplayer(0))
+		.displayer(new RoundedBitmapDisplayer(20))
 		.build();
 		
 		Intent intent = getIntent();
