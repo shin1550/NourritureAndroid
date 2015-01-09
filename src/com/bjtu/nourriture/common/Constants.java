@@ -8,5 +8,5 @@ public class Constants {
 	public static final String INTENT_EXTRA_SINGLE_RECIPE_ID = "singleRecipeId";
 	
 	public static final String POST_RECIPE_COMMENT_CONENT = "content";
-	public static final String POST_RECIPE_COMMENT_REPLYID = "replayId";
+	public static final String POST_RECIPE_COMMENT_REPLYID = "replyId";
 }
