@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,17 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.bjtu.nourriture.ConnectToServer;
-import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
-import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -234,8 +233,56 @@ public class TopicDetailActivity extends Activity {
 
 	}
 
-	public void addLike(View view) {
+	private class addlike implements OnItemClickListener{
 
+		@Override
+		public void onItemClick(AdapterView<?>parent, View view, int position,
+				long id) {
+			
+			System.out.println("----------click--------------");
+			
+			try {
+				
+				
+				String pictureId = list.get(position).getString("_id");
+				String url = "/topic/likeTopicUpload/"
+						+ pictureId;
+				String method = "GET";		
+				uploadListResult = connect.testURLConn(url, method);
+				JSONObject jsonObject = new JSONObject(uploadListResult);
+				String message = jsonObject.getString("message");
+				System.out.println("------message-------"+message);
+				if(message.equals("like successful")){
+					
+					TextView like_count = (TextView) view.findViewById(R.id.likeCount);
+					String count = (String)like_count.getText();
+					int countint = Integer.parseInt(count);
+					countint++;
+					
+					like_count.setText(countint);
+					
+				}
+				
+				
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		/*	System.out.println(list.get(position).toString());
+			
+			list.get(position);
+			Intent intent = new Intent();    
+   //         intent.setClass(ListTopicActivity.this, TopicDetailActivity.class); 
+			
+			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL, list.get(position).toString());
+			startActivity(intent);*/
+			
+		}
+		
 	}
 
 	public void uploadPicture(View view) {
