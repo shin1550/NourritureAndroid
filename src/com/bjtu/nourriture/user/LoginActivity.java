@@ -76,8 +76,7 @@ public class LoginActivity extends Activity {
 								public void run() {
 									// TODO Auto-generated method stub
 									proDia.dismiss();
-									Toast.makeText(LoginActivity.this,
-											isSuccess, Toast.LENGTH_LONG).show();
+									Toast.makeText(LoginActivity.this,isSuccess, Toast.LENGTH_LONG).show();
 								}
 							});
 						} catch (Exception e) {
@@ -141,6 +140,13 @@ public class LoginActivity extends Activity {
 		// Toast.makeText(LoginActivity.this,"登录失败",
 		// Toast.LENGTH_LONG).show();
 		// }
+		
+		
+		//测试isLogin
+		String url2="service/userinfo/isLogin";
+		ConnectToServer connect2 = new ConnectToServer();
+		String message2 = connect2.testURLConn2(url2,bytes);
+		System.out.println("message2----------" + message2);
 		
 	}
 	

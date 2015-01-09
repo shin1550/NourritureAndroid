@@ -53,6 +53,8 @@ public String testURLConn2(String urlAdd,byte[] bytes) throws Exception{
 		conn.setConnectTimeout(5 * 1000);
 		conn.setRequestMethod("POST");	
 		conn.getOutputStream().write(bytes);// 输入参数
+		int abc = conn.getResponseCode() ;
+		System. out.println("ResponseCode------"+abc);
 		if (conn.getResponseCode() != 200)
 			throw new RuntimeException("失败");
 		InputStream is = conn.getInputStream();
