@@ -65,6 +65,7 @@ public class LoginActivity extends Activity {
 				password = passText.getText().toString();
 				System.out.println("Account:" + username + "---------Password:"+ password);
 				proDia = ProgressDialog.show(LoginActivity.this, "登录","正在登录，请耐心等候");
+				proDia.show();
 				new Thread() {
 					@Override
 					public void run() {
@@ -74,20 +75,19 @@ public class LoginActivity extends Activity {
 							handler.post(new Runnable() {
 								@Override
 								public void run() {
-									// TODO Auto-generated method stub
-									proDia.dismiss();
-									Toast.makeText(LoginActivity.this,isSuccess, Toast.LENGTH_LONG).show();
+									Toast.makeText(LoginActivity.this,isSuccess, Toast.LENGTH_SHORT).show();
 								}
 							});
 						} catch (Exception e) {
 						} finally {
+							proDia.dismiss();
 							Intent intent = new Intent();
 							intent.setClass(LoginActivity.this,MainActivity.class);
 							startActivity(intent);
 						}
 					}
 				}.start();
-				proDia.show();
+				
 			}
 		});
 
@@ -130,23 +130,11 @@ public class LoginActivity extends Activity {
 		session.put("username", user_account);
 		session.put("head", user_head);
 		session.put("islogin", true);
-		// if(isSuccess.equals("success")){
-		// Intent intent = new Intent();
-		// intent.setClass(LoginActivity.this, IndexActivity.class);
-		// intent.putExtra("message", message);
-		// LoginActivity.this.startActivity(intent);
-		// }
-		// else{
-		// Toast.makeText(LoginActivity.this,"登录失败",
-		// Toast.LENGTH_LONG).show();
-		// }
-		
-		
-		//测试isLogin
-		String url2="service/userinfo/isLogin";
-		ConnectToServer connect2 = new ConnectToServer();
-		String message2 = connect2.testURLConn2(url2,bytes);
-		System.out.println("message2----------" + message2);
+//		//测试isLogin
+//		String url2="service/userinfo/isLogin";
+//		ConnectToServer connect2 = new ConnectToServer();
+//		String message2 = connect2.testURLConn2(url2,bytes);
+//		System.out.println("message2----------" + message2);
 		
 	}
 	
