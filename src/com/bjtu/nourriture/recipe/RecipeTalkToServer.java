@@ -6,12 +6,12 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -32,7 +32,7 @@ public class RecipeTalkToServer {
 		String result = null;
         BufferedReader reader = null;
         try {
-            HttpClient client = new DefaultHttpClient();
+            DefaultHttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
             request.setURI(new URI(
                     "http://123.57.38.31:3000/service/"+url));
@@ -59,7 +59,7 @@ public class RecipeTalkToServer {
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 HttpEntity entity = response.getEntity();
                 ret = EntityUtils.toString(entity);
-                CookieStore mCookieStore = ((AbstractHttpClient) client).getCookieStore();
+                CookieStore mCookieStore = client.getCookieStore();
                 List<Cookie> cookies = mCookieStore.getCookies();
                 System.out.println("---+++---");
                 System.out.println(cookies.toString());
@@ -95,11 +95,11 @@ public class RecipeTalkToServer {
 		String result = null;
         BufferedReader reader = null;
         try {
-            HttpClient client = new DefaultHttpClient();
+            DefaultHttpClient client = new DefaultHttpClient();
             HttpPost request = new HttpPost();
             request.setURI(new URI("http://123.57.38.31:3000/service/"+url));
             
-            CookieStore mCookieStore = ((AbstractHttpClient) client).getCookieStore();
+            CookieStore mCookieStore = client.getCookieStore();
             List<Cookie> cookies = mCookieStore.getCookies();
             System.out.println("---+++---");
             System.out.println(cookies.toString());
