@@ -16,7 +16,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
@@ -24,30 +23,31 @@ import android.os.StrictMode;
 
 public class RecipeTalkToServer {
 
+	static String PHPSESSID;
+	
 	public static String recipeGet(String url){
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
 		
-		String PHPSESSID = null;
 		String ret = "none";
 		String result = null;
         BufferedReader reader = null;
         try {
-            DefaultHttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet();
+        	HttpGet request = new HttpGet();
             request.setURI(new URI(
                     "http://123.57.38.31:3000/service/"+url));
-            
-            if(null != PHPSESSID){
+        	if(null != PHPSESSID){
             	request.setHeader("Cookie", "PHPSESSID=" + PHPSESSID);
-            } 
+            }
+            DefaultHttpClient client = new DefaultHttpClient();
+             
             /*CookieStore mCookieStore = ((AbstractHttpClient) client).getCookieStore();
             List<Cookie> cookies = mCookieStore.getCookies();
             System.out.println("---+++---");
             System.out.println(cookies.toString());*/
             
             HttpResponse response = client.execute(request);
-            reader = new BufferedReader(new InputStreamReader(response
-                    .getEntity().getContent()));
+            HttpEntity entity = response.getEntity();
+            reader = new BufferedReader(new InputStreamReader(entity.getContent()));
  
             StringBuffer strBuffer = new StringBuffer("");
             String line = null;
@@ -57,8 +57,8 @@ public class RecipeTalkToServer {
             result = strBuffer.toString();
  
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                HttpEntity entity = response.getEntity();
-                ret = EntityUtils.toString(entity);
+                //HttpEntity entity = response.getEntity();
+                //ret = EntityUtils.toString(entity);
                 CookieStore mCookieStore = client.getCookieStore();
                 List<Cookie> cookies = mCookieStore.getCookies();
                 System.out.println("---+++---");

@@ -61,7 +61,7 @@
         android:layout_marginTop="3dp"
         android:background="@drawable/login_editbox"
         android:ems="10"
-        android:hint="用户昵称"
+        android:hint="用户邮箱"
         android:singleLine="true"
         android:textColor="#000"
         android:textSize="15sp" >
