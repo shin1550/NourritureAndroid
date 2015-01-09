@@ -82,7 +82,7 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
 	
 	public String getRecipeList(){
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-		
+		//only recipe
 		String result = null;
         BufferedReader reader = null;
         try {
