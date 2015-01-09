@@ -58,8 +58,8 @@
     
                 android:layout_below="@+id/button1"
                 android:layout_marginTop="16dp"
-                android:onClick="toListTopic"
-                android:text="to list topic" />
+                android:onClick="toListAttention"
+                android:text="to list Attention" />
             
             <Button
                 android:id="@+id/button3"
@@ -68,8 +68,8 @@
     
                 android:layout_below="@+id/button2"
                 android:layout_marginTop="16dp"
-                android:onClick="toListAttention"
-                android:text="to list attention" />
+                android:onClick="toListTopic"
+                android:text="to list topic" />
         </LinearLayout>
 
         
