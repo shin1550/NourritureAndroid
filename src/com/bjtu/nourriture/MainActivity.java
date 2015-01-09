@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -61,11 +62,14 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
     ImageView one_oneImageView;
 	ArrayList<JSONObject> galleryRecipeList = new ArrayList<JSONObject>();
 	DisplayImageOptions options;
-	
+	Handler handler;
+	Bitmap bitmap;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		handler = new Handler();
 		layout_1 = this.findViewById(R.id.layout_1);
 		layout_1_1 = this.findViewById(R.id.layout_1_1);
 		menu_1_1 = (TextView)this.findViewById(R.id.menu_1_1);
@@ -83,9 +87,17 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 				head = "http://123.57.38.31:3000/"+(String) session.get("head");
 				new Thread(){
 					public void run() {
-						Bitmap bitmap = getHttpBitmap(head);
+						bitmap = getHttpBitmap(head);
 					    		 //从网上取图片
-						one_oneImageView .setImageBitmap(bitmap);	//设置Bitmap
+						handler.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								one_oneImageView .setImageBitmap(bitmap);	//设置Bitmap
+							}
+						});
+						
 					};
 				}.start();
 			}

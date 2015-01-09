@@ -130,23 +130,11 @@ public class LoginActivity extends Activity {
 		session.put("username", user_account);
 		session.put("head", user_head);
 		session.put("islogin", true);
-		// if(isSuccess.equals("success")){
-		// Intent intent = new Intent();
-		// intent.setClass(LoginActivity.this, IndexActivity.class);
-		// intent.putExtra("message", message);
-		// LoginActivity.this.startActivity(intent);
-		// }
-		// else{
-		// Toast.makeText(LoginActivity.this,"登录失败",
-		// Toast.LENGTH_LONG).show();
-		// }
-		
-		
-		//测试isLogin
-		String url2="service/userinfo/isLogin";
-		ConnectToServer connect2 = new ConnectToServer();
-		String message2 = connect2.testURLConn2(url2,bytes);
-		System.out.println("message2----------" + message2);
+//		//测试isLogin
+//		String url2="service/userinfo/isLogin";
+//		ConnectToServer connect2 = new ConnectToServer();
+//		String message2 = connect2.testURLConn2(url2,bytes);
+//		System.out.println("message2----------" + message2);
 		
 	}
 	
