@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
+import com.bjtu.nourriture.common.CheckHttpUtil;
 import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 
@@ -39,7 +40,7 @@ public class LoginActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
+		CheckHttpUtil.initIntener(this);
 		connect = new ConnectToServer();
 		accountText = (EditText) this.findViewById(R.id.login_user_edit);
 		passText = (EditText) this.findViewById(R.id.login_passwd_edit);
