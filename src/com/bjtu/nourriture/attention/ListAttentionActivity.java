@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,9 +31,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
+import com.bjtu.nourriture.common.Session;
+import com.bjtu.nourriture.recipe.RecipeTalkToServer;
+import com.bjtu.nourriture.user.LoginActivity;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -84,6 +91,24 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
 		String result = null;
         BufferedReader reader = null;
         try {
+        	Session session=Session.getSession();
+        	if(session.get("username") == null || session.get("username").equals("")){
+				Toast.makeText(getApplicationContext(), "Sign in please",
+					     Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(this, LoginActivity.class);
+				startActivity(intent);
+			}else{
+				List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+	            //postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_CONENT, commentString));
+	            //postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_REPLYID, singleRecipeId));
+	            
+	            postParameters.add(new BasicNameValuePair("androidId", "548c3b76aa90218a2272bdc1"));
+	            postParameters.add(new BasicNameValuePair("androidAccount", (String) session.get("username")));
+	            postParameters.add(new BasicNameValuePair("androidHead", (String) session.get("head")));
+	            String resultString = RecipeTalkToServer.recipePost("recipe/comment",postParameters);
+			}  
+        	
+        	
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
             request.setURI(new URI(
@@ -111,7 +136,7 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
                 }
             }
         }
-        
+        System.out.print("result===="+result); 
         return result;
 	}
 	
