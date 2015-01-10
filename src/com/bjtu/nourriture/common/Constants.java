@@ -20,4 +20,6 @@ public class Constants {
 	public static final String POST_UPLOAD_TOPIC_TITLE = "title";
 	public static final String POST_UPLOAD_TOPIC_STORY = "story";
 	public static final String POST_UPLOAD_TOPIC_PICTURE_PATH = "picture";
+			
+	public static String POST_SESSIONID = null;
 }

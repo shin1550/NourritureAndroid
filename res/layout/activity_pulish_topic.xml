@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.bjtu.nourriture.topic.PublishTopicActivity" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="topic name  here..." >
+
+         
+        </EditText>
+        
+        <EditText
+        android:id="@+id/topic_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minLines="5"
+        android:hint="topic content here..."
+        android:layout_below="@+id/title" />
+        
+           
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/my_topic_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="17dp"
+        android:src="@drawable/a2" />
+    
+        <LinearLayout
+        android:id="@+id/mybottom"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:background="#ffaf60"
+            android:descendantFocusability="blocksDescendants"
+            android:id="@+id/pulish_picture"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:src="@drawable/pb6" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="#ffffff"
+                android:text="Publish" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

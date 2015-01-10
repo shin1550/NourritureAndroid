@@ -9,13 +9,34 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-public class UploadTopicActivity extends Activity {
+public class PublishTopicActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_upload_topic);
+		setContentView(R.layout.activity_pulish_topic);
+		
+		EditText titleEditText = (EditText) findViewById(R.id.title);
+		EditText contentEditText = (EditText) findViewById(R.id.topic_content);		
+		ImageView picImageView = (ImageView) findViewById(R.id.my_topic_picture);
+		
+		
+		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.pulish_picture);
+		linearLayout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+				
+			}
+		});
+		
 	}
 
 	@Override

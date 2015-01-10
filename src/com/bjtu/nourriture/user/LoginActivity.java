@@ -113,10 +113,10 @@ public class LoginActivity extends Activity {
 				.append("&").append("password").append("=")
 				.append(password);
 		byte[] bytes = params.toString().getBytes();  //变为字节
-		message = connect.testURLConn2(url, bytes);
-		System.out.println("message----------" + message);
+		message = connect.testURLConn3(url, bytes);
 		JSONObject jsonObject = new JSONObject(message);
 		isSuccess = jsonObject.getString("message");
+		
 
 		// 将登录信息存入session
 
@@ -128,11 +128,13 @@ public class LoginActivity extends Activity {
 		user_head = userServer2.getString("head");
 		user_id=userServer2.getString("_id");
 		
+		String sessionid =jsonObject.getString("sessionId");
 		Session session=Session.getSession();
 		session.put("username", user_account);
 		session.put("head", user_head);
 		session.put("user_id",user_id);
 		session.put("islogin", true);
+		session.put("sessionId",sessionid);
 
 //		//测试isLogin
 //		String url2="service/userinfo/isLogin";
