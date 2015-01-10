@@ -1,15 +1,7 @@
 package com.bjtu.nourriture.recipe;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +39,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	DisplayImageOptions options;
 	ArrayList<JSONObject> list = new ArrayList<JSONObject>();
 	ListRecipeAdapter adapter;
+	ListView listview;
 	int pageNo = 1;
 	int totalNumber;
 	int number;
@@ -75,20 +67,20 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		.build();
 		
 		setContentView(R.layout.activity_recipe_list_all);
-		ListView listview=(ListView) findViewById(R.id.listView1);
-		View loadMoreView;
-		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_list_loadmore, null);  
-    	listview.addFooterView(loadMoreView);
+		listview=(ListView) findViewById(R.id.listView1);
     	
     	adapter = new ListRecipeAdapter(this,list);
-    	adapter.notifyDataSetChanged();
+    	listview.requestLayout();
     	listview.setAdapter(adapter);
+    	//adapter.notifyDataSetChanged();
+    	
+    	View loadMoreView;
+		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_comment_loadmore, null);  
+    	listview.addFooterView(loadMoreView);
     	
     	ListRecipeTask task = new ListRecipeTask();
 		task.listView = listview;
 		task.activity = this;
-		//task.list = list;
-		//task.pageNo = pageNo;
 		task.execute();
 		
 		EditText searchEditText = (EditText) findViewById(R.id.listRecipeSearch);
@@ -116,6 +108,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		System.out.println(list.get(pos).toString());
 		
 		list.get(pos);
+		//ImageLoaderConfiguration.;
 		Intent intent = new Intent(this, SingleRecipeActivity.class);
 		
 		try {
@@ -237,11 +230,13 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+			//adapter.notifyDataSetChanged();
 			return null;
 		}
 		
 		@Override
 		public void onPostExecute(Object result){
+			listview.requestLayout();
 			adapter.notifyDataSetChanged();
 		}
 	}
