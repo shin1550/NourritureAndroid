@@ -20,7 +20,8 @@
             android:paddingTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload Recipe"/>
+            android:text="Upload Recipe"
+            android:hint="Recipe Name"/>
         
         <ImageView 
             android:layout_alignParentRight="true"
@@ -54,18 +55,26 @@
     	        android:layout_width="match_parent"
     	        android:layout_height="wrap_content">
     	        <TextView
+    	            android:id="@+id/createRecipeDifficultity"
     	            android:layout_width="30dp"
+    	            android:paddingTop="5dp"
+    	            android:paddingBottom="5dp"
     	            android:layout_height="wrap_content"
-    	            android:text="Difficultity"
+    	            android:text="Difficultity:"
+    	            android:clickable="true"
     	            android:onClick="chooseDifficultity"/>
     	        <View
                     android:layout_width="0.5dp"
                     android:layout_height="fill_parent"
                     android:background="#040404" />
     	        <TextView
+    	            android:id="@+id/createRecipeTime"
     	            android:layout_width="30dp"
     	            android:layout_height="wrap_content"
-    	            android:text="Time:"
+    	            android:paddingTop="5dp"
+    	            android:paddingBottom="5dp"
+    	            android:text="Cook Time:"
+    	            android:clickable="true"
     	            android:onClick="chooseTime"/>
     	    </TableRow>
     	</TableLayout>
@@ -79,7 +88,7 @@
     	    <TableRow 
     	        android:layout_width="match_parent"
     	        android:layout_height="wrap_content">
-    	        <TextView
+    	        <EditText
     	            android:layout_width="30dp"
     	            android:layout_height="wrap_content"
     	            android:hint="Material"/>
@@ -87,7 +96,7 @@
                     android:layout_width="0.5dp"
                     android:layout_height="fill_parent"
                     android:background="#040404" />
-    	        <TextView
+    	        <EditText
     	            android:layout_width="30dp"
     	            android:layout_height="wrap_content"
     	            android:hint="Amount"/>
@@ -97,15 +106,16 @@
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:padding="10dp"
-    	    android:stretchColumns="0">
+    	    android:stretchColumns="0"
+    	    android:background="#ffffff">
     	    <TableRow 
     	        android:layout_width="match_parent"
     	        android:layout_height="wrap_content">
     	        <TextView
-    	            android:hint="materail"
     	            android:layout_width="30dp"
     	            android:layout_height="wrap_content"
     	            android:text="+Add one more"
+    	            android:clickable="true"
     	            android:onClick="addMoreMaterial"/>
     	    </TableRow>
     	</TableLayout>
@@ -123,12 +133,14 @@
     	<RelativeLayout 
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
-    	    android:background="#ffffff">
+    	    android:background="#ffffff"
+    	    android:onClick="showDialog"
+    	    android:paddingTop="10dp"
+    	    android:paddingBottom="10dp">
     	    <LinearLayout
     	        android:layout_width="wrap_content"
     	    	android:layout_height="wrap_content"
-    	    	android:layout_centerHorizontal="true"
-    	    	android:onClick="showDialog">
+    	    	android:layout_centerHorizontal="true">
     	        
     	        <ImageView
 	    	   	    android:layout_width="wrap_content"
@@ -143,4 +155,7 @@
     	    
     	</RelativeLayout>
 
+    	<ImageView
+    	    android:layout_width="match_parent"
+    	    android:layout_height="wrap_content"/>
 </LinearLayout>

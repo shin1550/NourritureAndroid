@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ public class CreateRecipeActivity extends Activity{
 	private static final int RESULT_REQUEST_CODE = 2;
 	private String picPath = null;
 	private static final String TAG = "ImageUtils";
+	private String[] difficultity = new String[]{"Junior Level","Middle Level","Senior Level"};
+	private String[] time = new String[] {"About 10 minutes","10 - 30 minutes","30 - 60 minutes","More than 60 minutes"};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +52,28 @@ public class CreateRecipeActivity extends Activity{
 		//CreateRecipeActivity.this.finish();
 	}
 	
-	public void chooseDifficultity(View view){
-		new AlertDialog.Builder(this)  
-		.setTitle("多选框")  
-		.setMultiChoiceItems(new String[] {"Junior Level","Middle Level","Senior Level"}, null, null)   
-		.show();
+	public void chooseDifficultity(View view){   
+        new AlertDialog.Builder(this)
+        .setTitle("Difficultity")
+        .setItems(difficultity,new DialogInterface.OnClickListener(){  
+            public void onClick(DialogInterface dialog, int which){
+            	TextView textView = (TextView) findViewById(R.id.createRecipeDifficultity);
+            	textView.append("Difficultity:\n"+difficultity[which]);
+            	dialog.dismiss();  
+            }  
+         }).show(); 
 	}
 	
 	public void chooseTime(View view){
-		new AlertDialog.Builder(this)  
-		.setTitle("多选框")  
-		.setMultiChoiceItems(new String[] {"About 10 minutes","10 - 30 minutes","30 - 60 minutes","More than 60 minutes"}, null, null)   
-		.show();
+		new AlertDialog.Builder(this)
+        .setTitle("Cook Time")
+        .setItems(time,new DialogInterface.OnClickListener(){  
+            public void onClick(DialogInterface dialog, int which){
+            	TextView textView = (TextView) findViewById(R.id.createRecipeTime);
+            	textView.append("Cook Time:\n"+time[which]);
+            	dialog.dismiss();  
+            }  
+         }).show();
 	}
 	
 	public void addMoreMaterial(View view){
@@ -68,11 +81,12 @@ public class CreateRecipeActivity extends Activity{
 		TableRow tablerow = new TableRow(CreateRecipeActivity.this);
 		tablerow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 		
-		TextView MaterialView = new TextView(CreateRecipeActivity.this);
-		TextView AmountView = new TextView(CreateRecipeActivity.this);
+		EditText MaterialView = new EditText(CreateRecipeActivity.this);
+		EditText AmountView = new EditText(CreateRecipeActivity.this);
 		View blankView = new View(CreateRecipeActivity.this);
 		blankView.setBackgroundColor(Color.GRAY);
-		//blankView.setLayoutParams(new LayoutParams(0.5,LayoutParams.MATCH_PARENT));
+		MaterialView.setHint("Material");
+		AmountView.setHint("Amount");
 		
 		tablerow.addView(MaterialView,10,LayoutParams.WRAP_CONTENT);
 		tablerow.addView(blankView, 1, LayoutParams.MATCH_PARENT);
@@ -130,7 +144,7 @@ public class CreateRecipeActivity extends Activity{
 			switch (requestCode) {
 			case IMAGE_REQUEST_CODE:
 				//startPhotoZoom(data.getData());
-				//startActivityForResult(data, 2);
+				startActivityForResult(data, 2);
 				break;
 			case CAMERA_REQUEST_CODE:
 				if (Tools.hasSdcard()) {
@@ -139,7 +153,7 @@ public class CreateRecipeActivity extends Activity{
 									+ IMAGE_FILE_NAME);
 					System.out.println("carame-------uri"+Uri.fromFile(tempFile));
 					//startPhotoZoom(Uri.fromFile(tempFile));
-				//	startActivityForResult(data, 2);
+					startActivityForResult(data, 2);
 				} else {
 					System.out.println("-------");
 					
@@ -170,7 +184,7 @@ public class CreateRecipeActivity extends Activity{
 			String path=saveImage(photo,80);
 			picPath=path;
 			
-			
+			System.out.println("====----------"+picPath);
 			/*Intent intent = new Intent();
 			intent.setClass(TopicDetailActivity.this,TopicUploadActivity.class);
 			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_UPLAOD_PATH, path);
@@ -182,7 +196,7 @@ public class CreateRecipeActivity extends Activity{
 		}
 	}
 	
-public static String saveImage(Bitmap bitmap, int quality) {
+	public static String saveImage(Bitmap bitmap, int quality) {
 		
 		System.out.println("bitmap-----"+bitmap);
 
