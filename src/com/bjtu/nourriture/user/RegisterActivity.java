@@ -63,27 +63,27 @@ public class RegisterActivity extends Activity {
 				System.out.println("account：" + accounts+"-------email：" + emailString+"-------password:" + pass);
 				// 非空验证
 				if ("".equals(accounts.trim()) || accounts.trim() == null) {
-					Toast.makeText(RegisterActivity.this, "账号不能为空",
+					Toast.makeText(RegisterActivity.this, "Account cannot be empty!",
 							Toast.LENGTH_LONG).show();
 					return;
 				}
 				if ("".equals(emailString.trim()) || emailString.toString().trim() == null) {
-					Toast.makeText(RegisterActivity.this, "邮箱不能为空",
+					Toast.makeText(RegisterActivity.this, "Email cannot be empty!",
 							Toast.LENGTH_LONG).show();
 					return;
 				}
 				if ("".equals(pass.trim()) || pass.trim() == null) {
-					Toast.makeText(RegisterActivity.this, "密码不能为空",
+					Toast.makeText(RegisterActivity.this, "Password cannot be empty!",
 							Toast.LENGTH_LONG).show();
 					return;
 				}
 				if (aggre.isChecked() == false) {
-					Toast.makeText(RegisterActivity.this, "请选中协议",
+					Toast.makeText(RegisterActivity.this, "Please select the protocol!",
 							Toast.LENGTH_LONG).show();
 					return;
 				}
 
-				proDia = ProgressDialog.show(RegisterActivity.this, "注册","正在注册，请耐心等待");
+				proDia = ProgressDialog.show(RegisterActivity.this, "Register","It is register now,please wait!");
 				proDia.show();
 				new Thread() {
 					@Override
@@ -93,7 +93,7 @@ public class RegisterActivity extends Activity {
 							handler.post(new Runnable() {
 								@Override
 								public void run() {
-									Toast.makeText(RegisterActivity.this, "注册成功",Toast.LENGTH_SHORT).show();
+									Toast.makeText(RegisterActivity.this, "Register successful!",Toast.LENGTH_SHORT).show();
 								}
 							});
 						} catch (Exception e) {
