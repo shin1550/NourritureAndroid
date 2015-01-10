@@ -133,12 +133,14 @@ public class LoginActivity extends Activity {
 		session.put("head", user_head);
 		session.put("user_id",user_id);
 		session.put("islogin", true);
+
 //		//测试isLogin
 //		String url2="service/userinfo/isLogin";
 //		ConnectToServer connect2 = new ConnectToServer();
 //		String message2 = connect2.testURLConn2(url2,bytes);
 //		System.out.println("message2----------" + message2);
 		
+
 	}
 	
 

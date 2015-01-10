@@ -183,6 +183,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	
 	public void toListRecipe(View view){
 		Intent intent = new Intent();
+		ImageLoader.getInstance().destroy();
 		intent.setClass(MainActivity.this,ListRecipeActivity.class);
 		startActivity(intent);
 	}
