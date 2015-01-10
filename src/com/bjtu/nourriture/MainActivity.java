@@ -2,8 +2,12 @@ package com.bjtu.nourriture;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
@@ -17,8 +21,11 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -32,6 +39,8 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bjtu.nourriture.common.CheckHttpUtil;
 import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.attention.ListAttentionActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
@@ -48,19 +57,24 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener{
 
-	private SlidingMenu mMenu;
-	private View layout_1,layout_1_1;
-	private TextView menu_1_1;
+	SlidingMenu mMenu;
+	View layout_1,layout_1_1;
+	TextView menu_1_1;
+	String head;
+    ImageView one_oneImageView;
 	ArrayList<JSONObject> galleryRecipeList = new ArrayList<JSONObject>();
 	DisplayImageOptions options;
-	
+	Handler handler;
+	Bitmap bitmap;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		handler = new Handler();
 		layout_1 = this.findViewById(R.id.layout_1);
 		layout_1_1 = this.findViewById(R.id.layout_1_1);
 		menu_1_1 = (TextView)this.findViewById(R.id.menu_1_1);
+		one_oneImageView=(ImageView)this.findViewById(R.id.one_one);
 		//逻辑还存在问题，待修改
 		Session session = Session.getSession();
 		Boolean islogin=(Boolean)session.get("islogin");
@@ -70,8 +84,23 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 				layout_1.setVisibility(View.GONE);
 				layout_1_1.setVisibility(View.VISIBLE);
 				String username = (String) session.get("username");
-				String head = (String) session.get("head");
 				menu_1_1.setText(username);
+				head = "http://123.57.38.31:3000/"+(String) session.get("head");
+				new Thread(){
+					public void run() {
+						bitmap = getHttpBitmap(head);
+					    		 //从网上取图片
+						handler.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								one_oneImageView .setImageBitmap(bitmap);	//设置Bitmap
+							}
+						});
+						
+					};
+				}.start();
 			}
 		}
 		mMenu = (SlidingMenu) findViewById(R.id.id_menu);
@@ -305,5 +334,25 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         
         return result;
 	}
-	
+	public static Bitmap getHttpBitmap(String url) {
+	     URL myFileUrl = null;
+	     Bitmap bitmap = null;
+	     try {
+	          myFileUrl = new URL(url);
+	     } catch (MalformedURLException e) {
+	          e.printStackTrace();
+	     }
+	     try {
+	          HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+	          conn.setConnectTimeout(0);
+	          conn.setDoInput(true);
+	          conn.connect();
+	          InputStream is = conn.getInputStream();
+	          bitmap = BitmapFactory.decodeStream(is);
+	          is.close();
+	     } catch (IOException e) {
+	          e.printStackTrace();
+	     }
+	     return bitmap;
+	}
 }

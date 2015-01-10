@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
+import com.bjtu.nourriture.common.CheckHttpUtil;
 import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 
@@ -39,7 +40,7 @@ public class LoginActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
+		CheckHttpUtil.initIntener(this);
 		connect = new ConnectToServer();
 		accountText = (EditText) this.findViewById(R.id.login_user_edit);
 		passText = (EditText) this.findViewById(R.id.login_passwd_edit);
@@ -65,6 +66,7 @@ public class LoginActivity extends Activity {
 				password = passText.getText().toString();
 				System.out.println("Account:" + username + "---------Password:"+ password);
 				proDia = ProgressDialog.show(LoginActivity.this, "登录","正在登录，请耐心等候");
+				proDia.show();
 				new Thread() {
 					@Override
 					public void run() {
@@ -74,21 +76,19 @@ public class LoginActivity extends Activity {
 							handler.post(new Runnable() {
 								@Override
 								public void run() {
-									// TODO Auto-generated method stub
-									proDia.dismiss();
-									Toast.makeText(LoginActivity.this,
-											isSuccess, Toast.LENGTH_LONG).show();
+									Toast.makeText(LoginActivity.this,isSuccess, Toast.LENGTH_SHORT).show();
 								}
 							});
 						} catch (Exception e) {
 						} finally {
+							proDia.dismiss();
 							Intent intent = new Intent();
 							intent.setClass(LoginActivity.this,MainActivity.class);
 							startActivity(intent);
 						}
 					}
 				}.start();
-				proDia.show();
+				
 			}
 		});
 
@@ -120,27 +120,26 @@ public class LoginActivity extends Activity {
 
 		// 将登录信息存入session
 
-		String user_account, user_password, user_head;
+		String user_account, user_password, user_head,user_id;
 		String userServer = jsonObject.getString("user");
 		JSONObject userServer2 = new JSONObject(userServer);
 		user_account = userServer2.getString("account");
 		user_password = userServer2.getString("password");
 		user_head = userServer2.getString("head");
+		user_id=userServer2.getString("_id");
 		
 		Session session=Session.getSession();
 		session.put("username", user_account);
 		session.put("head", user_head);
+		session.put("user_id",user_id);
 		session.put("islogin", true);
-		// if(isSuccess.equals("success")){
-		// Intent intent = new Intent();
-		// intent.setClass(LoginActivity.this, IndexActivity.class);
-		// intent.putExtra("message", message);
-		// LoginActivity.this.startActivity(intent);
-		// }
-		// else{
-		// Toast.makeText(LoginActivity.this,"登录失败",
-		// Toast.LENGTH_LONG).show();
-		// }
+
+//		//测试isLogin
+//		String url2="service/userinfo/isLogin";
+//		ConnectToServer connect2 = new ConnectToServer();
+//		String message2 = connect2.testURLConn2(url2,bytes);
+//		System.out.println("message2----------" + message2);
+		
 
 	}
 	

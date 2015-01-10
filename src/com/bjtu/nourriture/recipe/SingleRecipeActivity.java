@@ -34,9 +34,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mobstat.i;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
 import com.bjtu.nourriture.common.Session;
+import com.bjtu.nourriture.user.LoginActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -219,6 +221,7 @@ public class SingleRecipeActivity extends Activity{
 	
 	public void showComment(){
 		TableLayout commentTable = (TableLayout) findViewById(R.id.singleCommentTable);
+		commentTable.removeAllViews();
 		commentTable.setStretchAllColumns(true);
 		if(commentList != null){
 			for (int i = 0; i < commentList.size(); i++) {
@@ -251,7 +254,7 @@ public class SingleRecipeActivity extends Activity{
 				commentUserAccount.setTextSize(12);
 				commentUserLayout.addView(commentHeadImageView,70,60);
 				commentUserLayout.addView(commentUserAccount);
-				tablerow.addView(commentUserLayout,70,88);
+				tablerow.addView(commentUserLayout,70,95);
 				commentTime.setTextSize(12);
 				commentInfoLayout.addView(commentTime);
 				commentInfoLayout.addView(commentContent);
@@ -271,17 +274,59 @@ public class SingleRecipeActivity extends Activity{
 				     Toast.LENGTH_SHORT).show();
 		}else{
 			Session session = Session.getSession();
-			if(session == null){
-				System.out.println("--------------no session----------");
+			if(session.get("username") == null || session.get("username").equals("")){
+				Toast.makeText(getApplicationContext(), "Sign in please",
+					     Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(this, LoginActivity.class);
+				startActivity(intent);
 			}else{
-				System.out.println("------------"+session.get("username"));
+				List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_CONENT, commentString));
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_REPLYID, singleRecipeId));
+	            
+	            postParameters.add(new BasicNameValuePair("androidId", "548c3b76aa90218a2272bdc1"));
+	            postParameters.add(new BasicNameValuePair("androidAccount", (String) session.get("username")));
+	            postParameters.add(new BasicNameValuePair("androidHead", (String) session.get("head")));
+	            String resultString = RecipeTalkToServer.recipePost("recipe/comment",postParameters);
+	            
+	            if(resultString.equals("comment success！")){
+	            	Toast.makeText(getApplicationContext(), "Comment success !",
+						     Toast.LENGTH_SHORT).show();
+	            	newCommentEditText.setText("");
+	            	RefreshCommentTask task = new RefreshCommentTask();
+	        		task.activity = this;
+	        		task.execute();
+	            }
 			}
-			List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_CONENT, commentString));
-            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_REPLYID, singleRecipeId));
-            String aString = RecipeTalkToServer.recipePost("recipe/comment",postParameters);
-            System.out.println("++++++++"+aString);
 		}
  	}
 	
+	class RefreshCommentTask extends AsyncTask<Object, Object, Object>{
+		SingleRecipeActivity activity;
+		ArrayList<JSONObject> list = new ArrayList<JSONObject>();
+		
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			//评论信息
+			String commentRecult = getCommentList();
+			try {
+				JSONObject jsonObject = new JSONObject(commentRecult);
+				JSONArray jsonArray = jsonObject.getJSONArray("root");
+				for(int i=0;i<jsonArray.length();i++){   
+	                JSONObject jo = (JSONObject)jsonArray.opt(i);
+	                list.add(jo);
+	            }
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		public void onPostExecute(Object result){
+			commentList.clear();
+			commentList = list;
+			showComment();
+		}
+	}
 }

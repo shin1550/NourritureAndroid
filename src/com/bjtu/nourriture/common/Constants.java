@@ -9,6 +9,6 @@ public class Constants {
 	public static final String INTENT_EXTRA_TOPIC_UPLAOD_PATH = "uploadPath";
 	
 	public static final String POST_RECIPE_COMMENT_CONENT = "content";
+
 	public static final String POST_RECIPE_COMMENT_REPLYID = "replayId";
-	
 }
