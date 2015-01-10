@@ -41,4 +41,6 @@ public class Constants {
 	
 	public static final String RECIPE_PHOTO_PATH = "recipePhotoPath";
 	public static final String RECIPE_STEP_PHOTO_PATH = "recipeStepPhotoPath";
+			
+	public static String POST_SESSIONID = null;
 }

@@ -266,9 +266,10 @@ public class TopicDetailActivity extends Activity {
 				upload_id.setText(list.get(position).getString("_id"));
 			
 				name.setText(list.get(position).getString("title"));
+				
 				String authorname = "";
-				if (list.get(position).getJSONObject("author")
-						.getString("account") == null) {
+				String author1=list.get(position).getJSONObject("author").getString("account");
+				if (author1 == null||author1.equals("")) {
 					authorname = "travel";
 				} else {
 					authorname = list.get(position).getJSONObject("author")

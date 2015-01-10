@@ -87,10 +87,10 @@
         android:layout_marginTop="15dp"
         android:columnWidth="90dp"
         android:gravity="center"
-        android:horizontalSpacing="1dp"
+        android:horizontalSpacing="8dp"
         android:numColumns="2"
         android:layout_above="@id/mybottom"
-        android:verticalSpacing="1dp" >
+        android:verticalSpacing="5dp" >
     </GridView>
     
 

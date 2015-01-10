@@ -93,7 +93,7 @@
             android:label="@string/title_activity_topic_upload" >
         </activity>
         <activity
-            android:name="com.bjtu.nourriture.topic.UploadTopicActivity"
+            android:name="com.bjtu.nourriture.topic.PublishTopicActivity"
             android:label="@string/title_activity_upload_topic" >
         </activity>
         <activity
