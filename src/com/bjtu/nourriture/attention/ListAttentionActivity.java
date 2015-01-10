@@ -98,13 +98,12 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
 				Intent intentLogIn = new Intent(getApplicationContext(), LoginActivity.class);
 				startActivity(intentLogIn);
 			}else{
-				List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+				//List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 	            
-	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ID, (String) session.get("user_id")));
-	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ACCOUNT, (String) session.get("username")));
-	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_HEAD, (String) session.get("head")));
-	            resultString = RecipeTalkToServer.recipePost("attention/lookFriendStatusRecipe?pageNo=1&pageSize=10",postParameters);
-	       	}  
+	            //postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ID, (String) session.get("user_id")));
+	            resultString = RecipeTalkToServer.recipeGet("attention/lookFriendStatusRecipe?"+Constants.POST_RECIPE_USER_ID+"="+(String) session.get("user_id"));
+	            System.out.println(resultString);
+			}  
        
         	
             /*HttpClient client = new DefaultHttpClient();
@@ -134,7 +133,7 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
                 }
             }
         }
-        System.out.print("resultString===="+resultString); 
+        
         return resultString;
 	}
 	

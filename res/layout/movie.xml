@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:xmz="http://xmz.com"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+  
+  <com.bjtu.nourriture.ImageViewBorder
+  	android:id="@+id/movie_image"
+  	android:layout_width="wrap_content"
+  	android:layout_height="wrap_content"
+  	xmz:BorderColor="GRAY"
+  />
+  <TextView
+  	android:id="@+id/movie_text"
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:gravity="center_horizontal"
+  />
+</LinearLayout>
