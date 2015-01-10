@@ -33,15 +33,6 @@
         
            
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/my_topic_picture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="17dp"
-        android:src="@drawable/a2" />
     
         <LinearLayout
         android:id="@+id/mybottom"
@@ -74,5 +65,13 @@
                 android:text="Publish" />
         </LinearLayout>
     </LinearLayout>
+
+        <ImageView
+            android:id="@+id/my_topic_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/linearLayout1"
+            android:layout_below="@+id/linearLayout1"
+            android:src="@drawable/a2" />
 
 </RelativeLayout>

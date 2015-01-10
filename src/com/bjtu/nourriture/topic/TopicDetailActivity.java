@@ -267,13 +267,17 @@ public class TopicDetailActivity extends Activity {
 			
 				name.setText(list.get(position).getString("title"));
 				
-				String authorname = "";
-				String author1=list.get(position).getJSONObject("author").getString("account");
-				if (author1 == null||author1.equals("")) {
-					authorname = "travel";
-				} else {
+				String authorString =list.get(position).optString("author");
+				String authorname = "travel";
+				if(authorString==null||authorString.equals("")){
+					
+				}
+				else{
 					authorname = list.get(position).getJSONObject("author")
 							.getString("account");
+					if (authorname == null||authorname.equals("")) {
+						authorname = "travel";
+					}
 				}
 
 				author.setText("by " + authorname);
@@ -472,11 +476,11 @@ public class TopicDetailActivity extends Activity {
 	
 	public static String saveImage(Bitmap bitmap, int quality) {
 		
-		System.out.println("bitmap-----"+bitmap);
+		
 
 		String fileName = "upload_" + System.currentTimeMillis() + ".jpg";
 		String filePath = Environment.getExternalStorageDirectory()+"/"+ fileName;
-		System.out.println("filepath-----"+filePath);
+		
 		String path = null;
 		try {
 			File file = new File(filePath);			

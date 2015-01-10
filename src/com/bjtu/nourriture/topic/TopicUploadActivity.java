@@ -3,8 +3,6 @@ package com.bjtu.nourriture.topic;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Method;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +12,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +30,6 @@ import android.widget.Toast;
 
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
-import com.bjtu.nourriture.recipe.RecipeTalkToServer;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -48,6 +48,9 @@ public class TopicUploadActivity extends Activity {
 	EditText story;
 	String topicId;
 	String singleData;
+	private ProgressDialog pd; 
+	String uploadNameString;
+	String storyString ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +88,13 @@ public class TopicUploadActivity extends Activity {
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.upload_picture);
 		linearLayout.setOnClickListener(new OnClickListener() {
 
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
-				String uploadNameString = upload_name.getText().toString();
-				String storyString = story.getText().toString();
+				uploadNameString = upload_name.getText().toString();
+				storyString = story.getText().toString();
 				if (uploadNameString == null || uploadNameString.equals("")) {
 					Toast.makeText(getApplicationContext(),
 							"Empty product name", Toast.LENGTH_SHORT).show();
@@ -98,79 +102,20 @@ public class TopicUploadActivity extends Activity {
 					Toast.makeText(getApplicationContext(),
 							"Empty product story", Toast.LENGTH_SHORT).show();
 				} else {
-					final File file = new File(path);
-					if (file != null) {
-
-						String urlString = "http://123.57.38.31:3000/topic/upload";
-						String result = UploadUtil.uploadFile(file, urlString);
-
-						String url = "topic/uploadProduct";
-
-						List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-						postParameters.add(new BasicNameValuePair(
-								Constants.POST_UPDLOAD_TOPIC_ID, topicId));
-						postParameters.add(new BasicNameValuePair(
-								Constants.POST_UPLOAD_TOPIC_TITLE,
-								uploadNameString));
-						postParameters
-								.add(new BasicNameValuePair(
-										Constants.POST_UPLOAD_TOPIC_STORY,
-										storyString));
-						postParameters.add(new BasicNameValuePair(
-								Constants.POST_UPLOAD_TOPIC_PICTURE_PATH,
-								result));
-						String resultString = connect.topicPost(url,
-								postParameters);
-
-						JSONObject singleObject = null;
-
-						try {
-							singleObject = new JSONObject(resultString);
-
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-
-						String status;
-						try {
-							status = singleObject.getString("status");
-							if (status.equals("true")) {
-								Intent intent = new Intent();
-								intent.setClass(TopicUploadActivity.this,
-										TopicDetailActivity.class);
-								url = "topic/showTopicDetail/" + topicId;
-								String method = "GET";
-
-								try {
-									result = connect.testURLConn(url, method);
-
-									JSONObject jsonObject2 = new JSONObject(
-											result);
-									singleData = jsonObject2.getJSONObject(
-											"topic").toString();
-
-									intent.putExtra(
-											Constants.INTENT_EXTRA_TOPIC_DETAIL,
-											singleData);
-									startActivity(intent);
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-
-							} else {
-
-								Toast.makeText(getApplicationContext(),
-										"upload fail,try again",
-										Toast.LENGTH_SHORT).show();
-
-							}
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
+					
+					 pd = ProgressDialog.show(TopicUploadActivity.this, "upload", "upload,please wait");  
+					  
+		                /* 开启一个新线程，在新线程里执行耗时的方法 */  
+		                new Thread(new Runnable() {  
+		                    @Override  
+		                    public void run() {  
+		                        spandTimeMethod();// 耗时的方法  
+		                        handler.sendEmptyMessage(0);// 执行耗时的方法之后发送消给handler  
+		                    }  
+		  
+		                }).start();  
+		       
+					
 				}
 			}
 		});
@@ -205,4 +150,93 @@ public class TopicUploadActivity extends Activity {
 			return null;
 		}
 	}
+	
+	private void spandTimeMethod() {  
+//        try {  
+        	final File file = new File(path);
+			if (file != null) {
+
+				String urlString = "http://123.57.38.31:3000/topic/upload";
+				String result = UploadUtil.uploadFile(file, urlString);
+
+				String url = "topic/uploadProduct";
+
+				List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+				postParameters.add(new BasicNameValuePair(
+						Constants.POST_UPDLOAD_TOPIC_ID, topicId));
+				postParameters.add(new BasicNameValuePair(
+						Constants.POST_UPLOAD_TOPIC_TITLE,
+						uploadNameString));
+				postParameters
+						.add(new BasicNameValuePair(
+								Constants.POST_UPLOAD_TOPIC_STORY,
+								storyString));
+				postParameters.add(new BasicNameValuePair(
+						Constants.POST_UPLOAD_TOPIC_PICTURE_PATH,
+						result));
+				String resultString = connect.topicPost(url,
+						postParameters);
+
+				JSONObject singleObject = null;
+
+				try {
+					singleObject = new JSONObject(resultString);
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				String status;
+				try {
+					status = singleObject.getString("status");
+					if (status.equals("true")) {
+						Intent intent = new Intent();
+						intent.setClass(TopicUploadActivity.this,
+								TopicDetailActivity.class);
+						url = "topic/showTopicDetail/" + topicId;
+						String method = "GET";
+
+						try {
+							result = connect.testURLConn(url, method);
+
+							JSONObject jsonObject2 = new JSONObject(
+									result);
+							singleData = jsonObject2.getJSONObject(
+									"topic").toString();
+
+							intent.putExtra(
+									Constants.INTENT_EXTRA_TOPIC_DETAIL,
+									singleData);
+							startActivity(intent);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					} else {
+
+						Toast.makeText(getApplicationContext(),
+								"upload fail,try again",
+								Toast.LENGTH_SHORT).show();
+
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+//           // Thread.sleep(5000);  
+//        } catch (InterruptedException e) {  
+//            // TODO Auto-generated catch block  
+//            e.printStackTrace();  
+//        }  
+    }  
+  
+    Handler handler = new Handler() {  
+        @Override  
+        public void handleMessage(Message msg) {// handler接收到消息后就会执行此方法  
+            pd.dismiss();// 关闭ProgressDialog  
+        }  
+    };  
 }

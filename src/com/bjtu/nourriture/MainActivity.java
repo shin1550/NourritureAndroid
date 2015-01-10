@@ -53,6 +53,7 @@ import com.bjtu.nourriture.attention.ListAttentionActivity;
 import com.bjtu.nourriture.recipe.CreateRecipeActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
+import com.bjtu.nourriture.topic.PublishTopicActivity;
 import com.bjtu.nourriture.user.LoginActivity;
 import com.bjtu.nourriture.user.MoreActivity;
 
@@ -481,6 +482,20 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		}else{
 			Intent intent = new Intent();
 			intent.setClass(MainActivity.this, CreateRecipeActivity.class);
+			startActivity(intent);
+		}
+	}
+	
+	public void toCreateTopic(View view){
+		Session session = Session.getSession();
+		if(session.get("username") == null || session.get("username").equals("")){
+			Toast.makeText(getApplicationContext(), "Sign in please",
+				     Toast.LENGTH_SHORT).show();
+			Intent intentLogIn = new Intent(this, LoginActivity.class);
+			startActivity(intentLogIn);
+		}else{
+			Intent intent = new Intent();
+			intent.setClass(MainActivity.this, PublishTopicActivity.class);
 			startActivity(intent);
 		}
 	}

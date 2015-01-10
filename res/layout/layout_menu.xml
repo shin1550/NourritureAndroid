@@ -88,7 +88,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" 
+            android:onClick="toCreateTopic">
 
             <ImageView
                 android:id="@+id/three"
@@ -105,7 +106,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/three"
-                android:text="第3个Item"
+                android:text="Publish Topic"
                 android:textColor="#f0f0f0"
                 android:textSize="20sp" />
         </RelativeLayout>
