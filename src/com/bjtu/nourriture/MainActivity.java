@@ -49,6 +49,7 @@ import com.bjtu.nourriture.recipe.CreateRecipeActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 import com.bjtu.nourriture.user.LoginActivity;
+import com.bjtu.nourriture.user.MoreActivity;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -88,7 +89,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		//逻辑还存在问题，待修改
 		Session session = Session.getSession();
 		Boolean islogin=(Boolean)session.get("islogin");
-		System.out.println("islogin----"+islogin);
+		System.out.println("IsLogin:"+islogin);
 		if(islogin!=null){
 			if(islogin){
 				layout_1.setVisibility(View.GONE);
@@ -200,8 +201,13 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		startActivity(intent);
 	}
 	
+	public void toMore(View view){
+		Intent intent = new Intent();
+		intent.setClass(MainActivity.this,MoreActivity.class);
+		startActivity(intent);
+	}
+	
 	public void toMenu1(View view){
-		System.out.println("1");
 		Intent intent = new Intent();
 		intent.setClass(MainActivity.this,LoginActivity.class);
 		startActivity(intent);

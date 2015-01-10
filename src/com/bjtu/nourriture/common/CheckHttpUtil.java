@@ -1,4 +1,7 @@
 package com.bjtu.nourriture.common;
+import com.bjtu.nourriture.MainActivity;
+import com.bjtu.nourriture.user.LoginActivity;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -35,7 +38,7 @@ public class CheckHttpUtil {
 
 
 		// 判断网络是否可用
-		if (isOpenNetwork(activity) == true) {
+		if (isOpenNetwork(activity) == true) {  //！！！！！！！！！！！
 			// 网络可用，则开始加载。
 			//initPross();//这里是我个人程序要进行网络加载的方法，根据自己的程序而定，灵活运用。
 		} else {
@@ -47,10 +50,12 @@ public class CheckHttpUtil {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Intent intent = null;
-
-
 					try {
-						intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+						//Intent intent = new Intent("android.settings.WIRELESS_SETTINGS");  
+				           //startActivity(intent);
+						//intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+						System.out.println("网络连接异常，进入网络设置界面。");
+						 intent = new Intent("android.settings.WIRELESS_SETTINGS");  
 						activity.startActivity(intent);
 					} catch (Exception e) {
 						// Log.w(TAG,
@@ -65,6 +70,9 @@ public class CheckHttpUtil {
 					//finish();//因为网络不可用的状态，也是不让自己的程序结束运行， 这是根据个人需要设置。
 					Toast.makeText(activity, "网络异常，加载失败！", Toast.LENGTH_SHORT).show();
 					//initAll();//这里是没有网络的时候，又不需要手动设置，则显示出来的一个静态页面，根据个人需要。
+					Intent intent = new Intent();
+					intent.setClass(activity,MainActivity.class);
+					activity.startActivity(intent);
 				}
 			}).show();
 

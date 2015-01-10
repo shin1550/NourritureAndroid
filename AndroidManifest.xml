@@ -109,6 +109,10 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="com.bjtu.nourriture.user.MoreActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name=".recipe.SingleRecipeCommentActivity"
             android:label="@string/app_name" >
         </activity>
