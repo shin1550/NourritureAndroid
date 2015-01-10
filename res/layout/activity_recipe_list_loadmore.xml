@@ -5,13 +5,10 @@
     android:orientation="vertical"
     android:layout_alignParentBottom="true">
     
-
     <Button
        android:id="@+id/listRecipeLoadMore"
        android:text="Load More"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:onClick="loadMore"/>
-    <include
-       layout="@layout/activity_bottom" />
 </LinearLayout>

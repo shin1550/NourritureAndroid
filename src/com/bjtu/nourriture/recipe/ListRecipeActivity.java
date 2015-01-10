@@ -18,12 +18,16 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -74,14 +78,15 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
     	listview.setAdapter(adapter);
     	//adapter.notifyDataSetChanged();
     	
-    	View loadMoreView;
-		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_comment_loadmore, null);  
-    	listview.addFooterView(loadMoreView);
-    	
     	ListRecipeTask task = new ListRecipeTask();
 		task.listView = listview;
 		task.activity = this;
+		//task.list = list;
 		task.execute();
+		
+		/*View loadMoreView;
+		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_comment_loadmore, null);  
+    	listview.addFooterView(loadMoreView);*/
 		
 		EditText searchEditText = (EditText) findViewById(R.id.listRecipeSearch);
 		searchEditText.setOnKeyListener(new OnKeyListener() {  
@@ -108,7 +113,6 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		System.out.println(list.get(pos).toString());
 		
 		list.get(pos);
-		//ImageLoaderConfiguration.;
 		Intent intent = new Intent(this, SingleRecipeActivity.class);
 		
 		try {
@@ -205,6 +209,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	
 	class ListRecipeTask extends AsyncTask<Object, Object, Object>{
 		ListView listView;
+//		ArrayList<JSONObject> tempList;
 		ListRecipeActivity activity;
 		String search;
 		String recipeRecult;
@@ -236,8 +241,10 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		
 		@Override
 		public void onPostExecute(Object result){
+			listView.setVisibility(View.GONE);  
 			listview.requestLayout();
 			adapter.notifyDataSetChanged();
+			listView.setVisibility(View.VISIBLE);  
 		}
 	}
 	
@@ -288,7 +295,21 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	
 	public String getSearchRecipeList(String search){
 		return RecipeTalkToServer.recipeGet("recipe/search?pageNo="+pageNo+"&pageSize=10&queryStr="+search);
-		
+	}
+
+	public void backToFront(View view){
+		ListRecipeActivity.this.finish();
 	}
 	
+	public void backToHome(View view){
+		ListRecipeActivity.this.finish();
+		Intent intent = new Intent();
+		intent.setClass(ListRecipeActivity.this, MainActivity.class);
+		startActivity(intent);
+	}
+	
+	public void backToMore(View view){
+		Toast.makeText(getApplicationContext(), "Coming Soon...",
+			     Toast.LENGTH_SHORT).show();
+	}
 }
