@@ -36,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bjtu.nourriture.ConnectToServer;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -55,6 +54,7 @@ public class TopicDetailActivity extends Activity {
 	String uploadListResult;
 	GridView gridView;
 	String idString;
+	String singleData;
     TopicDetailListViewAdapter adapter;
 	
 	
@@ -88,13 +88,13 @@ public class TopicDetailActivity extends Activity {
 				.displayer(new RoundedBitmapDisplayer(20)).build();
 
 		Intent intent = getIntent();
-		String singleData = intent
+		singleData = intent
 				.getStringExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL);
 		JSONObject singleObject = null;
 
 		try {
 			singleObject = new JSONObject(singleData);
-			System.out.println("-----it's ok-------------");
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -143,19 +143,7 @@ public class TopicDetailActivity extends Activity {
 				
 				showDialog();
 				
-//				if (picPath == null) {
-//	            	 Toast.makeText(getApplicationContext(), "请选择图片",Toast.LENGTH_SHORT).show();
-//	
-//	            } else {
-//	                final File file = new File(picPath);
-//	                if (file != null) {
-//	                
-//	                	/*String params = userinfo.getAccount();
-//	                    String request = UploadUtil.uploadFile(file, requestURL,params);
-//	                    //uploadImage.setText(request);
-//*/	                    
-//	              }
-//	            }
+
 	    
 	     
 				
@@ -473,6 +461,8 @@ public class TopicDetailActivity extends Activity {
 			Intent intent = new Intent();
 			intent.setClass(TopicDetailActivity.this,TopicUploadActivity.class);
 			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_UPLAOD_PATH, path);
+			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_TOPIC_ID, idString);
+			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL, singleData);
 			startActivity(intent);
 
 			

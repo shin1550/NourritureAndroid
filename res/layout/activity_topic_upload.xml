@@ -8,22 +8,20 @@
     tools:context="com.bjtu.nourriture.topic.TopicUploadActivity" >
 
     <EditText
-        android:id="@+id/upload_name"
+        android:id="@+id/upload_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:ems="10"
         android:hint="Product name here"
         android:inputType="textPersonName" >
 
-        <requestFocus />
     </EditText>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/upload_name" >
+        android:layout_below="@+id/upload_title" >
 
         <ImageView
             android:id="@+id/my_production"
@@ -36,7 +34,6 @@
             android:hint="you story here"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:ems="10"
             android:inputType="textMultiLine" />
 
     </LinearLayout>

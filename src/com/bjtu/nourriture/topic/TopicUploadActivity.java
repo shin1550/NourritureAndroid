@@ -3,8 +3,14 @@ package com.bjtu.nourriture.topic;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Method;
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -19,10 +25,11 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.bjtu.nourriture.ConnectToServer;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
+import com.bjtu.nourriture.recipe.RecipeTalkToServer;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -37,6 +44,11 @@ public class TopicUploadActivity extends Activity {
 	ArrayList<JSONObject> list = new ArrayList<JSONObject>();
 	String topicListResult;
 	String path;
+	EditText upload_name;
+	EditText story;
+	String topicId;
+	String singleData;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +79,12 @@ public class TopicUploadActivity extends Activity {
 		Bitmap bitmap = getLoacalBitmap(path);
 		mypicture .setImageBitmap(bitmap);
 		
+		topicId=intent.getStringExtra(Constants.INTENT_EXTRA_TOPIC_TOPIC_ID);
+		singleData = intent.getStringExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL);
+		
+		upload_name= (EditText)findViewById(R.id.upload_title);
+		story= (EditText)findViewById(R.id.story);
+		
 		LinearLayout linearLayout =(LinearLayout)findViewById(R.id.upload_picture);
 		linearLayout.setOnClickListener(new OnClickListener() {
 
@@ -74,19 +92,85 @@ public class TopicUploadActivity extends Activity {
 			public void onClick(View v) {
 			// TODO Auto-generated method stub
 				
-				EditText upload_name= (EditText) v.findViewById(R.id.upload_name);
-				EditText story= (EditText) v.findViewById(R.id.story);
 				
-				String uploadNameString = upload_name.getText().toString().trim();
-				String storyString = story.getText().toString().trim();
+				
+				String uploadNameString = upload_name.getText().toString();
+				String storyString = story.getText().toString();
 				System.out.println("-----------------"+uploadNameString+"----"+storyString+"----");
+				if(uploadNameString==null||uploadNameString.equals("")){
+					Toast.makeText(getApplicationContext(), "Empty product name",
+						     Toast.LENGTH_SHORT).show();
+				}
+				else if(storyString==null||storyString.equals("")){
+					Toast.makeText(getApplicationContext(), "Empty product story",
+						     Toast.LENGTH_SHORT).show();
+				}else{
+					final File file = new File(path);
+	                if (file != null) {
+	                
+	                	String urlString="http://123.57.38.31:3000/topic/upload";                
+	                	String result = UploadUtil.uploadFile(file, urlString);
+	                	
+	                	String url="topic/uploadProduct";
+	       
+	                	List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+	    	            postParameters.add(new BasicNameValuePair(Constants.POST_UPDLOAD_TOPIC_ID, topicId));
+	    	            postParameters.add(new BasicNameValuePair(Constants.POST_UPLOAD_TOPIC_TITLE, uploadNameString));
+	    	            
+	    	            postParameters.add(new BasicNameValuePair(Constants.POST_UPLOAD_TOPIC_STORY, storyString));
+	    	            postParameters.add(new BasicNameValuePair(Constants.POST_UPLOAD_TOPIC_PICTURE_PATH, result));
+	    	            String resultString = connect.topicPost(url,postParameters);
+	    	            
+	    	            System.out.println("result---------"+resultString);
+	    	            
+	    	            JSONObject singleObject = null;
+
+	    	    		try {
+	    	    			singleObject = new JSONObject(resultString);
+	    	    			
+	    	    		} catch (JSONException e) {
+	    	    			e.printStackTrace();
+	    	    		}
+	    	    		
+	    	    		String status;
+						try {
+							status = singleObject.getString("status");							
+							if(status.equals("true")){								
+								Intent intent = new Intent();
+								intent.setClass(TopicUploadActivity.this,TopicDetailActivity.class);
+								url="topic/showTopicDetail/"+topicId;
+								String method="GET";
+								
+								try {
+									result=connect.testURLConn(url, method);
+									System.out.println("------result-------"+result);
+									
+									intent.putExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL,singleData);
+									startActivity(intent);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+									
+								
+		    	    			
+		    	    		}else{
+		    	    			
+		    	    			Toast.makeText(getApplicationContext(), "upload fail,try again",
+		   						     Toast.LENGTH_SHORT).show();
+		    	    			
+		    	    		}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	    	    		
+
+					
+				}
 				
-				final File file = new File(path);
-                if (file != null) {
-                
-                	String urlString="http://123.57.38.31:3000/topic/upload";                
-                	String result = UploadUtil.uploadFile(file, urlString);
-                	
+				
                 	
                 	
                 	
