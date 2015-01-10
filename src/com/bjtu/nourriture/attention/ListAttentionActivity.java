@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,9 +31,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
+import com.bjtu.nourriture.common.Session;
+import com.bjtu.nourriture.recipe.RecipeTalkToServer;
+import com.bjtu.nourriture.user.LoginActivity;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -81,10 +88,26 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
 	public String getRecipeList(){
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
 		//only recipe
-		String result = null;
+		String resultString = null;
         BufferedReader reader = null;
         try {
-            HttpClient client = new DefaultHttpClient();
+        	Session session=Session.getSession();
+        	if(session.get("username") == null || session.get("username").equals("")){
+				Toast.makeText(getApplicationContext(), "Sign in please",
+					     Toast.LENGTH_SHORT).show();
+				Intent intentLogIn = new Intent(getApplicationContext(), LoginActivity.class);
+				startActivity(intentLogIn);
+			}else{
+				List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+	            
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ID, (String) session.get("user_id")));
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ACCOUNT, (String) session.get("username")));
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_HEAD, (String) session.get("head")));
+	            resultString = RecipeTalkToServer.recipePost("attention/lookFriendStatusRecipe?pageNo=1&pageSize=10",postParameters);
+	       	}  
+       
+        	
+            /*HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
             request.setURI(new URI(
                     "http://123.57.38.31:3000/service/attention/lookFriendStatusRecipe?pageNo=1&pageSize=10"));
@@ -97,7 +120,7 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
             while ((line = reader.readLine()) != null) {
                 strBuffer.append(line);
             }
-            result = strBuffer.toString();
+            result = strBuffer.toString();*/
  
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,8 +134,8 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
                 }
             }
         }
-        
-        return result;
+        System.out.print("resultString===="+resultString); 
+        return resultString;
 	}
 	
 	@Override

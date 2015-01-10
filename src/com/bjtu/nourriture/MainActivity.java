@@ -40,6 +40,7 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.mobstat.StatService;
 import com.bjtu.nourriture.common.CheckHttpUtil;
 import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.attention.ListAttentionActivity;
@@ -70,6 +71,13 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		//made by zhangcan
+		//设置渠道
+		StatService.setAppChannel(this, "testmarket", true);
+		// 调试百度统计SDK的Log开关，可以在Eclipse中看到sdk打印的日志，发布时去除调用，或者设置为false
+		StatService.setDebugOn(true);
+				
 		handler = new Handler();
 		layout_1 = this.findViewById(R.id.layout_1);
 		layout_1_1 = this.findViewById(R.id.layout_1_1);
@@ -175,6 +183,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	
 	public void toListRecipe(View view){
 		Intent intent = new Intent();
+		ImageLoader.getInstance().destroy();
 		intent.setClass(MainActivity.this,ListRecipeActivity.class);
 		startActivity(intent);
 	}
@@ -354,5 +363,22 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	          e.printStackTrace();
 	     }
 	     return bitmap;
+	}
+	
+	//made by zhangcan for baidu analytics
+	public void onResume() {
+		super.onResume();
+		System.out.println("FragmentDemoActivity-->onResume");
+		StatService.onResume(this);
+	}
+
+	public void onPause() {
+		super.onPause();
+		System.out.println("FragmentDemoActivity-->onPause");
+		/**
+		 * 页面结束（注意： 每个Activity中都需要添加，如果有继承的父Activity中已经添加了该调用，那么子Activity中务必不能添加）
+		 * 如果该FragmentActivity包含了几个全页面的fragment，那么可以在fragment里面加入就可以了，这里可以不加入。如果不加入将不会记录该Activity页面。
+		 */
+		StatService.onPause(this);
 	}
 }

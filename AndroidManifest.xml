@@ -9,16 +9,11 @@
         android:targetSdkVersion="19" />
 
     <!-- 必须申明的权限 -->
-    <uses-permission android:name="android.permission.INTERNET" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" ></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" ></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" ></uses-permission>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" ></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" ></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- 可选的权限 -->
@@ -34,7 +29,7 @@
         <!-- 您从百度网站获取的APP KEY -->
         <meta-data
             android:name="BaiduMobAd_STAT_ID"
-            android:value="5dcea05402" /> <!-- abcd1234 -->
+            android:value="769c0efaed" /> <!-- abcd1234 -->
         <!-- 渠道商编号 -->
         <meta-data
             android:name="BaiduMobAd_CHANNEL"
@@ -89,8 +84,17 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.bjtu.nourriture.topic.TopicDetailActivity"
+            android:name=".topic.TopicDetailActivity"
             android:label="@string/title_activity_topic_detail" >
+        </activity>
+
+        <activity
+            android:name=".topic.TopicUploadActivity"
+            android:label="@string/title_activity_topic_upload" >
+        </activity>
+        <activity
+            android:name="com.bjtu.nourriture.topic.UploadTopicActivity"
+            android:label="@string/title_activity_upload_topic" >
         </activity>
         <activity
             android:name=".attention.ListAttentionActivity"
@@ -104,7 +108,10 @@
             android:name="com.bjtu.nourriture.user.RegisterActivity"
             android:label="@string/app_name" >
         </activity>
-
+        <activity
+            android:name=".recipe.SingleRecipeCommentActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bjtu.nourriture.ConnectToServer;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -122,10 +121,11 @@ public class ListTopicActivity extends Activity{
 			
 			list.get(position);
 			Intent intent = new Intent();    
-            intent.setClass(ListTopicActivity.this, TopicDetailActivity.class); 
-			
-			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL, list.get(position).toString());
+            intent.setClass(ListTopicActivity.this, TopicDetailActivity.class); 		
+			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL,list.get(position).toString() );
 			startActivity(intent);
+		
+			
 			
 		}
 		

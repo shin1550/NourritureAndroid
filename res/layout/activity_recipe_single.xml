@@ -110,31 +110,26 @@
                     android:typeface="sans" />
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/singleAuthorInfo"
-                android:layout_alignParentRight="true"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/recipe_collectRecipe" />
-            </LinearLayout>
+            <ImageView
+                    android:id="@+id/singleRecipeCollect"
+                    android:layout_width="45dp"
+                	android:layout_height="35dp"
+                	android:paddingRight="10dp"
+                	android:layout_alignBottom="@id/singleAuthorInfo"
+                	android:layout_alignParentRight="true"/>
+            
         </RelativeLayout>
 
         <TextView
             android:id="@+id/singleRecipeDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="5dp" />
+            android:paddingBottom="10dp" />
 
         <SurfaceView
             android:id="@+id/surfaceView1"
             android:layout_width="match_parent"
-            android:layout_height="1dp" />
+            android:layout_height="0.5dp" />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -171,7 +166,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:paddingTop="15dp"
             android:text="@string/recipe_material" />
 
         <TableLayout
@@ -195,7 +190,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:paddingTop="15dp"
             android:paddingBottom="5dp"
             android:text="@string/recipe_step"/>
         
@@ -207,13 +202,43 @@
             
         </TableLayout>
         
-        <TextView
-            android:id="@+id/singleRecipeComment"
+        <RelativeLayout 
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp"
-            android:text="@string/recipe_comment"/>
+            android:layout_height="wrap_content">
+            <TextView
+	            android:id="@+id/singleRecipeComment"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:paddingTop="15dp"
+	            android:paddingBottom="10dp"
+	            android:text="@string/recipe_comment"/>
+            
+            <RelativeLayout 
+                android:layout_toRightOf="@id/singleRecipeComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+		        android:paddingBottom="10dp"
+                android:layout_alignParentRight="true"
+                android:onClick="moreComment">
+                
+                <ImageView 
+                    android:id="@+id/singleMoreComment"
+                    android:layout_width="20dp"
+		            android:layout_height="20dp"
+		            android:layout_alignParentRight="true"
+		            android:src="@drawable/go"/>
+                
+                <TextView
+                    android:layout_toLeftOf="@id/singleMoreComment"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="more"/>
+                
+            </RelativeLayout>
+        </RelativeLayout>
+        
         
         <TableLayout
             android:layout_width="match_parent"
@@ -230,16 +255,17 @@
             >
 	        <EditText
 	            android:id="@+id/singleNewComment"
-	            android:layout_width="330dp"
+	            android:layout_width="390dp"
 	            android:layout_height="wrap_content"
 	            android:lines="1"
 	            android:hint="@string/recipe_comment_hint"
 	            />
 	        
 	        <ImageView
-	            android:layout_width="30dp"
-	            android:layout_height="30dp"
-	            android:paddingRight="10dp"
+	            android:layout_width="35dp"
+	            android:layout_height="35dp"
+	            android:paddingRight="5dp"
+	            android:paddingBottom="5dp"
 	            android:layout_alignParentRight="true"
 	            android:src="@drawable/go"
 	            android:layout_alignParentBottom="true"

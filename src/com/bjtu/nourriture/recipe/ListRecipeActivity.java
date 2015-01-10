@@ -1,15 +1,7 @@
 package com.bjtu.nourriture.recipe;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +18,16 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -48,6 +43,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	DisplayImageOptions options;
 	ArrayList<JSONObject> list = new ArrayList<JSONObject>();
 	ListRecipeAdapter adapter;
+	ListView listview;
 	int pageNo = 1;
 	int totalNumber;
 	int number;
@@ -75,21 +71,22 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		.build();
 		
 		setContentView(R.layout.activity_recipe_list_all);
-		ListView listview=(ListView) findViewById(R.id.listView1);
-		View loadMoreView;
-		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_list_loadmore, null);  
-    	listview.addFooterView(loadMoreView);
+		listview=(ListView) findViewById(R.id.listView1);
     	
     	adapter = new ListRecipeAdapter(this,list);
-    	adapter.notifyDataSetChanged();
+    	listview.requestLayout();
     	listview.setAdapter(adapter);
+    	//adapter.notifyDataSetChanged();
     	
     	ListRecipeTask task = new ListRecipeTask();
 		task.listView = listview;
 		task.activity = this;
 		//task.list = list;
-		//task.pageNo = pageNo;
 		task.execute();
+		
+		/*View loadMoreView;
+		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_comment_loadmore, null);  
+    	listview.addFooterView(loadMoreView);*/
 		
 		EditText searchEditText = (EditText) findViewById(R.id.listRecipeSearch);
 		searchEditText.setOnKeyListener(new OnKeyListener() {  
@@ -212,6 +209,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	
 	class ListRecipeTask extends AsyncTask<Object, Object, Object>{
 		ListView listView;
+//		ArrayList<JSONObject> tempList;
 		ListRecipeActivity activity;
 		String search;
 		String recipeRecult;
@@ -237,12 +235,16 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+			//adapter.notifyDataSetChanged();
 			return null;
 		}
 		
 		@Override
 		public void onPostExecute(Object result){
+			listView.setVisibility(View.GONE);  
+			listview.requestLayout();
 			adapter.notifyDataSetChanged();
+			listView.setVisibility(View.VISIBLE);  
 		}
 	}
 	
@@ -293,7 +295,21 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	
 	public String getSearchRecipeList(String search){
 		return RecipeTalkToServer.recipeGet("recipe/search?pageNo="+pageNo+"&pageSize=10&queryStr="+search);
-		
+	}
+
+	public void backToFront(View view){
+		ListRecipeActivity.this.finish();
 	}
 	
+	public void backToHome(View view){
+		ListRecipeActivity.this.finish();
+		Intent intent = new Intent();
+		intent.setClass(ListRecipeActivity.this, MainActivity.class);
+		startActivity(intent);
+	}
+	
+	public void backToMore(View view){
+		Toast.makeText(getApplicationContext(), "Coming Soon...",
+			     Toast.LENGTH_SHORT).show();
+	}
 }
