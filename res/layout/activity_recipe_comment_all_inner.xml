@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp" >
+    
+    <ImageView       
+        android:id="@+id/singleCommentHead"
+        android:paddingRight="15dp"
+        android:layout_width="65dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_launcher"/>
+    
+    <LinearLayout android:id="@+id/singleCommentDetail"   
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content"  
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/singleCommentHead">  
+        
+        <TextView  
+	        android:id="@+id/singleCommentAccount"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#040404"
+	        android:typeface="sans"
+	        android:textSize="15sp"/>
+        
+        <TextView  
+	        android:id="@+id/singleCommentTime"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#040404"
+	        android:typeface="sans"
+	        android:textSize="12sp"/>
+        
+        <TextView  
+	        android:id="@+id/singleCommentContent"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#040404"
+	        android:typeface="sans"
+	        android:textSize="16sp"/>
+          
+    </LinearLayout>
+
+</RelativeLayout>
