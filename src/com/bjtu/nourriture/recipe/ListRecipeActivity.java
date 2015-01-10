@@ -81,6 +81,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
     	listview.addFooterView(loadMoreView);
     	
     	adapter = new ListRecipeAdapter(this,list);
+    	adapter.notifyDataSetChanged();
     	listview.setAdapter(adapter);
     	
     	ListRecipeTask task = new ListRecipeTask();
