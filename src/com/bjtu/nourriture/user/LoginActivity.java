@@ -126,7 +126,7 @@ public class LoginActivity extends Activity {
 		user_account = userServer2.getString("account");
 		user_password = userServer2.getString("password");
 		user_head = userServer2.getString("head");
-		user_id=userServer2.getString("user_id");
+		user_id=userServer2.getString("_id");
 		
 		Session session=Session.getSession();
 		session.put("username", user_account);
