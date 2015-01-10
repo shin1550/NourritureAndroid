@@ -1,15 +1,10 @@
 package com.bjtu.nourriture.attention;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,8 +13,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +27,9 @@ import android.widget.Toast;
 
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
+import com.bjtu.nourriture.common.Session;
+import com.bjtu.nourriture.recipe.RecipeTalkToServer;
+import com.bjtu.nourriture.user.LoginActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -40,6 +38,9 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 public class SingleRecipeActivity extends Activity{
 
 	DisplayImageOptions options;
+	DisplayImageOptions optionRound;
+	Session session = Session.getSession();
+	Intent intentLogIn = new Intent();
 	ArrayList<JSONObject> commentList = null;
 	JSONObject singleObject = null;
 	String singleRecipeId = null;
@@ -69,8 +70,18 @@ public class SingleRecipeActivity extends Activity{
 		.cacheInMemory(true)
 		.cacheOnDisk(true)
 		.considerExifParams(true)
-		.displayer(new RoundedBitmapDisplayer(20))
+		.displayer(new RoundedBitmapDisplayer(0))
 		.build();
+		optionRound = new DisplayImageOptions.Builder()
+		.showImageOnLoading(R.drawable.ic_launcher)
+		.showImageForEmptyUri(R.drawable.ic_launcher)
+		.showImageOnFail(R.drawable.ic_launcher)
+		.cacheInMemory(true)
+		.cacheOnDisk(true)
+		.considerExifParams(true)
+		.displayer(new RoundedBitmapDisplayer(90))
+		.build();
+		intentLogIn.setClass(SingleRecipeActivity.this, LoginActivity.class);
 		
 		Intent intent = getIntent();
 		singleData = intent.getStringExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE);
@@ -82,40 +93,7 @@ public class SingleRecipeActivity extends Activity{
 	}
 	
 	public String getCommentList(){
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-		
-		String result = null;
-        BufferedReader reader = null;
-        try {
-            HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet();
-            request.setURI(new URI(
-                    "http://123.57.38.31:3000/service/recipe/listComment?pageNo=1&pageSize=5&recipeId="+singleRecipeId));
-            HttpResponse response = client.execute(request);
-            reader = new BufferedReader(new InputStreamReader(response
-                    .getEntity().getContent()));
- 
-            StringBuffer strBuffer = new StringBuffer("");
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                strBuffer.append(line);
-            }
-            result = strBuffer.toString();
- 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                    reader = null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        return result;
+		return RecipeTalkToServer.recipeGet("recipe/listComment?pageNo=1&pageSize=5&recipeId="+singleRecipeId);
 	}
 	
 	class SingleRecipeTask extends AsyncTask<Object, Object, Object>{
@@ -162,6 +140,7 @@ public class SingleRecipeActivity extends Activity{
 		public void onPostExecute(Object result){
 			commentList = list;
 			showRecipe();
+			showCollect();
 			showComment();
 		}
 	}
@@ -183,7 +162,7 @@ public class SingleRecipeActivity extends Activity{
 		});
 
 		ImageLoader.getInstance()
-		.displayImage(authorHead, recipeAuthorHeadImageView, options, new SimpleImageLoadingListener() {
+		.displayImage(authorHead, recipeAuthorHeadImageView, optionRound, new SimpleImageLoadingListener() {
 		});
 		
 		recipeNameTextView.setText(recipeName);
@@ -247,6 +226,7 @@ public class SingleRecipeActivity extends Activity{
 	
 	public void showComment(){
 		TableLayout commentTable = (TableLayout) findViewById(R.id.singleCommentTable);
+		commentTable.removeAllViews();
 		commentTable.setStretchAllColumns(true);
 		if(commentList != null){
 			for (int i = 0; i < commentList.size(); i++) {
@@ -269,7 +249,7 @@ public class SingleRecipeActivity extends Activity{
 					commentTime.setText(commentList.get(i).getString("logTime"));
 					commentContent.setText(commentList.get(i).getString("content"));
 					ImageLoader.getInstance()
-					.displayImage("http://123.57.38.31:3000"+commentList.get(i).getJSONObject("author").getString("head").trim(), commentHeadImageView, options, new SimpleImageLoadingListener() {
+					.displayImage("http://123.57.38.31:3000"+commentList.get(i).getJSONObject("author").getString("head").trim(), commentHeadImageView, optionRound, new SimpleImageLoadingListener() {
 					});
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -279,7 +259,7 @@ public class SingleRecipeActivity extends Activity{
 				commentUserAccount.setTextSize(12);
 				commentUserLayout.addView(commentHeadImageView,70,60);
 				commentUserLayout.addView(commentUserAccount);
-				tablerow.addView(commentUserLayout,70,88);
+				tablerow.addView(commentUserLayout,70,LayoutParams.WRAP_CONTENT);
 				commentTime.setTextSize(12);
 				commentInfoLayout.addView(commentTime);
 				commentInfoLayout.addView(commentContent);
@@ -291,13 +271,147 @@ public class SingleRecipeActivity extends Activity{
 		}
 	}
 	
+	public void showCollect(){
+		ImageView singleRecipeCollect = (ImageView) findViewById(R.id.singleRecipeCollect);
+		String resultString = RecipeTalkToServer.recipeGet("recipe/checkCollect?recipeId="+singleRecipeId+"&"+Constants.POST_RECIPE_USER_ID+"="+(String) session.get("user_id"));
+		if(resultString.equals("false")){
+			singleRecipeCollect.setImageDrawable(getResources().getDrawable(R.drawable.collect));
+			singleRecipeCollect.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					if(session.get("username") == null || session.get("username").equals("")){
+						Toast.makeText(getApplicationContext(), "Sign in please",
+							     Toast.LENGTH_SHORT).show();
+						//intentLogIn = new Intent();
+						//intentLogIn.setClass(SingleRecipeActivity.this, LoginActivity.class);
+						//intentLogIn = new Intent(getApplicationContext(), LoginActivity.class);
+						startActivity(intentLogIn);
+					}else{
+						List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+			            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COLLECT_RECIPEID, singleRecipeId));
+			            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ID, (String) session.get("user_id")));
+			            String resultString = RecipeTalkToServer.recipePost("recipe/collect",postParameters);
+			            if(resultString.equals("collect success！")){
+			            	Toast.makeText(getApplicationContext(), "collect success !",
+								     Toast.LENGTH_SHORT).show();
+			        		collectNum = String.valueOf(Integer.parseInt(collectNum)+1);
+			        		TextView singleRecipeCollectNum = (TextView) findViewById(R.id.singleRecipeCollectNum);
+			        		singleRecipeCollectNum.setText(collectNum);
+			            }
+						showCollect();
+					}
+				}
+	        });
+		}else{
+			singleRecipeCollect.setImageDrawable(getResources().getDrawable(R.drawable.already_collect));
+			singleRecipeCollect.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+	            	Toast.makeText(getApplicationContext(), "Already Collected !",
+						     Toast.LENGTH_SHORT).show();
+				}
+	        });
+		}
+	}
+	
 	public void commentIt(View view){
 		EditText newCommentEditText = (EditText) findViewById(R.id.singleNewComment);
 		String commentString = newCommentEditText.getText().toString();
 		if(commentString == null || commentString.trim().equals("")){
 			Toast.makeText(getApplicationContext(), "Empty comment",
 				     Toast.LENGTH_SHORT).show();
+		}else{
+			
+			if(session.get("username") == null || session.get("username").equals("")){
+				Toast.makeText(getApplicationContext(), "Sign in please",
+					     Toast.LENGTH_SHORT).show();
+				//intentLogIn = new Intent(getApplicationContext(), LoginActivity.class);
+				startActivity(intentLogIn);
+			}else{
+				List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_CONENT, commentString));
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_REPLYID, singleRecipeId));
+	            
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ID, (String) session.get("user_id")));
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ACCOUNT, (String) session.get("username")));
+	            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_HEAD, (String) session.get("head")));
+	            String resultString = RecipeTalkToServer.recipePost("recipe/comment",postParameters);
+	            
+	            if(resultString.equals("comment success！")){
+	            	Toast.makeText(getApplicationContext(), "Comment success !",
+						     Toast.LENGTH_SHORT).show();
+	            	newCommentEditText.setText("");
+	            	RefreshCommentTask task = new RefreshCommentTask();
+	        		task.activity = this;
+	        		task.execute();
+	        		commentNum = String.valueOf(Integer.parseInt(commentNum)+1);
+	        		TextView singleRecipeCommentNum = (TextView) findViewById(R.id.singleRecipeCommentNum);
+	        		TextView singleRecipeComment = (TextView) findViewById(R.id.singleRecipeComment);
+	        		singleRecipeCommentNum.setText(commentNum);
+	        		singleRecipeComment.setText("People say("+commentNum+"):");
+	            }
+			}
 		}
  	}
 	
+	class RefreshCommentTask extends AsyncTask<Object, Object, Object>{
+		SingleRecipeActivity activity;
+		ArrayList<JSONObject> list = new ArrayList<JSONObject>();
+		
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			//评论信息
+			String commentRecult = getCommentList();
+			try {
+				JSONObject jsonObject = new JSONObject(commentRecult);
+				JSONArray jsonArray = jsonObject.getJSONArray("root");
+				for(int i=0;i<jsonArray.length();i++){   
+	                JSONObject jo = (JSONObject)jsonArray.opt(i);
+	                list.add(jo);
+	            }
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		public void onPostExecute(Object result){
+			commentList.clear();
+			commentList = list;
+			showComment();
+		}
+		
+	}
+	
+	public void moreComment(View view){
+		Intent intent = new Intent(this, SingleRecipeCommentActivity.class);
+		intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_NAME, recipeName);
+		intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID, singleRecipeId);
+		startActivity(intent);
+	}
+	
+	public void collectIt(View view){
+		Session session = Session.getSession();
+		if(session.get("username") == null || session.get("username").equals("")){
+			Toast.makeText(getApplicationContext(), "Sign in please",
+				     Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+		}else{
+			List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COLLECT_RECIPEID, singleRecipeId));
+            
+            postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ID, (String) session.get("user_id")));
+            String resultString = RecipeTalkToServer.recipePost("recipe/collect",postParameters);
+            
+            if(resultString.equals("collect success！")){
+            	Toast.makeText(getApplicationContext(), "collect success !",
+					     Toast.LENGTH_SHORT).show();
+        		collectNum = String.valueOf(Integer.parseInt(collectNum)+1);
+        		TextView singleRecipeCollectNum = (TextView) findViewById(R.id.singleRecipeCollectNum);
+        		singleRecipeCollectNum.setText(collectNum);
+            }
+		}
+ 	}
 }
