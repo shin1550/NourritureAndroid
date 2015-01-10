@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:paddingBottom="2dp" >
@@ -14,7 +14,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            >
 
             <ImageView
                 android:id="@+id/img_weixin"
@@ -22,7 +23,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:scaleType="matrix"
-                android:src="@drawable/back_64" />
+                android:src="@drawable/back_64"
+                android:onClick="backToFront" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,7 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            >
 
             <ImageView
                 android:id="@+id/img_address"
@@ -45,7 +48,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:scaleType="matrix"
-                android:src="@drawable/home_64" />
+                android:src="@drawable/home_64"
+                android:onClick="backToHome" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            >
 
             
             <ImageView
@@ -68,12 +73,13 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:scaleType="matrix"
-                android:src="@drawable/more_64" />
+                android:src="@drawable/more_64"
+                android:onClick="backToMore" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="meixianghao"
+                android:text="More"
                 android:textColor="#000000"
                 android:textSize="12sp" />
         </LinearLayout>
