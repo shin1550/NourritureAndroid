@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -35,10 +37,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mobstat.StatService;
 import com.bjtu.nourriture.common.CheckHttpUtil;
@@ -67,6 +73,12 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	DisplayImageOptions options;
 	Handler handler;
 	Bitmap bitmap;
+	
+	//
+	//private MovieLayout movieLayout;  
+    //private MovieAdapter adapter; 
+	private String texts[] = null;
+    private int images[] = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -141,7 +153,77 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		task.execute();
 		
 		gallery.setOnItemClickListener(this);
+		
+		//hh
+//		movieLayout=(MovieLayout)findViewById(R.id.movieLayout);  
+//        adapter=new MovieAdapter(this);  
+//        for(int i=0;i<10;i++){  
+//            Map<String,Object> map=new HashMap<String,Object>();  
+//            map.put("image", getResources().getDrawable(R.drawable.go));  
+//            map.put("text", "电影"+(i+1));  
+//            adapter.addObject(map);  
+//        }  
+//        movieLayout.setAdapter(adapter);
+		images=new int[]{R.drawable.back_64, R.drawable.collect,
+                R.drawable.home_64, R.drawable.more_64};
+        texts = new String[]{ "Menu", "Recipe",
+                "Attention", "Topic"};
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
+        for (int i = 0; i < 4; i++) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("itemImage", images[i]);
+            map.put("itemText", texts[i]);
+            lstImageItem.add(map);
+        }
+        
+        SimpleAdapter saImageItems = new SimpleAdapter(this, 
+                lstImageItem,// 数据源
+                R.layout.night_item,// 显示布局
+                new String[] { "itemImage", "itemText" }, 
+                new int[] { R.id.itemImage, R.id.itemText }); 
+        gridview.setAdapter(saImageItems);
+        gridview.setOnItemClickListener(new ItemClickListener());
 	}
+	
+	class ItemClickListener implements OnItemClickListener {
+        /**
+         * 点击项时触发事件
+         * 
+         * @param parent  发生点击动作的AdapterView
+         * @param view 在AdapterView中被点击的视图(它是由adapter提供的一个视图)。
+         * @param position 视图在adapter中的位置。
+         * @param rowid 被点击元素的行id。
+         */
+        public void onItemClick(AdapterView<?> parent, View view, int position, long rowid) {
+            HashMap<String, Object> item = (HashMap<String, Object>) parent.getItemAtPosition(position);
+            //获取数据源的属性值
+            String itemText=(String)item.get("itemText");
+            Object object=item.get("itemImage");
+            Toast.makeText(MainActivity.this, itemText, Toast.LENGTH_LONG).show();
+            
+            //根据图片进行相应的跳转
+            switch (images[position]) {
+            case R.drawable.back_64:
+                //startActivity(new Intent(MainActivity.this, TestActivity1.class));//启动另一个Activity
+                //finish();//结束此Activity，可回收
+            	toggleMenu(null);
+            	//Toast.makeText(MainActivity.this, R.drawable.go, Toast.LENGTH_SHORT).show();
+                break;
+            case R.drawable.collect:
+            	toListRecipe(null);
+            	//Toast.makeText(MainActivity.this, R.drawable.go, Toast.LENGTH_SHORT).show();
+                break;
+            case R.drawable.home_64:
+            	toListAttention(null);
+            	break;
+            case R.drawable.more_64:
+            	toListTopic(null);
+            	break;
+            }
+            
+        }
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -316,7 +398,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
             request.setURI(new URI(
-                    "http://123.57.38.31:3000/service/recipe/listAll?pageNo=1&pageSize=5"));
+                    "http://123.57.38.31:3000/service/recipe/listAll?pageNo=1&pageSize=10"));
             HttpResponse response = client.execute(request);
             reader = new BufferedReader(new InputStreamReader(response
                     .getEntity().getContent()));
