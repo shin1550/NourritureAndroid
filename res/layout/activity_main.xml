@@ -1,6 +1,7 @@
 <com.bjtu.nourriture.SlidingMenu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:silding="http://schemas.android.com/apk/res/com.bjtu.nourriture"
+    xmlns:myattr="http://schemas.android.com/apk/res/com.bjtu.nourriture"
     android:id="@+id/id_menu"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
@@ -28,13 +29,82 @@
 				android:spacing="1dip">
                 
             </Gallery>
+            <!--
+            <HorizontalScrollView
+		    	android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content"
+		    	android:scrollbars="none">
+    			<com.bjtu.nourriture.MovieLayout
+    				android:id="@+id/movieLayout"
+    				android:layout_width="wrap_content"
+    				android:layout_height="wrap_content"
+    			/>
+    		</HorizontalScrollView>
+    		-->
+    		
+    		<!-- 
+			android:numColumns="auto_fit" ，GridView的列数设置为自动 
+			android:columnWidth="90dp"，每列的宽度，也就是Item的宽度
+			android:stretchMode="columnWidth"，缩放与列宽大小同步
+			android:verticalSpacing="10dp"，两行之间的边距，如：行一(NO.0~NO.2)与行二(NO.3~NO.5)间距为10dp
+			android:horizontalSpacing="10dp"，两列之间的边距
+			 -->
+			<GridView
+			    android:id="@+id/gridview"
+			    android:layout_width="wrap_content" 
+			    android:layout_height="wrap_content"
+			    android:numColumns="auto_fit"
+			    android:verticalSpacing="10dp"
+			    android:horizontalSpacing="14dp"
+			    android:columnWidth="62dp"
+			    android:stretchMode="columnWidth"
+			    android:gravity="center"
+			/>
+			
+			<com.bjtu.nourriture.SlidingSwitcherView  
+		        android:id="@+id/slidingLayout"  
+		        myattr:auto_play="true"  
+		        android:layout_width="fill_parent"  
+		        android:layout_height="350dp" >  
+  
+		        <LinearLayout  
+		            android:layout_width="fill_parent"  
+		            android:layout_height="fill_parent"  
+		            android:orientation="horizontal" >  
+	  
+	            <Button  
+	                android:layout_width="fill_parent"  
+	                android:layout_height="fill_parent"  
+	                android:background="@drawable/image1" />  
+	  
+	            <Button  
+	                android:layout_width="fill_parent"  
+	                android:layout_height="fill_parent"  
+	                android:background="@drawable/image2" />  
+	  
+	            <Button  
+	                android:layout_width="fill_parent"  
+	                android:layout_height="fill_parent"  
+	                android:background="@drawable/image3" />  
+	  
+	            <Button  
+	                android:layout_width="fill_parent"  
+	                android:layout_height="fill_parent"  
+	                android:background="@drawable/image4" />  
+	        	</LinearLayout>  
+  
+	        	<LinearLayout  
+		            android:layout_width="60dip"  
+		            android:layout_height="20dip"  
+		            android:layout_alignParentBottom="true"  
+		            android:layout_alignParentRight="true"  
+		            android:layout_margin="15dip"  
+		            android:orientation="horizontal" >  
+	        	</LinearLayout>  
+			</com.bjtu.nourriture.SlidingSwitcherView>
+    		
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/hello_world" />
-
+			<!-- 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,6 +140,7 @@
                 android:layout_marginTop="16dp"
                 android:onClick="toListTopic"
                 android:text="to list topic" />
+            -->
         </LinearLayout>
 
         

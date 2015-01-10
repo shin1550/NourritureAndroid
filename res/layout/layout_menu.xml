@@ -8,13 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:onClick="toMenu1"
         android:orientation="vertical" >
 
         <RelativeLayout
              android:id="@+id/layout_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" 
+            android:onClick="toMenu1">
             <ImageView
                 android:id="@+id/one"
                 android:layout_width="50dp"
@@ -39,6 +39,7 @@
              android:id="@+id/layout_1_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" 
+            android:onClick="toMore"
             android:visibility="gone">
             <ImageView
                 android:id="@+id/one_one"
@@ -62,7 +63,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:onClick="toCreateRecipe">
 
             <ImageView
                 android:id="@+id/two"
@@ -79,7 +81,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/two"
-                android:text="第2个Item"
+                android:text="Create Recipe"
                 android:textColor="#f0f0f0"
                 android:textSize="20sp" />
         </RelativeLayout>

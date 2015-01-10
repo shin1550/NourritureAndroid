@@ -88,28 +88,25 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
 	public String getRecipeList(){
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
 		//only recipe
-		String result = null;
+		String resultString = null;
         BufferedReader reader = null;
         try {
         	Session session=Session.getSession();
         	if(session.get("username") == null || session.get("username").equals("")){
 				Toast.makeText(getApplicationContext(), "Sign in please",
 					     Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent(this, LoginActivity.class);
-				startActivity(intent);
+				Intent intentLogIn = new Intent(getApplicationContext(), LoginActivity.class);
+				startActivity(intentLogIn);
 			}else{
-				List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-	            //postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_CONENT, commentString));
-	            //postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_COMMENT_REPLYID, singleRecipeId));
+				//List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 	            
-	            postParameters.add(new BasicNameValuePair("androidId", "548c3b76aa90218a2272bdc1"));
-	            postParameters.add(new BasicNameValuePair("androidAccount", (String) session.get("username")));
-	            postParameters.add(new BasicNameValuePair("androidHead", (String) session.get("head")));
-	            String resultString = RecipeTalkToServer.recipePost("recipe/comment",postParameters);
+	            //postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ID, (String) session.get("user_id")));
+	            resultString = RecipeTalkToServer.recipeGet("attention/lookFriendStatusRecipe?"+Constants.POST_RECIPE_USER_ID+"="+(String) session.get("user_id"));
+	            System.out.println(resultString);
 			}  
+       
         	
-        	
-            HttpClient client = new DefaultHttpClient();
+            /*HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
             request.setURI(new URI(
                     "http://123.57.38.31:3000/service/attention/lookFriendStatusRecipe?pageNo=1&pageSize=10"));
@@ -122,7 +119,7 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
             while ((line = reader.readLine()) != null) {
                 strBuffer.append(line);
             }
-            result = strBuffer.toString();
+            result = strBuffer.toString();*/
  
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,8 +133,8 @@ public class ListAttentionActivity extends Activity implements AdapterView.OnIte
                 }
             }
         }
-        System.out.print("result===="+result); 
-        return result;
+        
+        return resultString;
 	}
 	
 	@Override

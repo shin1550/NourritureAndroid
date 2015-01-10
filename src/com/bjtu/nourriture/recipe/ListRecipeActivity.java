@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
+import com.bjtu.nourriture.common.CheckHttpUtil;
 import com.bjtu.nourriture.common.Constants;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -51,6 +52,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		CheckHttpUtil.initIntener(this);
 		
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())  
         .threadPriority(Thread.NORM_PRIORITY - 2)
