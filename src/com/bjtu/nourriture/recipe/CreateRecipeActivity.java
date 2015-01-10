@@ -2,6 +2,8 @@ package com.bjtu.nourriture.recipe;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import android.app.Activity;
@@ -9,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,8 +24,10 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bjtu.nourriture.R;
+import com.bjtu.nourriture.common.Constants;
 import com.bjtu.nourriture.topic.Tools;
 
 public class CreateRecipeActivity extends Activity{
@@ -38,6 +43,13 @@ public class CreateRecipeActivity extends Activity{
 	private String[] difficultity = new String[]{"Junior Level","Middle Level","Senior Level"};
 	private String[] time = new String[] {"About 10 minutes","10 - 30 minutes","30 - 60 minutes","More than 60 minutes"};
 	
+	private String recipeName = "";
+	private String difficultityChoose = "";
+	private String cookTime = "";
+	private String material = "";
+	private String amount = "";
+	private String description = "";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,7 +61,8 @@ public class CreateRecipeActivity extends Activity{
 	}
 	
 	public void forwardTo(View view){
-		//CreateRecipeActivity.this.finish();
+		Toast.makeText(CreateRecipeActivity.this, "Please finsh the infomation ！",
+				Toast.LENGTH_LONG).show();
 	}
 	
 	public void chooseDifficultity(View view){   
@@ -58,7 +71,8 @@ public class CreateRecipeActivity extends Activity{
         .setItems(difficultity,new DialogInterface.OnClickListener(){  
             public void onClick(DialogInterface dialog, int which){
             	TextView textView = (TextView) findViewById(R.id.createRecipeDifficultity);
-            	textView.append("Difficultity:\n"+difficultity[which]);
+            	textView.setText("Difficultity:\n"+difficultity[which]);
+            	difficultityChoose = difficultity[which];
             	dialog.dismiss();  
             }  
          }).show(); 
@@ -70,7 +84,8 @@ public class CreateRecipeActivity extends Activity{
         .setItems(time,new DialogInterface.OnClickListener(){  
             public void onClick(DialogInterface dialog, int which){
             	TextView textView = (TextView) findViewById(R.id.createRecipeTime);
-            	textView.append("Cook Time:\n"+time[which]);
+            	textView.setText("Cook Time:\n"+time[which]);
+            	cookTime = time[which];
             	dialog.dismiss();  
             }  
          }).show();
@@ -97,7 +112,7 @@ public class CreateRecipeActivity extends Activity{
 
 	public void showDialog(View view){
 		new AlertDialog.Builder(this)
-		.setTitle("upload picture")
+		.setTitle("Upload Photo")
 		.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -105,30 +120,22 @@ public class CreateRecipeActivity extends Activity{
 				case 0:
 					Intent intentFromGallery = new Intent();
 					intentFromGallery.setType("image/*"); // 设置文件类型
-					intentFromGallery
-							.setAction(Intent.ACTION_GET_CONTENT);
-					startActivityForResult(intentFromGallery,
-							IMAGE_REQUEST_CODE);
+					intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
+					startActivityForResult(intentFromGallery,IMAGE_REQUEST_CODE);
 					break;
 				case 1:
-					Intent intentFromCapture = new Intent(
-							MediaStore.ACTION_IMAGE_CAPTURE);
+					Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					// 判断存储卡是否可以用，可用进行存储
 					if (Tools.hasSdcard()) {
-						intentFromCapture.putExtra(
-								MediaStore.EXTRA_OUTPUT,
-								Uri.fromFile(new File(Environment
-										.getExternalStorageDirectory(),
-										IMAGE_FILE_NAME)));
+						intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
+								Uri.fromFile(new File(Environment.getExternalStorageDirectory(),IMAGE_FILE_NAME)));
 					}
-					startActivityForResult(intentFromCapture,
-							CAMERA_REQUEST_CODE);
+					startActivityForResult(intentFromCapture,CAMERA_REQUEST_CODE);
 					break;
 				}
 			}
 		})
 		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
@@ -140,31 +147,25 @@ public class CreateRecipeActivity extends Activity{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//结果码不等于取消时候
 		if (resultCode != RESULT_CANCELED) {
-
 			switch (requestCode) {
 			case IMAGE_REQUEST_CODE:
-				//startPhotoZoom(data.getData());
+				startPhotoZoom(data.getData());
 				startActivityForResult(data, 2);
 				break;
 			case CAMERA_REQUEST_CODE:
 				if (Tools.hasSdcard()) {
-					File tempFile = new File(
-							Environment.getExternalStorageDirectory()
-									+ IMAGE_FILE_NAME);
+					File tempFile = new File(Environment.getExternalStorageDirectory()+IMAGE_FILE_NAME);
 					System.out.println("carame-------uri"+Uri.fromFile(tempFile));
-					//startPhotoZoom(Uri.fromFile(tempFile));
+					startPhotoZoom(Uri.fromFile(tempFile));
 					startActivityForResult(data, 2);
 				} else {
 					System.out.println("-------");
-					
 					/*Toast.makeText(TopicDetailActivity.this, "未找到存储卡，无法存储照片！",
 							Toast.LENGTH_LONG).show();*/
 				}
-
 				break;
 			case RESULT_REQUEST_CODE:
 				if (data != null) {
-					
 					System.out.println("date----"+data);
 					System.out.println("uri222222222----"+data.getData());
 					getImageToView(data);
@@ -184,16 +185,25 @@ public class CreateRecipeActivity extends Activity{
 			String path=saveImage(photo,80);
 			picPath=path;
 			
-			System.out.println("====----------"+picPath);
-			/*Intent intent = new Intent();
-			intent.setClass(TopicDetailActivity.this,TopicUploadActivity.class);
-			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_UPLAOD_PATH, path);
-			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_TOPIC_ID, idString);
-			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL, singleData);
-			startActivity(intent);*/
-
-			
+			toStepActivity();
 		}
+	}
+	
+	public void startPhotoZoom(Uri uri) {
+
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(uri, "image/*");
+		// 设置裁剪
+		intent.putExtra("crop", "true");
+		// aspectX aspectY 是宽高的比例
+		intent.putExtra("aspectX", 1);
+		intent.putExtra("aspectY", 1.5);
+		// outputX outputY 是裁剪图片宽高
+		intent.putExtra("outputX", 320);
+		intent.putExtra("outputY", 480);
+		intent.putExtra("return-data", true);
+      
+		startActivityForResult(intent, 2);
 	}
 	
 	public static String saveImage(Bitmap bitmap, int quality) {
@@ -224,5 +234,30 @@ public class CreateRecipeActivity extends Activity{
 		
 		System.out.println(path);
 		return path;
+	}
+	
+	public void toStepActivity(){
+		EditText recipeNameEditText = (EditText) findViewById(R.id.createRecipeName);
+		EditText materialEditText = (EditText) findViewById(R.id.createMaterial);
+		EditText amountEditText = (EditText) findViewById(R.id.createAmount);
+		EditText descriptioneEditText = (EditText) findViewById(R.id.createRecipeDescription);
+		
+		recipeName = recipeNameEditText.getText().toString();
+		material = materialEditText.getText().toString();
+		amount = amountEditText.getText().toString();
+		description = descriptioneEditText.getText().toString();
+		
+		Intent intent = new Intent();
+		intent.setClass(CreateRecipeActivity.this,CreateRecipeDetailActivity.class);
+		
+		intent.putExtra(Constants.INTENT_EXTRA_RECIPE_PHOTO_PATH, picPath);
+		intent.putExtra(Constants.INTENT_EXTRA_RECIPE_NAME, recipeName);
+		intent.putExtra(Constants.INTENT_EXTRA_RECIPE_DESCRIPTION, description);
+		intent.putExtra(Constants.INTENT_EXTRA_RECIPE_MATERIAL, material);
+		intent.putExtra(Constants.INTENT_EXTRA_RECIPE_AMOUNT, amount);
+		intent.putExtra(Constants.INTENT_EXTRA_RECIPE_DIFFICULTITY, difficultityChoose);
+		intent.putExtra(Constants.INTENT_EXTRA_RECIPE_COOK_TIME, cookTime);
+		
+		startActivity(intent);
 	}
 }

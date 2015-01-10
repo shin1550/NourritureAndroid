@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Upload Recipe"
-            android:hint="Recipe Name"/>
+            />
         
         <ImageView 
             android:layout_alignParentRight="true"
@@ -39,11 +39,12 @@
     </LinearLayout>
 
     	<EditText
-	        android:id="@+id/editText1"
+	        android:id="@+id/createRecipeName"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:paddingTop="20dp"
-	        android:ems="10" >
+	        android:ems="10"
+	        android:hint="Recipe Name" >
     	</EditText>
     	
     	<TableLayout
@@ -89,6 +90,7 @@
     	        android:layout_width="match_parent"
     	        android:layout_height="wrap_content">
     	        <EditText
+    	            android:id="@+id/createMaterial"
     	            android:layout_width="30dp"
     	            android:layout_height="wrap_content"
     	            android:hint="Material"/>
@@ -97,6 +99,7 @@
                     android:layout_height="fill_parent"
                     android:background="#040404" />
     	        <EditText
+    	            android:id="@+id/createAmount"
     	            android:layout_width="30dp"
     	            android:layout_height="wrap_content"
     	            android:hint="Amount"/>
@@ -121,10 +124,12 @@
     	</TableLayout>
 
     	<EditText
-    	    android:id="@+id/editText2"
+    	    android:id="@+id/createRecipeDescription"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
     	    android:ems="10"
+    	    android:paddingTop="15dp"
+    	    android:paddingBottom="15dp"
     	    android:inputType="textMultiLine"
     	    android:hint="Your story with it" >
 
@@ -155,7 +160,4 @@
     	    
     	</RelativeLayout>
 
-    	<ImageView
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"/>
 </LinearLayout>
