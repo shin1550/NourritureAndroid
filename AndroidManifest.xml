@@ -112,6 +112,10 @@
             android:name=".recipe.SingleRecipeCommentActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".recipe.CreateRecipeActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

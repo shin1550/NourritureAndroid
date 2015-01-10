@@ -39,11 +39,13 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mobstat.StatService;
 import com.bjtu.nourriture.common.CheckHttpUtil;
 import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.attention.ListAttentionActivity;
+import com.bjtu.nourriture.recipe.CreateRecipeActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 import com.bjtu.nourriture.user.LoginActivity;
@@ -380,5 +382,19 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		 * 如果该FragmentActivity包含了几个全页面的fragment，那么可以在fragment里面加入就可以了，这里可以不加入。如果不加入将不会记录该Activity页面。
 		 */
 		StatService.onPause(this);
+	}
+	
+	public void toCreateRecipe(View view){
+		Session session = Session.getSession();
+		if(session.get("username") == null || session.get("username").equals("")){
+			Toast.makeText(getApplicationContext(), "Sign in please",
+				     Toast.LENGTH_SHORT).show();
+			Intent intentLogIn = new Intent(this, LoginActivity.class);
+			startActivity(intentLogIn);
+		}else{
+			Intent intent = new Intent();
+			intent.setClass(MainActivity.this, CreateRecipeActivity.class);
+			startActivity(intent);
+		}
 	}
 }
