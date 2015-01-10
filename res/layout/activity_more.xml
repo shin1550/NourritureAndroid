@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical">
+<RelativeLayout  
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#eee"
+        android:orientation="vertical" >
+        
+        <RelativeLayout
+        android:id="@+id/login_top_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/title_bar" >
+
+        <Button
+            android:id="@+id/more_back_btn"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/title_btn_back"
+            android:onClick="login_back"
+            android:text="Back"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="More"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+		
+        <!-- 个人中心开始 -->
+		<RelativeLayout      				    
+            android:layout_width="fill_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="@drawable/preference_single_item" >
+      		<ImageView
+      		    android:id="@+id/personalcenter"
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentLeft="true"
+        		android:src="@drawable/more1" />    
+
+            <TextView
+                android:id="@+id/personal_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/personalcenter"
+                android:padding="8dp"
+                android:text="Personal Center                                                          "
+                android:textColor="#000"
+                android:textSize="17sp" />
+ 
+			<ImageView
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentRight="true"
+        		android:src="@drawable/mm_submenu" />      					
+   		</RelativeLayout>
+   		   <!-- 个人中心结束 -->
+		
+		<!-- 资料修改开始 -->
+		<RelativeLayout      				    
+            android:layout_width="fill_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="@drawable/preference_single_item" >
+      		<ImageView
+      		    android:id="@+id/update"
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentLeft="true"
+        		android:src="@drawable/more2" />    
+            <TextView
+                android:id="@+id/update_person"
+        		android:layout_width="wrap_content" 
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@id/update"
+        		android:layout_centerVertical="true"
+        		android:padding="8dp" 
+        		android:text="Modify Information  "
+        		android:textSize="17sp"		
+				android:textColor="#000" /> 
+			<ImageView
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentRight="true"
+        		android:src="@drawable/mm_submenu" />      					
+   		</RelativeLayout>
+        <!-- 资料修改结束 -->
+   		
+		<!-- 好友申请 -->
+		<RelativeLayout      				    
+            android:layout_width="fill_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="@drawable/preference_single_item" >
+      		<ImageView
+      		    android:id="@+id/friendApply"
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentLeft="true"
+        		android:src="@drawable/more3" />    
+            <TextView
+                android:id="@+id/friend_Apply"
+        		android:layout_width="wrap_content" 
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@id/friendApply"
+        		android:layout_centerVertical="true"
+        		android:padding="8dp" 
+        		android:text="Friends Apply                                                                 "
+        		android:textSize="17sp"		
+				android:textColor="#000" /> 
+			<ImageView
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentRight="true"
+        		android:src="@drawable/mm_submenu" />      					
+   		</RelativeLayout>
+   		<!-- 好友申请结束 -->
+   		
+   		<!-- 我发表的开始 -->
+   		<RelativeLayout      				    
+            android:layout_width="fill_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="@drawable/preference_single_item" >
+      		<ImageView
+      		    android:id="@+id/Mypublish"
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentLeft="true"
+        		android:src="@drawable/more4" />    
+            <TextView
+                android:id="@+id/myPub"
+        		android:layout_width="wrap_content" 
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@id/Mypublish"
+        		android:layout_centerVertical="true"
+        		android:padding="8dp" 
+        		android:text="My Published Items                                                                 "
+        		android:textSize="17sp"		
+				android:textColor="#000" /> 
+			<ImageView
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentRight="true"
+        		android:src="@drawable/mm_submenu" />      					
+   		</RelativeLayout>
+   		
+   		<!-- 我发表的结束 -->
+		
+		<!-- 发表状态开始 -->
+		<RelativeLayout      				    
+            android:layout_width="fill_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="@drawable/preference_single_item" >
+      		<ImageView
+      		    android:id="@+id/status"
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentLeft="true"
+        		android:src="@drawable/more5" />    
+            <TextView
+                 android:id="@+id/publish_status"
+        		android:layout_width="wrap_content" 
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@id/status"
+        		android:layout_centerVertical="true"
+        		android:padding="8dp" 
+        		android:text="Publish Recipe                                                            "
+        		android:textSize="17sp"		
+				android:textColor="#000" /> 
+			<ImageView
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentRight="true"
+        		android:src="@drawable/mm_submenu" />      					
+   		</RelativeLayout>
+   		<!-- 发表状态结束 -->
+   		
+		<!-- 发表游记开始 -->
+		<RelativeLayout      				    
+            android:layout_width="fill_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="@drawable/preference_single_item" >
+      		<ImageView
+      		    android:id="@+id/story"
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentLeft="true"
+        		android:src="@drawable/more6" />    
+            <TextView
+                android:id="@+id/publish_story"
+        		android:layout_width="wrap_content" 
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@id/story"
+        		android:layout_centerVertical="true"
+        		android:padding="8dp" 
+        		android:text="Publish Topic                                                                  "
+        		android:textSize="17sp"		
+				android:textColor="#000" /> 
+			<ImageView
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentRight="true"
+        		android:src="@drawable/mm_submenu" />      					
+   		</RelativeLayout>
+   		<!-- 发表游记结束 -->
+   		
+   		<!-- 切换账户开始 -->
+   		<RelativeLayout      				    
+            android:layout_width="fill_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="@drawable/preference_single_item" >
+      		<ImageView
+      		    android:id="@+id/changeAccount"
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentLeft="true"
+        		android:src="@drawable/more7" />    
+            <TextView
+                android:id="@+id/changeAcc"
+        		android:layout_width="wrap_content" 
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@id/changeAccount"
+        		android:padding="8dp" 
+        		android:text="Change Account                                                                  "
+        		android:textSize="17sp"		
+				android:textColor="#000" /> 
+			<ImageView
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentRight="true"
+        		android:src="@drawable/mm_submenu" />      					
+   		</RelativeLayout>
+   		
+   		<!-- 切换账户结束 -->
+		
+   		<!-- 退出开始 -->
+			<RelativeLayout      				    
+            android:layout_width="fill_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:background="@drawable/preference_single_item" >
+      		<ImageView
+      		    android:id="@+id/exit"
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentLeft="true"
+        		android:src="@drawable/more8" />    
+            <TextView
+                android:id="@+id/exits"
+        		android:layout_width="wrap_content" 
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@id/exit"
+        		android:layout_centerVertical="true"
+        		android:padding="8dp" 
+        		android:text="Logout                                                            "
+        		android:textSize="17sp"		
+				android:textColor="#000" /> 
+			<ImageView
+            	android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"        	     	
+        		android:scaleType="matrix"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentRight="true"
+        		android:src="@drawable/mm_submenu" />      					
+   		</RelativeLayout>
+   		<!-- 退出结束 -->
+    </LinearLayout>
+</RelativeLayout>
+</ScrollView>

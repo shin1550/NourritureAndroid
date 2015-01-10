@@ -65,7 +65,7 @@ public class LoginActivity extends Activity {
 				username = accountText.getText().toString();
 				password = passText.getText().toString();
 				System.out.println("Account:" + username + "---------Password:"+ password);
-				proDia = ProgressDialog.show(LoginActivity.this, "登录","正在登录，请耐心等候");
+				proDia = ProgressDialog.show(LoginActivity.this, "Login","It is just login now,please wait!");
 				proDia.show();
 				new Thread() {
 					@Override
