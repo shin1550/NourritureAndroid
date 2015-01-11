@@ -76,7 +76,6 @@ public class ConnectToServer {
 			Session session = Session.getSession();
 			String sessionid = (String) session.get("sessionId");
 			if(sessionid != null) { 
-				
 				request.setHeader("Cookie", "JSPSESSID.732cdf6d=" + sessionid+";"+Constants.POST_SESSIONID); 
 			}
 

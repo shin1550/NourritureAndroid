@@ -266,7 +266,7 @@ public static Bitmap getHttpBitmap(String url) {
 
 public void getRecipesConnection() throws Exception{
 	url = "service/userinfo/getUserRecipes";
-	connectionMessage = connect.testURLConn1(url);
+	connectionMessage = connect.testURLConn4(url);
 	System.out.println("connectionMessage:" + connectionMessage);
 	messageJsonObject = new JSONObject(connectionMessage);
 	recipesString = messageJsonObject.getString("root");
