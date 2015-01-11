@@ -83,10 +83,10 @@ public class LoginActivity extends Activity {
 						} finally {
 							proDia.dismiss();
 							//回到之前的操作页
-							LoginActivity.this.finish();
-							/*Intent intent = new Intent();
+							//LoginActivity.this.finish();
+							Intent intent = new Intent();
 							intent.setClass(LoginActivity.this,MainActivity.class);
-							startActivity(intent);*/
+							startActivity(intent);
 						}
 					}
 				}.start();
