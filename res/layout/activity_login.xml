@@ -91,7 +91,6 @@
 	        android:background="@drawable/btn_style_green"
 	        android:textColor="#ffffff"
 	        android:textSize="22sp"
-	        android:onClick="login_mainweixin"
 	        />
 	</RelativeLayout>
 
