@@ -78,15 +78,14 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	Bitmap bitmap;
 	
 	//
-	//private MovieLayout movieLayout;  
-    //private MovieAdapter adapter; 
+	private MovieLayout movieLayout;  
+    private MovieAdapter adapter; 
 	private String texts[] = null;
     private int images[] = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
 		//made by zhangcan
 		//设置渠道
 		StatService.setAppChannel(this, "testmarket", true);
@@ -160,13 +159,16 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		//hh
 //		movieLayout=(MovieLayout)findViewById(R.id.movieLayout);  
 //        adapter=new MovieAdapter(this);  
-//        for(int i=0;i<10;i++){  
+//        for(int i=0;i<5;i++){  
 //            Map<String,Object> map=new HashMap<String,Object>();  
-//            map.put("image", getResources().getDrawable(R.drawable.go));  
-//            map.put("text", "电影"+(i+1));  
+//            map.put("image", getResources().getDrawable(R.drawable.t1));  
+//            map.put("text", "");  
+//            //map.put("text", "电影"+(i+1));  
 //            adapter.addObject(map);  
 //        }  
 //        movieLayout.setAdapter(adapter);
+        
+        
 		images=new int[]{R.drawable.back_64, R.drawable.collect,
                 R.drawable.home_64, R.drawable.more_64};
         texts = new String[]{ "Menu", "Recipe",
@@ -182,7 +184,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         
         SimpleAdapter saImageItems = new SimpleAdapter(this, 
                 lstImageItem,// 数据源
-                R.layout.night_item,// 显示布局
+                R.layout.night_item,// 显示布局onResume
                 new String[] { "itemImage", "itemText" }, 
                 new int[] { R.id.itemImage, R.id.itemText }); 
         gridview.setAdapter(saImageItems);
@@ -333,8 +335,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		
 		@Override
 		public long getItemId(int position){
-			if(position >= 5){
-				position = position%5;
+			if(position >= 10){
+				position = position%10;
 			}
 			return position;
 		}
@@ -342,8 +344,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent){
 			View vi=convertView;
-			if(position >= 5){
-				position = position%5;
+			if(position >= 10){
+				position = position%10;
 			}
 			/*if(vi == null){
 				vi = ViewScaleType.get(position);
@@ -459,6 +461,39 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	public void onResume() {
 		super.onResume();
 		System.out.println("FragmentDemoActivity-->onResume");
+		handler = new Handler();
+		layout_1 = this.findViewById(R.id.layout_1);
+		layout_1_1 = this.findViewById(R.id.layout_1_1);
+		menu_1_1 = (TextView)this.findViewById(R.id.menu_1_1);
+		one_oneImageView=(ImageView)this.findViewById(R.id.one_one);
+		//逻辑还存在问题，待修改
+		Session session = Session.getSession();
+		Boolean islogin=(Boolean)session.get("islogin");
+		System.out.println("IsLogin:"+islogin);
+		if(islogin!=null){
+			if(islogin){
+				layout_1.setVisibility(View.GONE);
+				layout_1_1.setVisibility(View.VISIBLE);
+				String username = (String) session.get("username");
+				menu_1_1.setText(username);
+				head = "http://123.57.38.31:3000/"+(String) session.get("head");
+				new Thread(){
+					public void run() {
+						bitmap = getHttpBitmap(head);
+					    		 //从网上取图片
+						handler.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								one_oneImageView .setImageBitmap(bitmap);	//设置Bitmap
+							}
+						});
+						
+					};
+				}.start();
+			}
+		}
 		StatService.onResume(this);
 	}
 

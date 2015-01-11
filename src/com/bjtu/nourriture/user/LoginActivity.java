@@ -83,10 +83,10 @@ public class LoginActivity extends Activity {
 						} finally {
 							proDia.dismiss();
 							//回到之前的操作页
-							LoginActivity.this.finish();
-							/*Intent intent = new Intent();
+							//LoginActivity.this.finish();
+							Intent intent = new Intent();
 							intent.setClass(LoginActivity.this,MainActivity.class);
-							startActivity(intent);*/
+							startActivity(intent);
 						}
 					}
 				}.start();
@@ -122,19 +122,21 @@ public class LoginActivity extends Activity {
 
 		// 将登录信息存入session
 
-		String user_account, user_password, user_head,user_id;
+		String user_account, user_password, user_head,user_id,user_email;
 		String userServer = jsonObject.getString("user");
 		JSONObject userServer2 = new JSONObject(userServer);
 		user_account = userServer2.getString("account");
 		user_password = userServer2.getString("password");
 		user_head = userServer2.getString("head");
 		user_id=userServer2.getString("_id");
+		user_email=userServer2.getString("email");
 		
 		String sessionid =jsonObject.getString("sessionId");
 		Session session=Session.getSession();
 		session.put("username", user_account);
 		session.put("head", user_head);
 		session.put("user_id",user_id);
+		session.put("emal",user_email);
 		session.put("islogin", true);
 		session.put("sessionId",sessionid);
 

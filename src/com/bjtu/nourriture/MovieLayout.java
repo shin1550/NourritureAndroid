@@ -25,7 +25,7 @@ public class MovieLayout extends LinearLayout {
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(context, "您点击了"+map.get("text"), Toast.LENGTH_SHORT).show();
+					Toast.makeText(context, "To be expected"+map.get("text"), Toast.LENGTH_SHORT).show();
 				}
 			});
 			this.setOrientation(HORIZONTAL);

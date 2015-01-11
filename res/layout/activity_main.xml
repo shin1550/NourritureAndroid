@@ -50,12 +50,15 @@
 			android:horizontalSpacing="10dp"，两列之间的边距
 			 -->
 			<GridView
+			    android:paddingTop="10dp"
+			    android:paddingLeft="40dp"
+			    android:paddingBottom="20dp"
 			    android:id="@+id/gridview"
 			    android:layout_width="wrap_content" 
 			    android:layout_height="wrap_content"
 			    android:numColumns="auto_fit"
 			    android:verticalSpacing="10dp"
-			    android:horizontalSpacing="14dp"
+			    android:horizontalSpacing="20dp"
 			    android:columnWidth="62dp"
 			    android:stretchMode="columnWidth"
 			    android:gravity="center"
@@ -64,8 +67,8 @@
 			<com.bjtu.nourriture.SlidingSwitcherView  
 		        android:id="@+id/slidingLayout"  
 		        myattr:auto_play="true"  
-		        android:layout_width="fill_parent"  
-		        android:layout_height="350dp" >  
+		        android:layout_width="wrap_content"  
+		        android:layout_height="250dp" >  
   
 		        <LinearLayout  
 		            android:layout_width="fill_parent"  
@@ -103,7 +106,57 @@
 	        	</LinearLayout>  
 			</com.bjtu.nourriture.SlidingSwitcherView>
     		
-
+			<TextView
+		        android:id="@+id/textView111"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:textColor="#878282"
+		        android:text="           " />
+			<TextView
+		        android:id="@+id/textView1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textColor="#878282"
+		        
+		        android:text="		当季食物" />
+			
+			<GridLayout
+				android:layout_width="fill_parent"  
+    			android:layout_height="wrap_content"  
+    			android:orientation="horizontal"  
+    			android:rowCount="1"  
+    			android:columnCount="5" >  
+			　　<Button  
+			        android:id="@+id/one" 
+			        android:textColor="#878282"
+			        android:layout_columnSpan="1"    
+      				android:layout_gravity="fill" 
+			        android:text="土豆"/>  
+			　　<Button  
+			        android:id="@+id/two" 
+			        android:textColor="#878282" 
+			        android:layout_columnSpan="1"    
+      				android:layout_gravity="fill"
+			        android:text="排骨"/>  
+				<Button  
+	        		android:id="@+id/three" 
+	        		android:textColor="#878282" 
+	        		android:layout_columnSpan="1"    
+      				android:layout_gravity="fill"
+	        		android:text="甜品"/>    
+			　　<Button  
+			        android:id="@+id/four"  
+			        android:textColor="#878282"
+			        android:layout_columnSpan="1"    
+      				android:layout_gravity="fill"
+			        android:text="辣菜"/>  
+				<Button  
+			        android:id="@+id/five"  
+			        android:textColor="#878282"
+			        android:layout_columnSpan="1"    
+      				android:layout_gravity="fill"
+			        android:text="家常菜"/>   
+  			</GridLayout>
 			<!-- 
             <Button
                 android:layout_width="wrap_content"

@@ -1,0 +1,143 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".PersonalCenterActivity" >
+
+     <!-- 顶部个人中心显示开始 -->
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/title_bar"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/personalcenter_reback_btn"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/title_btn_back"
+            android:text="返回"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="个人中心"
+            android:textColor="#ffffff"
+            android:textSize="20sp"  />
+    </RelativeLayout>
+    <!-- 顶部详细信息显示结束 -->
+
+
+    <!-- 中间显示好友详细信息开始 -->
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_top_layout"
+        android:layout_marginTop="45dp"
+        android:layout_toRightOf="@+id/linearLayout1"
+        android:background="@drawable/mm_listitem" >
+
+        <ImageView
+            android:id="@+id/peronalcenter_head"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/nich" />
+
+        <TextView
+            android:id="@+id/personalCenterName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/peronalcenter_head"
+            android:text="王璨"
+            android:textSize="20dp" 
+            android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/personalcenterSex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="14dp"
+            android:layout_toRightOf="@id/personalCenterName"
+            android:src="@drawable/male"/>
+
+        <TextView
+            android:id="@+id/personalCenterCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/personalCenterName"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/peronalcenter_head"
+            android:text="重庆"
+            android:textSize="20dp" 
+            android:textColor="#000000"/>
+
+
+      
+    </RelativeLayout>
+    <!-- 中间显示好友详细信息结束 -->
+
+
+    <!-- 新消息显示开始 -->
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout1"
+        android:orientation="vertical" >
+        
+         <RelativeLayout
+        android:id="@+id/relativeLayout10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/linearLayout1" >
+        
+         <ImageView
+             android:id="@+id/newMessageLine"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/line2" />
+        
+        </RelativeLayout>
+        
+         
+         <!-- 所有状态显示开始 -->
+         <!-- 第一条好友状态 -->
+           <ListView android:id="@+id/datalist" 
+       android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:divider="@null"
+         />
+        
+         
+        <!-- 新消息显示结束 -->
+        
+         
+        
+    </LinearLayout>
+    
+    <!-- 新鲜事显示结束 -->
+    
+    <!-- 所有新鲜事显示开始 -->
+    
+    <!-- 所有新鲜事显示结束 -->
+    
+
+</RelativeLayout>
