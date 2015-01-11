@@ -82,9 +82,11 @@ public class LoginActivity extends Activity {
 						} catch (Exception e) {
 						} finally {
 							proDia.dismiss();
-							Intent intent = new Intent();
+							//回到之前的操作页
+							LoginActivity.this.finish();
+							/*Intent intent = new Intent();
 							intent.setClass(LoginActivity.this,MainActivity.class);
-							startActivity(intent);
+							startActivity(intent);*/
 						}
 					}
 				}.start();
@@ -113,10 +115,10 @@ public class LoginActivity extends Activity {
 				.append("&").append("password").append("=")
 				.append(password);
 		byte[] bytes = params.toString().getBytes();  //变为字节
-		message = connect.testURLConn2(url, bytes);
-		System.out.println("message----------" + message);
+		message = connect.testURLConn3(url, bytes);
 		JSONObject jsonObject = new JSONObject(message);
 		isSuccess = jsonObject.getString("message");
+		
 
 		// 将登录信息存入session
 
@@ -129,12 +131,14 @@ public class LoginActivity extends Activity {
 		user_id=userServer2.getString("_id");
 		user_email=userServer2.getString("email");
 		
+		String sessionid =jsonObject.getString("sessionId");
 		Session session=Session.getSession();
 		session.put("username", user_account);
 		session.put("head", user_head);
 		session.put("user_id",user_id);
 		session.put("emal",user_email);
 		session.put("islogin", true);
+		session.put("sessionId",sessionid);
 
 //		//测试isLogin
 //		String url2="service/userinfo/isLogin";
