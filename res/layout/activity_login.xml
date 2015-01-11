@@ -21,7 +21,6 @@
             android:text="Back"
             android:textSize="14sp"
             android:textColor="#fff"
-            android:onClick="login_back"
             android:background="@drawable/title_btn_back"/>
         <TextView
             android:layout_width="wrap_content"
@@ -39,7 +38,6 @@
              android:layout_height="wrap_content"
              android:layout_alignParentRight="true"
              android:background="@drawable/title_btn_right"
-             android:onClick="login_back"
              android:text="Register"
              android:textColor="#fff"
              android:textSize="14sp"
