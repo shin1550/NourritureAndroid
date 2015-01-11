@@ -88,7 +88,7 @@ public class PersonalCenterActivity extends Activity {
 			@Override
 			public void run() {
 				handler.post(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						handler.post(new Runnable() {
@@ -103,7 +103,7 @@ public class PersonalCenterActivity extends Activity {
 				});
 			}
 		}).start();
-		
+
 
 		username = (TextView)this.findViewById(R.id.personalCenterName);
 		username.setText(usernameString);
@@ -116,12 +116,21 @@ public class PersonalCenterActivity extends Activity {
 			@Override
 			public void run() {
 				handler.post(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
 						try {
 							getRecipesConnection();
+							JSONArray postList;
+
+							postList = messageJsonObject.getJSONArray("root");
+							System.out.println("postList:"+postList);
+							String newContent;
+							for(int i=0;i<postList.length();i++){
+								JSONObject info = (JSONObject)postList.get(i);   //单个recipe
+								System.out.println("recipe("+i+"):"+info);
+							}
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -130,23 +139,6 @@ public class PersonalCenterActivity extends Activity {
 				});
 			}
 		}).start();
-		
-	
-
-		JSONArray postList;
-//		try {
-//			postList = messageJsonObject.getJSONArray("root");
-//			System.out.println("postList:"+postList);
-//			String newContent;
-//			for(int i=0;i<postList.length();i++){
-//				JSONObject info = (JSONObject)postList.get(i);   //单个recipe
-//				System.out.println("recipe("+i+"):"+info);
-//			}
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}  //取出recipes串
-
 		//			Map<String,String> map=new HashMap<String,String>();
 		//			map.put("img", String.valueOf(info.getString("photo"));
 		//			System.out.println("username===="+info.getJSONObject("sender").getString("userName"));
@@ -171,104 +163,107 @@ public class PersonalCenterActivity extends Activity {
 		//			information.add(newInfo);
 		//
 		//			this.list.add(map);
-//	}
-	reback = (Button)this.findViewById(R.id.personalcenter_reback_btn);
-	reback.setOnClickListener(new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			finish();
+		//	}
+		reback = (Button)this.findViewById(R.id.personalcenter_reback_btn);
+		reback.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		return true;
+	}
+	//
+	//	int userid;
+	//	View myView ;
+	//	private class OnItemClickListenerImpl implements OnItemClickListener{
+	//
+	//		@Override
+	//		public void onItemClick(AdapterView<?>parent, View view, int position,
+	//				long id) {
+	//			// TODO Auto-generated method stub
+	//			System.out.println("position=============="+position);
+	//			userid=information.get(position).getSender().getUserid();
+	//			System.out.println("postsid============="+userid);
+	//
+	//
+	//			LayoutInflater factory = LayoutInflater.from(PersonalCenterActivity.this);
+	//			myView = factory.inflate(R.layout.message, null);
+	//			Dialog dialog = new AlertDialog.Builder(PersonalCenterActivity.this)
+	//			.setTitle("回复消息")
+	//			.setView(myView)
+	//			.setPositiveButton("发送", new DialogInterface.OnClickListener() {
+	//
+	//				@Override
+	//				public void onClick(DialogInterface dialog, int which) {
+	//					EditText messages =(EditText)myView.findViewById(R.id.messages);
+	//					String content = messages.getText().toString();
+	//					System.out.println("content---"+content);
+	//					try {
+	//						url = "androidTalkAction.action?userid1="+host.getUserid()+"&userid2="+userid+
+	//								"&content="+URLEncoder.encode(content, "UTF-8");
+	//
+	//						connect.testURLConn(url);
+	//						Toast.makeText(PersonalCenterActivity.this, "消息发送成功", Toast.LENGTH_LONG).show();
+	//
+	//					} catch (UnsupportedEncodingException e) {
+	//						// TODO Auto-generated catch block
+	//						e.printStackTrace();
+	//					} catch (Exception e) {
+	//						// TODO Auto-generated catch block
+	//						e.printStackTrace();
+	//					}
+	//
+	//				}
+	//			}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+	//
+	//				@Override
+	//				public void onClick(DialogInterface dialog, int which) {
+	//					// TODO Auto-generated method stub
+	//
+	//				}
+	//			}).create();
+	//
+	//
+	//			dialog.show();
+	//		}
+	//	}
+	public static Bitmap getHttpBitmap(String url) {
+		URL myFileUrl = null;
+		Bitmap bitmap = null;
+		try {
+			myFileUrl = new URL(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
 		}
-	});
-
-}
-
-@Override
-public boolean onCreateOptionsMenu(Menu menu) {
-	// Inflate the menu; this adds items to the action bar if it is present.
-	return true;
-}
-//
-//	int userid;
-//	View myView ;
-//	private class OnItemClickListenerImpl implements OnItemClickListener{
-//
-//		@Override
-//		public void onItemClick(AdapterView<?>parent, View view, int position,
-//				long id) {
-//			// TODO Auto-generated method stub
-//			System.out.println("position=============="+position);
-//			userid=information.get(position).getSender().getUserid();
-//			System.out.println("postsid============="+userid);
-//
-//
-//			LayoutInflater factory = LayoutInflater.from(PersonalCenterActivity.this);
-//			myView = factory.inflate(R.layout.message, null);
-//			Dialog dialog = new AlertDialog.Builder(PersonalCenterActivity.this)
-//			.setTitle("回复消息")
-//			.setView(myView)
-//			.setPositiveButton("发送", new DialogInterface.OnClickListener() {
-//
-//				@Override
-//				public void onClick(DialogInterface dialog, int which) {
-//					EditText messages =(EditText)myView.findViewById(R.id.messages);
-//					String content = messages.getText().toString();
-//					System.out.println("content---"+content);
-//					try {
-//						url = "androidTalkAction.action?userid1="+host.getUserid()+"&userid2="+userid+
-//								"&content="+URLEncoder.encode(content, "UTF-8");
-//
-//						connect.testURLConn(url);
-//						Toast.makeText(PersonalCenterActivity.this, "消息发送成功", Toast.LENGTH_LONG).show();
-//
-//					} catch (UnsupportedEncodingException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} catch (Exception e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//
-//				}
-//			}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//
-//				@Override
-//				public void onClick(DialogInterface dialog, int which) {
-//					// TODO Auto-generated method stub
-//
-//				}
-//			}).create();
-//
-//
-//			dialog.show();
-//		}
-//	}
-public static Bitmap getHttpBitmap(String url) {
-	URL myFileUrl = null;
-	Bitmap bitmap = null;
-	try {
-		myFileUrl = new URL(url);
-	} catch (MalformedURLException e) {
-		e.printStackTrace();
+		try {
+			HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+			conn.setConnectTimeout(0);
+			conn.setDoInput(true);
+			conn.connect();
+			InputStream is = conn.getInputStream();
+			bitmap = BitmapFactory.decodeStream(is);
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bitmap;
 	}
-	try {
-		HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
-		conn.setConnectTimeout(0);
-		conn.setDoInput(true);
-		conn.connect();
-		InputStream is = conn.getInputStream();
-		bitmap = BitmapFactory.decodeStream(is);
-		is.close();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-	return bitmap;
-}
 
-public void getRecipesConnection() throws Exception{
-	url = "service/userinfo/getUserRecipes";
-	connectionMessage = connect.testURLConn4(url);
-	System.out.println("connectionMessage:" + connectionMessage);
-	messageJsonObject = new JSONObject(connectionMessage);
-	recipesString = messageJsonObject.getString("root");
-}
+	public void getRecipesConnection() throws Exception{
+		//url = "service/userinfo/getUserRecipes";
+		url = "service/recipe/listAll";
+		connectionMessage = connect.testURLConn1(url);
+
+		System.out.println("connectionMessage:" + connectionMessage);
+		messageJsonObject = new JSONObject(connectionMessage);
+		recipesString = messageJsonObject.getString("root");
+		System.out.println("recipesString:" + recipesString);
+	}
 }
