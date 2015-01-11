@@ -139,31 +139,30 @@ public class PersonalCenterActivity extends Activity {
 				});
 			}
 		}).start();
-		//			Map<String,String> map=new HashMap<String,String>();
-		//			map.put("img", String.valueOf(info.getString("photo"));
-		//			System.out.println("username===="+info.getJSONObject("sender").getString("userName"));
-		//
-		//			int index=info.getString("time").indexOf("T");
-		//			String pubTime=info.getString("time").substring(0, index)+" "+info.getString("time").substring(index+1);
-		//
-		//			map.put("userInfo", info.getJSONObject("sender").getString("userName")+"\t"+pubTime);
-		//			map.put("postContent", info.getString("content"));
-		//
-		//			Information newInfo=new Information();
-		//			newInfo.setInfoId(Integer.parseInt(info.getString("infoId")));
-		//			Userinfo sender=new Userinfo();
-		//			sender.setAccount(info.getJSONObject("sender").getString("account"));
-		//			sender.setUserName(info.getJSONObject("sender").getString("userName"));
-		//			sender.setUserid(Integer.parseInt(info.getJSONObject("sender").getString("userid")));
-		//			newInfo.setSender(sender);
-		//			newInfo.setContent(info.getString("content"));
-		//
-		//
-		//			newInfo.setTime(pubTime);
-		//			information.add(newInfo);
-		//
-		//			this.list.add(map);
-		//	}
+//					Map<String,String> map=new HashMap<String,String>();
+//					map.put("img", String.valueOf(info.getString("photo"));
+//					System.out.println("username===="+info.getJSONObject("sender").getString("userName"));
+//		
+//					int index=info.getString("time").indexOf("T");
+//					String pubTime=info.getString("time").substring(0, index)+" "+info.getString("time").substring(index+1);
+//		
+//					map.put("userInfo", info.getJSONObject("sender").getString("userName")+"\t"+pubTime);
+//					map.put("postContent", info.getString("content"));
+//		
+//					Information newInfo=new Information();
+//					newInfo.setInfoId(Integer.parseInt(info.getString("infoId")));
+//					Userinfo sender=new Userinfo();
+//					sender.setAccount(info.getJSONObject("sender").getString("account"));
+//					sender.setUserName(info.getJSONObject("sender").getString("userName"));
+//					sender.setUserid(Integer.parseInt(info.getJSONObject("sender").getString("userid")));
+//					newInfo.setSender(sender);
+//					newInfo.setContent(info.getString("content"));
+//		
+//		
+//					newInfo.setTime(pubTime);
+//					information.add(newInfo);
+//		
+//					this.list.add(map);
 		reback = (Button)this.findViewById(R.id.personalcenter_reback_btn);
 		reback.setOnClickListener(new OnClickListener() {
 			@Override
@@ -179,61 +178,6 @@ public class PersonalCenterActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		return true;
 	}
-	//
-	//	int userid;
-	//	View myView ;
-	//	private class OnItemClickListenerImpl implements OnItemClickListener{
-	//
-	//		@Override
-	//		public void onItemClick(AdapterView<?>parent, View view, int position,
-	//				long id) {
-	//			// TODO Auto-generated method stub
-	//			System.out.println("position=============="+position);
-	//			userid=information.get(position).getSender().getUserid();
-	//			System.out.println("postsid============="+userid);
-	//
-	//
-	//			LayoutInflater factory = LayoutInflater.from(PersonalCenterActivity.this);
-	//			myView = factory.inflate(R.layout.message, null);
-	//			Dialog dialog = new AlertDialog.Builder(PersonalCenterActivity.this)
-	//			.setTitle("回复消息")
-	//			.setView(myView)
-	//			.setPositiveButton("发送", new DialogInterface.OnClickListener() {
-	//
-	//				@Override
-	//				public void onClick(DialogInterface dialog, int which) {
-	//					EditText messages =(EditText)myView.findViewById(R.id.messages);
-	//					String content = messages.getText().toString();
-	//					System.out.println("content---"+content);
-	//					try {
-	//						url = "androidTalkAction.action?userid1="+host.getUserid()+"&userid2="+userid+
-	//								"&content="+URLEncoder.encode(content, "UTF-8");
-	//
-	//						connect.testURLConn(url);
-	//						Toast.makeText(PersonalCenterActivity.this, "消息发送成功", Toast.LENGTH_LONG).show();
-	//
-	//					} catch (UnsupportedEncodingException e) {
-	//						// TODO Auto-generated catch block
-	//						e.printStackTrace();
-	//					} catch (Exception e) {
-	//						// TODO Auto-generated catch block
-	//						e.printStackTrace();
-	//					}
-	//
-	//				}
-	//			}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-	//
-	//				@Override
-	//				public void onClick(DialogInterface dialog, int which) {
-	//					// TODO Auto-generated method stub
-	//
-	//				}
-	//			}).create();
-	//
-	//
-	//			dialog.show();
-	//		}
-	//	}
 	public static Bitmap getHttpBitmap(String url) {
 		URL myFileUrl = null;
 		Bitmap bitmap = null;
