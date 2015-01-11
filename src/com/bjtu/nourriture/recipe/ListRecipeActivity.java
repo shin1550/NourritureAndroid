@@ -52,7 +52,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		CheckHttpUtil.initIntener(this);
+		
 		
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())  
         .threadPriority(Thread.NORM_PRIORITY - 2)
@@ -73,6 +73,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		.build();
 		
 		setContentView(R.layout.activity_recipe_list_all);
+		CheckHttpUtil.initIntener(this);
 		listview=(ListView) findViewById(R.id.listView1);
     	
     	adapter = new ListRecipeAdapter(this,list);

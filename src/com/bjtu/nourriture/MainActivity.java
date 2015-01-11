@@ -86,7 +86,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
 		//made by zhangcan
 		//设置渠道
 		StatService.setAppChannel(this, "testmarket", true);
@@ -336,8 +335,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		
 		@Override
 		public long getItemId(int position){
-			if(position >= 5){
-				position = position%5;
+			if(position >= 10){
+				position = position%10;
 			}
 			return position;
 		}
@@ -345,8 +344,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent){
 			View vi=convertView;
-			if(position >= 5){
-				position = position%5;
+			if(position >= 10){
+				position = position%10;
 			}
 			/*if(vi == null){
 				vi = ViewScaleType.get(position);
