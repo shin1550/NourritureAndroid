@@ -78,8 +78,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	Bitmap bitmap;
 	
 	//
-	//private MovieLayout movieLayout;  
-    //private MovieAdapter adapter; 
+	private MovieLayout movieLayout;  
+    private MovieAdapter adapter; 
 	private String texts[] = null;
     private int images[] = null;
 	@Override
@@ -160,13 +160,16 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		//hh
 //		movieLayout=(MovieLayout)findViewById(R.id.movieLayout);  
 //        adapter=new MovieAdapter(this);  
-//        for(int i=0;i<10;i++){  
+//        for(int i=0;i<5;i++){  
 //            Map<String,Object> map=new HashMap<String,Object>();  
-//            map.put("image", getResources().getDrawable(R.drawable.go));  
-//            map.put("text", "电影"+(i+1));  
+//            map.put("image", getResources().getDrawable(R.drawable.t1));  
+//            map.put("text", "");  
+//            //map.put("text", "电影"+(i+1));  
 //            adapter.addObject(map);  
 //        }  
 //        movieLayout.setAdapter(adapter);
+        
+        
 		images=new int[]{R.drawable.back_64, R.drawable.collect,
                 R.drawable.home_64, R.drawable.more_64};
         texts = new String[]{ "Menu", "Recipe",
