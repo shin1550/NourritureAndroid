@@ -50,8 +50,10 @@ import com.baidu.mobstat.StatService;
 import com.bjtu.nourriture.common.CheckHttpUtil;
 import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.attention.ListAttentionActivity;
+import com.bjtu.nourriture.recipe.CreateRecipeActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
+import com.bjtu.nourriture.topic.PublishTopicActivity;
 import com.bjtu.nourriture.user.LoginActivity;
 import com.bjtu.nourriture.user.MoreActivity;
 
@@ -183,7 +185,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         
         SimpleAdapter saImageItems = new SimpleAdapter(this, 
                 lstImageItem,// 数据源
-                R.layout.night_item,// 显示布局
+                R.layout.night_item,// 显示布局onResume
                 new String[] { "itemImage", "itemText" }, 
                 new int[] { R.id.itemImage, R.id.itemText }); 
         gridview.setAdapter(saImageItems);
@@ -460,6 +462,39 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	public void onResume() {
 		super.onResume();
 		System.out.println("FragmentDemoActivity-->onResume");
+		handler = new Handler();
+		layout_1 = this.findViewById(R.id.layout_1);
+		layout_1_1 = this.findViewById(R.id.layout_1_1);
+		menu_1_1 = (TextView)this.findViewById(R.id.menu_1_1);
+		one_oneImageView=(ImageView)this.findViewById(R.id.one_one);
+		//逻辑还存在问题，待修改
+		Session session = Session.getSession();
+		Boolean islogin=(Boolean)session.get("islogin");
+		System.out.println("IsLogin:"+islogin);
+		if(islogin!=null){
+			if(islogin){
+				layout_1.setVisibility(View.GONE);
+				layout_1_1.setVisibility(View.VISIBLE);
+				String username = (String) session.get("username");
+				menu_1_1.setText(username);
+				head = "http://123.57.38.31:3000/"+(String) session.get("head");
+				new Thread(){
+					public void run() {
+						bitmap = getHttpBitmap(head);
+					    		 //从网上取图片
+						handler.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								one_oneImageView .setImageBitmap(bitmap);	//设置Bitmap
+							}
+						});
+						
+					};
+				}.start();
+			}
+		}
 		StatService.onResume(this);
 	}
 
@@ -471,5 +506,33 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		 * 如果该FragmentActivity包含了几个全页面的fragment，那么可以在fragment里面加入就可以了，这里可以不加入。如果不加入将不会记录该Activity页面。
 		 */
 		StatService.onPause(this);
+	}
+	
+	public void toCreateRecipe(View view){
+		Session session = Session.getSession();
+		if(session.get("username") == null || session.get("username").equals("")){
+			Toast.makeText(getApplicationContext(), "Sign in please",
+				     Toast.LENGTH_SHORT).show();
+			Intent intentLogIn = new Intent(this, LoginActivity.class);
+			startActivity(intentLogIn);
+		}else{
+			Intent intent = new Intent();
+			intent.setClass(MainActivity.this, CreateRecipeActivity.class);
+			startActivity(intent);
+		}
+	}
+	
+	public void toCreateTopic(View view){
+		Session session = Session.getSession();
+		if(session.get("username") == null || session.get("username").equals("")){
+			Toast.makeText(getApplicationContext(), "Sign in please",
+				     Toast.LENGTH_SHORT).show();
+			Intent intentLogIn = new Intent(this, LoginActivity.class);
+			startActivity(intentLogIn);
+		}else{
+			Intent intent = new Intent();
+			intent.setClass(MainActivity.this, PublishTopicActivity.class);
+			startActivity(intent);
+		}
 	}
 }

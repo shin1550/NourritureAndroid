@@ -67,7 +67,7 @@ public class ListTopicActivity extends Activity{
 		ListView listview=(ListView) findViewById(R.id.topic_list_view);
 		
 		try {
-			String url="topic/showTopicList?pageNo=1&pageSize=6";
+			String url="topic/showTopicList?pageNo=1&pageSize=15";
 			String method ="GET";
 			topicListResult = connect.testURLConn(url,method);
 			

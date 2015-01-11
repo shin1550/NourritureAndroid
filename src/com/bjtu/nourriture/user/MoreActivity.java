@@ -20,7 +20,7 @@ import android.widget.Toast;
 public class MoreActivity extends Activity{
 
 	Button backButton;
-	TextView exit;
+	TextView exit,personal_center;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -59,7 +59,13 @@ public class MoreActivity extends Activity{
 			dialog.show();
 			}
 		});
-		
-		
+		personal_center = (TextView)this.findViewById(R.id.personal_center);
+		personal_center.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intent=new Intent(MoreActivity.this,PersonalCenterActivity.class);
+				 MoreActivity.this.startActivity(intent);
+			}
+		});
 	}
 }

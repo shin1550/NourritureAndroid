@@ -16,6 +16,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.bjtu.nourriture.common.Constants;
+import com.bjtu.nourriture.common.Session;
+
 import android.annotation.SuppressLint;
 import android.os.StrictMode;
 
@@ -26,11 +29,10 @@ public class ConnectToServer {
 	final static String ipaddress="http://123.57.38.31:3000/";
 	@SuppressLint("NewApi")
 	public String testURLConn(String urlAdd,String method) throws Exception{
-		System.out.println("yes1---------");
 		
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
 	   
-	    System.out.println("yes---------");
+	
 	    URL url=new URL(ipaddress+urlAdd);		
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setConnectTimeout(5 * 1000);		
@@ -70,6 +72,12 @@ public class ConnectToServer {
 			DefaultHttpClient client = new DefaultHttpClient();
 			HttpPost request = new HttpPost();
 			request.setURI(new URI("http://123.57.38.31:3000/" + url));
+			
+			Session session = Session.getSession();
+			String sessionid = (String) session.get("sessionId");
+			if(sessionid != null) { 
+				request.setHeader("Cookie", "JSPSESSID.732cdf6d=" + sessionid+";"+Constants.POST_SESSIONID); 
+			}
 
 			UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
 					postParameters);
