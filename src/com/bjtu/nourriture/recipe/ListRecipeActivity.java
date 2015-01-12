@@ -223,7 +223,6 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		
 		@Override
 		protected Object doInBackground(Object... arg0) {
-			System.out.println("---------------"+search);
 			if(search == null){
 				recipeRecult = getRecipeList();
 			}else{
@@ -255,7 +254,6 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 			listview.requestLayout();
 			adapter.notifyDataSetChanged();
 			listView.setVisibility(View.VISIBLE);
-			System.out.println(recipeNames);
 			recipeNameAdapter.notifyDataSetInvalidated();
 			
 		}
@@ -283,7 +281,6 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		AutoCompleteTextView searchEditText = (AutoCompleteTextView) findViewById(R.id.listRecipeSearch);
 		String searchString = searchEditText.getText().toString();
 		ListView listview=(ListView) findViewById(R.id.listView1);
-		System.out.println("====="+searchString);
 		if(searchString == null || searchString.trim().equals("")){
 			/*Toast.makeText(getApplicationContext(), "Please enter something",
 				     Toast.LENGTH_SHORT).show();*/

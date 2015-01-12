@@ -39,7 +39,7 @@
             android:id="@+id/footerLayout"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="115dp" >
+            android:layout_height="wrap_content" >
 
             <Button
 			       android:id="@+id/listRecipeLoadMore"
@@ -48,11 +48,6 @@
 			       android:layout_height="wrap_content"
 			       android:onClick="loadMore"/>
             
-            <include layout="@layout/activity_bottom"
-                android:layout_width="match_parent"
-            	android:layout_height="70dp"
-                android:id="@+id/listRecipeBottom"
-                android:layout_alignParentBottom="true" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -67,7 +62,6 @@
 	            android:id="@+id/listView1"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"/>
-	        	
 	        	
 	     </RelativeLayout>  			
 
