@@ -1,6 +1,7 @@
 package com.bjtu.nourriture.recipe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,13 +18,12 @@ import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +48,8 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	int pageNo = 1;
 	int totalNumber;
 	int number;
+	List<String> recipeNames = new ArrayList<String>();
+	ArrayAdapter<String> recipeNameAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,10 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_comment_loadmore, null);  
     	listview.addFooterView(loadMoreView);*/
 		
-		EditText searchEditText = (EditText) findViewById(R.id.listRecipeSearch);
+		AutoCompleteTextView searchEditText = (AutoCompleteTextView) findViewById(R.id.listRecipeSearch);
+		recipeNameAdapter = new ArrayAdapter<String>(this,
+					android.R.layout.simple_dropdown_item_1line, recipeNames);
+		searchEditText.setAdapter(recipeNameAdapter);
 		searchEditText.setOnKeyListener(new OnKeyListener() {  
             @Override  
             public boolean onKey(View v, int keyCode, KeyEvent event) {  
@@ -212,16 +217,17 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	
 	class ListRecipeTask extends AsyncTask<Object, Object, Object>{
 		ListView listView;
-//		ArrayList<JSONObject> tempList;
 		ListRecipeActivity activity;
 		String search;
 		String recipeRecult;
 		
 		@Override
 		protected Object doInBackground(Object... arg0) {
+			System.out.println("---------------"+search);
 			if(search == null){
 				recipeRecult = getRecipeList();
 			}else{
+				search = search.replaceAll(" ", "%20");
 				recipeRecult = getSearchRecipeList(search);
 			}
 			
@@ -234,6 +240,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 				for(int i=0;i<jsonArray.length();i++){   
 	                JSONObject jo = (JSONObject)jsonArray.opt(i);
 	                list.add(jo);
+	                recipeNames.add(jo.getString("recipeName"));
 	            }
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -247,7 +254,10 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 			listView.setVisibility(View.GONE);  
 			listview.requestLayout();
 			adapter.notifyDataSetChanged();
-			listView.setVisibility(View.VISIBLE);  
+			listView.setVisibility(View.VISIBLE);
+			System.out.println(recipeNames);
+			recipeNameAdapter.notifyDataSetInvalidated();
+			
 		}
 	}
 	
@@ -270,15 +280,16 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	}
 	
 	public void searchRecipe1(){
-		EditText searchEditText = (EditText) findViewById(R.id.listRecipeSearch);
+		AutoCompleteTextView searchEditText = (AutoCompleteTextView) findViewById(R.id.listRecipeSearch);
 		String searchString = searchEditText.getText().toString();
-		 
+		ListView listview=(ListView) findViewById(R.id.listView1);
+		System.out.println("====="+searchString);
 		if(searchString == null || searchString.trim().equals("")){
 			/*Toast.makeText(getApplicationContext(), "Please enter something",
 				     Toast.LENGTH_SHORT).show();*/
 			pageNo = 1;
 			list.clear();
-			ListView listview=(ListView) findViewById(R.id.listView1);
+			recipeNames.clear();
 			ListRecipeTask task = new ListRecipeTask();
 			task.listView = listview;
 			task.activity = this;
@@ -287,7 +298,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		}else{
 			pageNo = 1;
 			list.clear();
-			ListView listview=(ListView) findViewById(R.id.listView1);
+			recipeNames.clear();
 			ListRecipeTask task = new ListRecipeTask();
 			task.listView = listview;
 			task.activity = this;

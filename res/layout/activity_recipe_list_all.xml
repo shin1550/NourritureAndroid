@@ -13,11 +13,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/listRecipeSearch"
                 android:layout_width="390dp"
                 android:layout_height="wrap_content"
-                android:hint="search"
+                android:completionHint="Choose the recipe"
+        		android:completionThreshold="1"
+        		android:dropDownHorizontalOffset="20dp"
+        		android:ems="10"
                 android:imeOptions="actionSearch"
                 android:lines="1" />
 
