@@ -9,16 +9,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.integer;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -302,10 +306,10 @@ public class TopicDetailActivity extends Activity {
 						uploadListResult = connect.testURLConn(url, method);
 						JSONObject jsonObject = new JSONObject(uploadListResult);
 						String message = jsonObject.getString("message");
-						System.out.println("------message-------"+message);
+		
 						ArrayList<JSONObject> list2 = new ArrayList<JSONObject>();
 						if(message.equals("like successful")){
-							System.out.println("idString---------"+idString);
+						
 							
 							String url2 = "topic/getUploadToATopic?pageNo=1&pageSize=10&topic_id="
 									+ idString;
@@ -341,7 +345,8 @@ public class TopicDetailActivity extends Activity {
 		}
 
 	}
-	
+	private File tempFile = new File(Environment.getExternalStorageDirectory(),
+			IMAGE_FILE_NAME);
 	private void showDialog() {
 
 		new AlertDialog.Builder(this)
@@ -365,12 +370,11 @@ public class TopicDetailActivity extends Activity {
 									MediaStore.ACTION_IMAGE_CAPTURE);
 							// 判断存储卡是否可以用，可用进行存储
 							if (Tools.hasSdcard()) {
-
+								
 								intentFromCapture.putExtra(
 										MediaStore.EXTRA_OUTPUT,
-										Uri.fromFile(new File(Environment
-												.getExternalStorageDirectory(),
-												IMAGE_FILE_NAME)));
+										Uri.fromFile(tempFile));
+					
 							}
 
 							startActivityForResult(intentFromCapture,
@@ -397,16 +401,10 @@ public class TopicDetailActivity extends Activity {
 			switch (requestCode) {
 			case IMAGE_REQUEST_CODE:
 				startPhotoZoom(data.getData());
-				//startActivityForResult(data, 2);
 				break;
 			case CAMERA_REQUEST_CODE:
 				if (Tools.hasSdcard()) {
-					File tempFile = new File(
-							Environment.getExternalStorageDirectory()
-									+ IMAGE_FILE_NAME);
-					System.out.println("carame-------uri"+Uri.fromFile(tempFile));
 					startPhotoZoom(Uri.fromFile(tempFile));
-				//	startActivityForResult(data, 2);
 				} else {
 					Toast.makeText(TopicDetailActivity.this, "未找到存储卡，无法存储照片！",
 							Toast.LENGTH_LONG).show();
@@ -415,9 +413,7 @@ public class TopicDetailActivity extends Activity {
 				break;
 			case RESULT_REQUEST_CODE:
 				if (data != null) {
-					
-					System.out.println("date----"+data);
-					System.out.println("uri222222222----"+data.getData());
+	
 					getImageToView(data);
 					
 				}
@@ -433,9 +429,15 @@ public class TopicDetailActivity extends Activity {
 	 * @param uri
 	 */
 	public void startPhotoZoom(Uri uri) {
+		
+		System.out.println("ssssss----"+uri);
 
 		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
+		intent.setDataAndType(uri, "image/*");  
+      
+		 
+		 
+		//intent.setDataAndType(uri, "image/*");
 		// 设置裁剪
 		intent.putExtra("crop", "true");
 		// aspectX aspectY 是宽高的比例

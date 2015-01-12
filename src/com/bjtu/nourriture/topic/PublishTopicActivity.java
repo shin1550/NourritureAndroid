@@ -182,7 +182,8 @@ public class PublishTopicActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	
+	private File tempFile = new File(Environment.getExternalStorageDirectory(),
+			IMAGE_FILE_NAME);
 	private void showDialog() {
 
 		new AlertDialog.Builder(this)
@@ -209,9 +210,7 @@ public class PublishTopicActivity extends Activity {
 
 								intentFromCapture.putExtra(
 										MediaStore.EXTRA_OUTPUT,
-										Uri.fromFile(new File(Environment
-												.getExternalStorageDirectory(),
-												IMAGE_FILE_NAME)));
+										Uri.fromFile(tempFile));
 							}
 
 							startActivityForResult(intentFromCapture,
@@ -238,16 +237,11 @@ public class PublishTopicActivity extends Activity {
 			switch (requestCode) {
 			case IMAGE_REQUEST_CODE:
 				startPhotoZoom(data.getData());
-				//startActivityForResult(data, 2);
 				break;
 			case CAMERA_REQUEST_CODE:
 				if (Tools.hasSdcard()) {
-					File tempFile = new File(
-							Environment.getExternalStorageDirectory()
-									+ IMAGE_FILE_NAME);
-					System.out.println("carame-------uri"+Uri.fromFile(tempFile));
+					
 					startPhotoZoom(Uri.fromFile(tempFile));
-				//	startActivityForResult(data, 2);
 				} else {
 					Toast.makeText(PublishTopicActivity.this, "未找到存储卡，无法存储照片！",
 							Toast.LENGTH_LONG).show();
@@ -256,9 +250,7 @@ public class PublishTopicActivity extends Activity {
 				break;
 			case RESULT_REQUEST_CODE:
 				if (data != null) {
-					
-					System.out.println("date----"+data);
-					System.out.println("uri222222222----"+data.getData());
+	
 					getImageToView(data);
 					
 				}
@@ -276,6 +268,7 @@ public class PublishTopicActivity extends Activity {
 	public void startPhotoZoom(Uri uri) {
 
 		Intent intent = new Intent("com.android.camera.action.CROP");
+		System.out.println("uri"+uri);
 		intent.setDataAndType(uri, "image/*");
 		// 设置裁剪
 		intent.putExtra("crop", "true");
