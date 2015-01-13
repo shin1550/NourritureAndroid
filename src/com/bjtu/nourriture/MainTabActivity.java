@@ -18,6 +18,7 @@ public class MainTabActivity extends TabActivity implements OnCheckedChangeListe
 	private Intent mAIntent;
 	private Intent mBIntent;
 	private Intent mCIntent;
+	private Intent mDIntent;
 	
     /** Called when the activity is first created. */
     @Override
@@ -26,15 +27,18 @@ public class MainTabActivity extends TabActivity implements OnCheckedChangeListe
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.maintabs);
         
-        this.mAIntent = new Intent(this,ListRecipeActivity.class);
-        this.mBIntent = new Intent(this,ListTopicActivity.class);
-        this.mCIntent = new Intent(this,LoginActivity.class);
+        this.mAIntent = new Intent(this,MainActivity.class);
+        this.mBIntent = new Intent(this,ListRecipeActivity.class);
+        this.mCIntent = new Intent(this,ListTopicActivity.class);
+        this.mDIntent = new Intent(this,LoginActivity.class);
         
 		((RadioButton) findViewById(R.id.radio_button0))
 		.setOnCheckedChangeListener(this);
         ((RadioButton) findViewById(R.id.radio_button1))
 		.setOnCheckedChangeListener(this);
         ((RadioButton) findViewById(R.id.radio_button2))
+		.setOnCheckedChangeListener(this);
+		((RadioButton) findViewById(R.id.radio_button3))
 		.setOnCheckedChangeListener(this);
         
         setupIntent();
@@ -53,6 +57,9 @@ public class MainTabActivity extends TabActivity implements OnCheckedChangeListe
 			case R.id.radio_button2:
 				this.mTabHost.setCurrentTabByTag("C_TAB");
 				break;
+			case R.id.radio_button3:
+				this.mTabHost.setCurrentTabByTag("D_TAB");
+				break;
 			}
 		}
 		
@@ -62,15 +69,16 @@ public class MainTabActivity extends TabActivity implements OnCheckedChangeListe
 		this.mTabHost = getTabHost();
 		TabHost localTabHost = this.mTabHost;
 
-		localTabHost.addTab(buildTabSpec("A_TAB", R.string.main_recipe,
+		localTabHost.addTab(buildTabSpec("A_TAB", R.string.main_home,
 				R.drawable.icon_1_n, this.mAIntent));
 
-		localTabHost.addTab(buildTabSpec("B_TAB", R.string.main_topic,
+		localTabHost.addTab(buildTabSpec("B_TAB", R.string.main_recipe,
 				R.drawable.icon_2_n, this.mBIntent));
 
-		localTabHost.addTab(buildTabSpec("C_TAB",
-				R.string.main_publish, R.drawable.icon_3_n,
-				this.mCIntent));
+		localTabHost.addTab(buildTabSpec("C_TAB",R.string.main_topic, 
+				R.drawable.icon_3_n,this.mCIntent));
+		localTabHost.addTab(buildTabSpec("D_TAB",R.string.main_publish, 
+				R.drawable.icon_4_n,this.mDIntent));
 	}
 	
 	private TabHost.TabSpec buildTabSpec(String tag, int resLabel, int resIcon,

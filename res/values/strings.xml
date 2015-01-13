@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Nourriture</string>
+    <string name="main_home">Home</string>
     <string name="main_recipe">Recipe</string>
     <string name="main_topic">Topic</string>
     <string name="main_publish">Publish</string>

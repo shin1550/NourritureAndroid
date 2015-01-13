@@ -72,6 +72,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name=".recipe.ListRecipeActivity"
             android:label="@string/app_name" >
         </activity>
