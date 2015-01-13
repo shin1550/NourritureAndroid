@@ -121,6 +121,10 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name=".user.SettingActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name=".user.MoreActivity"
             android:label="@string/app_name" >
         </activity>
