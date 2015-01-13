@@ -95,7 +95,7 @@ public class PersonalCenterActivity extends Activity {
 							@Override
 							public void run() {
 								// TODO Auto-generated method stub
-								bitmap = getHttpBitmap(head);
+								bitmap = ImageUtil.getHttpBitmap(head);
 								headImage .setImageBitmap(bitmap);	//设置Bitmap
 							}
 						});
@@ -177,27 +177,6 @@ public class PersonalCenterActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		return true;
-	}
-	public static Bitmap getHttpBitmap(String url) {
-		URL myFileUrl = null;
-		Bitmap bitmap = null;
-		try {
-			myFileUrl = new URL(url);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		try {
-			HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
-			conn.setConnectTimeout(0);
-			conn.setDoInput(true);
-			conn.connect();
-			InputStream is = conn.getInputStream();
-			bitmap = BitmapFactory.decodeStream(is);
-			is.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return bitmap;
 	}
 
 	public void getRecipesConnection() throws Exception{

@@ -3,6 +3,7 @@ package com.bjtu.nourriture.user;
 import org.json.JSONObject;
 
 import com.bjtu.nourriture.MainActivity;
+import com.bjtu.nourriture.MainTabActivity;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.CheckHttpUtil;
 import com.bjtu.nourriture.common.Session;
@@ -85,7 +86,7 @@ public class LoginActivity extends Activity {
 							//回到之前的操作页
 							//LoginActivity.this.finish();
 							Intent intent = new Intent();
-							intent.setClass(LoginActivity.this,MainActivity.class);
+							intent.setClass(LoginActivity.this,MainTabActivity.class);
 							startActivity(intent);
 						}
 					}
