@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,16 +22,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
-import com.bjtu.nourriture.common.CheckHttpUtil;
 import com.bjtu.nourriture.common.Constants;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,18 +45,28 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 
 	DisplayImageOptions options;
 	ArrayList<JSONObject> list = new ArrayList<JSONObject>();
+	PullToRefreshListView mPullRefreshListView;
+	ArrayAdapter<String> recipeNameAdapter;
+	List<String> recipeNames = new ArrayList<String>();
+	int pageNo = 1;
+	/*int totalNumber = -1;
+	int number;*/
+	ListRecipeAdapter adapter;
+	String searchString;
+	
+	/*ArrayList<JSONObject> list = new ArrayList<JSONObject>();
 	ListRecipeAdapter adapter;
 	ListView listview;
 	int pageNo = 1;
 	int totalNumber;
 	int number;
 	List<String> recipeNames = new ArrayList<String>();
-	ArrayAdapter<String> recipeNameAdapter;
+	ArrayAdapter<String> recipeNameAdapter;*/
 	
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setContentView(R.layout.activity_recipe_list_all);
 		
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())  
         .threadPriority(Thread.NORM_PRIORITY - 2)
@@ -74,28 +86,10 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		.displayer(new RoundedBitmapDisplayer(20))
 		.build();
 		
-		setContentView(R.layout.activity_recipe_list_all);
-		CheckHttpUtil.initIntener(this);
-		listview=(ListView) findViewById(R.id.listView1);
-    	
-    	adapter = new ListRecipeAdapter(this,list);
-    	listview.requestLayout();
-    	listview.setAdapter(adapter);
-    	//adapter.notifyDataSetChanged();
-    	
-    	ListRecipeTask task = new ListRecipeTask();
-		task.listView = listview;
-		task.activity = this;
-		//task.list = list;
-		task.execute();
-		
-		/*View loadMoreView;
-		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_comment_loadmore, null);  
-    	listview.addFooterView(loadMoreView);*/
-		
 		AutoCompleteTextView searchEditText = (AutoCompleteTextView) findViewById(R.id.listRecipeSearch);
 		recipeNameAdapter = new ArrayAdapter<String>(this,
 					android.R.layout.simple_dropdown_item_1line, recipeNames);
+		//searchString = searchEditText.getText().toString();
 		searchEditText.setAdapter(recipeNameAdapter);
 		searchEditText.setOnKeyListener(new OnKeyListener() {  
             @Override  
@@ -108,30 +102,49 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
   
             }  
         });
-		listview.setOnItemClickListener(this);
-	}
-	
-	public String getRecipeList(){
-		return RecipeTalkToServer.recipeGet("recipe/listAll?pageNo="+pageNo+"&pageSize=10");
-	}
-	
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View view, int pos, long id){
-		System.out.println("----------click--------------");
-		System.out.println(list.get(pos).toString());
 		
-		list.get(pos);
-		Intent intent = new Intent(this, SingleRecipeActivity.class);
+		mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
+		mPullRefreshListView.setMode(Mode.PULL_UP_TO_REFRESH);
+		mPullRefreshListView.getLoadingLayoutProxy(false, true).setPullLabel(
+				"pull to load");
+		mPullRefreshListView.getLoadingLayoutProxy(false, true)
+				.setRefreshingLabel("loading");
+		mPullRefreshListView.getLoadingLayoutProxy(false, true)
+				.setReleaseLabel("release to load");
 		
-		try {
-			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID, list.get(pos).getString("_id"));
-			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, list.get(pos).toString());
-			startActivity(intent);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+				
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+				// TODO Auto-generated method stub
+				String label = DateUtils.formatDateTime(
+						getApplicationContext(),
+						System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME
+								| DateUtils.FORMAT_SHOW_DATE
+								| DateUtils.FORMAT_ABBREV_ALL);
+
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+
+				// Do work to refresh the list here.
+				pageNo += 1;
+				ListRecipeTask task = new ListRecipeTask();
+				task.execute();
+			}
+		});
 		
+		adapter = new ListRecipeAdapter(this,list);
+		mPullRefreshListView.requestLayout();
+		mPullRefreshListView.setAdapter(adapter);
+		mPullRefreshListView.setOnItemClickListener(this);
+		
+		ListRecipeTask task = new ListRecipeTask();
+		task.execute();
 	}
 	
 	class ListRecipeAdapter extends BaseAdapter{
@@ -215,27 +228,53 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		}
 	}
 	
-	class ListRecipeTask extends AsyncTask<Object, Object, Object>{
-		ListView listView;
-		ListRecipeActivity activity;
-		String search;
+	public void searchRecipe(View view){
+		searchRecipe1();
+	}
+	
+	public void searchRecipe1(){
+		//AutoCompleteTextView searchEditText = (AutoCompleteTextView) findViewById(R.id.listRecipeSearch);
+		//String searchString = searchEditText.getText().toString();
+		if(searchString == null || searchString.trim().equals("")){
+			pageNo = 1;
+			list.clear();
+			recipeNames.clear();
+			ListRecipeTask task = new ListRecipeTask();
+			//task.search = null;
+			task.execute();
+		}else{
+			pageNo = 1;
+			list.clear();
+			recipeNames.clear();
+			ListRecipeTask task = new ListRecipeTask();
+			//task.search = searchString;
+			task.execute();
+		}
+	}
+	
+	class ListRecipeTask extends AsyncTask<Object, Object, String>{
+		//String search;
 		String recipeRecult;
 		
 		@Override
-		protected Object doInBackground(Object... arg0) {
-			if(search == null){
+		protected String doInBackground(Object... arg0) {
+			AutoCompleteTextView searchEditText = (AutoCompleteTextView) findViewById(R.id.listRecipeSearch);
+			searchString = searchEditText.getText().toString();
+			
+			if(searchString == null || searchString.trim().equals("")){
 				recipeRecult = getRecipeList();
 			}else{
-				search = search.replaceAll(" ", "%20");
-				recipeRecult = getSearchRecipeList(search);
+				searchString = searchString.replaceAll(" ", "%20");
+				recipeRecult = getSearchRecipeList(searchString);
 			}
 			
 			try {
+				
 				JSONObject jsonObject = new JSONObject(recipeRecult);
 				JSONArray jsonArray = jsonObject.getJSONArray("root");
-				String totalString = jsonObject.getString("total");
-				totalNumber = Integer.parseInt(totalString);
-				number += jsonArray.length();
+				if(jsonArray.length() == 0){
+					return "No";
+				}
 				for(int i=0;i<jsonArray.length();i++){   
 	                JSONObject jo = (JSONObject)jsonArray.opt(i);
 	                list.add(jo);
@@ -244,83 +283,51 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			//adapter.notifyDataSetChanged();
 			return null;
 		}
 		
 		@Override
-		public void onPostExecute(Object result){
-			listView.setVisibility(View.GONE);  
-			listview.requestLayout();
-			adapter.notifyDataSetChanged();
-			listView.setVisibility(View.VISIBLE);
-			recipeNameAdapter.notifyDataSetInvalidated();
-			
+		public void onPostExecute(String result){
+			if(result != null && result.equals("No")){
+				Toast.makeText(getApplicationContext(), "No more",
+					     Toast.LENGTH_SHORT).show();
+				mPullRefreshListView.onRefreshComplete();
+				super.onPostExecute(null);
+			}else{
+				//mPullRefreshListView.setVisibility(View.GONE);  
+				mPullRefreshListView.requestLayout();
+				adapter.notifyDataSetChanged();
+				//mPullRefreshListView.setVisibility(View.VISIBLE);
+				
+				recipeNameAdapter.notifyDataSetInvalidated();
+				
+				mPullRefreshListView.onRefreshComplete();
+				super.onPostExecute(result);
+			}
 		}
 	}
 	
-	public void loadMore(View view){
-		if(totalNumber <= number){
-			Toast.makeText(getApplicationContext(), "No more",
-				     Toast.LENGTH_SHORT).show();
-		}else{
-			pageNo += 1;
-			ListView listview=(ListView) findViewById(R.id.listView1);
-			ListRecipeTask task = new ListRecipeTask();
-			task.listView = listview;
-			task.activity = this;
-			task.execute();
-		}
-	}
-	
-	public void searchRecipe(View view){
-		searchRecipe1();
-	}
-	
-	public void searchRecipe1(){
-		AutoCompleteTextView searchEditText = (AutoCompleteTextView) findViewById(R.id.listRecipeSearch);
-		String searchString = searchEditText.getText().toString();
-		ListView listview=(ListView) findViewById(R.id.listView1);
-		if(searchString == null || searchString.trim().equals("")){
-			/*Toast.makeText(getApplicationContext(), "Please enter something",
-				     Toast.LENGTH_SHORT).show();*/
-			pageNo = 1;
-			list.clear();
-			recipeNames.clear();
-			ListRecipeTask task = new ListRecipeTask();
-			task.listView = listview;
-			task.activity = this;
-			task.search = null;
-			task.execute();
-		}else{
-			pageNo = 1;
-			list.clear();
-			recipeNames.clear();
-			ListRecipeTask task = new ListRecipeTask();
-			task.listView = listview;
-			task.activity = this;
-			task.search = searchString;
-			task.execute();
-		}
+	public String getRecipeList(){
+		return RecipeTalkToServer.recipeGet("recipe/listAll?pageNo="+pageNo+"&pageSize=10");
 	}
 	
 	public String getSearchRecipeList(String search){
 		return RecipeTalkToServer.recipeGet("recipe/search?pageNo="+pageNo+"&pageSize=10&queryStr="+search);
 	}
 
-	public void backToFront(View view){
-		ListRecipeActivity.this.finish();
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+		list.get(pos);
+		Intent intent = new Intent(this, SingleRecipeActivity.class);
+		
+		try {
+			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID, list.get(pos).getString("_id"));
+			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, list.get(pos).toString());
+			startActivity(intent);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void backToHome(View view){
-		ListRecipeActivity.this.finish();
-		Intent intent = new Intent();
-		intent.setClass(ListRecipeActivity.this, MainActivity.class);
-		startActivity(intent);
-	}
-	
-	public void backToMore(View view){
-		Toast.makeText(getApplicationContext(), "Coming Soon...",
-			     Toast.LENGTH_SHORT).show();
-	}
 }
