@@ -227,6 +227,7 @@
                             android:src="@drawable/mm_submenu" />                       
                     </RelativeLayout>
                     <RelativeLayout
+                       android:id="@+id/setting_logout_layout" 
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
