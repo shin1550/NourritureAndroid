@@ -9,10 +9,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -62,6 +64,11 @@ public class SingleRecipeActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recipe_single);
 		
+		final ActionBar actionBar = getActionBar();
+	    actionBar.setDisplayHomeAsUpEnabled(true);
+	    actionBar.setDisplayUseLogoEnabled(false);
+	    actionBar.setDisplayShowHomeEnabled(false);
+		
 		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(R.drawable.ic_launcher)
 		.showImageForEmptyUri(R.drawable.ic_launcher)
@@ -90,6 +97,16 @@ public class SingleRecipeActivity extends Activity{
 		task.activity = this;
 		task.execute();
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+            	SingleRecipeActivity.this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 	
 	public String getCommentList(){
 		return RecipeTalkToServer.recipeGet("recipe/listComment?pageNo=1&pageSize=3&recipeId="+singleRecipeId);
@@ -141,13 +158,13 @@ public class SingleRecipeActivity extends Activity{
 			showRecipe();
 			showCollect();
 			showComment();
+			setTitle(recipeName);
 		}
 	}
 	
 	public void showRecipe(){
 		ImageView recipePhotoImageView = (ImageView) findViewById(R.id.singleRecipePhoto);
 		ImageView recipeAuthorHeadImageView = (ImageView) findViewById(R.id.singleRecipeAuthorHead);
-		TextView recipeNameTextView = (TextView) findViewById(R.id.singleRecipeName);
 		TextView singleRecipeAuthor = (TextView) findViewById(R.id.singleRecipeAuthor);
 		TextView singleRecipeCollectNum = (TextView) findViewById(R.id.singleRecipeCollectNum);
 		TextView singleRecipeCommentNum = (TextView) findViewById(R.id.singleRecipeCommentNum);
@@ -164,14 +181,14 @@ public class SingleRecipeActivity extends Activity{
 		.displayImage(authorHead, recipeAuthorHeadImageView, optionRound, new SimpleImageLoadingListener() {
 		});
 		
-		recipeNameTextView.setText(recipeName);
 		singleRecipeAuthor.setText(authorAccount);
 		singleRecipeCollectNum.setText(collectNum);
 		singleRecipeCommentNum.setText(commentNum);
 		singleRecipeDescription.setText(description);
 		singleRecipeDifficultity.append("  "+difficult);
 		singleRecipeTime.append("  "+cookTime);
-		singleRecipeComment.append("("+commentNum+"):");
+		singleRecipeComment.setText("Totally "+ commentNum + " comments");
+		//singleRecipeComment.append("("+commentNum+"):");
 		
 		TableLayout materialTable = (TableLayout) findViewById(R.id.singleMaterialTable);
 		materialTable.setStretchAllColumns(true);
@@ -213,10 +230,12 @@ public class SingleRecipeActivity extends Activity{
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			stepNumView.setPadding(5, 0, 0, 0);
+			stepNumView.setTextSize(20);
+			stepNumView.setPadding(0, 0, 0, 0);
 			tablerow.addView(stepNumView,10,LayoutParams.WRAP_CONTENT);
+			stepPhotoImageView.setPadding(0, 0, 10, 0);
+			tablerow.addView(stepPhotoImageView,200,300);
 			tablerow.addView(stepExplainView,150,LayoutParams.WRAP_CONTENT);
-			tablerow.addView(stepPhotoImageView,200,200);
 			tablerow.setPadding(0, 0, 0, 5);
 			
 			stepTable.addView(tablerow);
@@ -224,7 +243,7 @@ public class SingleRecipeActivity extends Activity{
 	}
 	
 	public void showComment(){
-		TableLayout commentTable = (TableLayout) findViewById(R.id.singleCommentTable);
+		/*TableLayout commentTable = (TableLayout) findViewById(R.id.singleCommentTable);
 		commentTable.removeAllViews();
 		commentTable.setStretchAllColumns(true);
 		if(commentList != null){
@@ -267,7 +286,7 @@ public class SingleRecipeActivity extends Activity{
 				
 				commentTable.addView(tablerow);
 			}
-		}
+		}*/
 	}
 	
 	public void showCollect(){
@@ -281,9 +300,6 @@ public class SingleRecipeActivity extends Activity{
 					if(session.get("username") == null || session.get("username").equals("")){
 						Toast.makeText(getApplicationContext(), "Sign in please",
 							     Toast.LENGTH_SHORT).show();
-						//intentLogIn = new Intent();
-						//intentLogIn.setClass(SingleRecipeActivity.this, LoginActivity.class);
-						//intentLogIn = new Intent(getApplicationContext(), LoginActivity.class);
 						startActivity(intentLogIn);
 					}else{
 						List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
@@ -324,7 +340,6 @@ public class SingleRecipeActivity extends Activity{
 			if(session.get("username") == null || session.get("username").equals("")){
 				Toast.makeText(getApplicationContext(), "Sign in please",
 					     Toast.LENGTH_SHORT).show();
-				//intentLogIn = new Intent(getApplicationContext(), LoginActivity.class);
 				startActivity(intentLogIn);
 			}else{
 				List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
@@ -347,7 +362,8 @@ public class SingleRecipeActivity extends Activity{
 	        		TextView singleRecipeCommentNum = (TextView) findViewById(R.id.singleRecipeCommentNum);
 	        		TextView singleRecipeComment = (TextView) findViewById(R.id.singleRecipeComment);
 	        		singleRecipeCommentNum.setText(commentNum);
-	        		singleRecipeComment.setText("People say("+commentNum+"):");
+	        		singleRecipeComment.setText("Totally "+ commentNum + " comments");
+	        		//singleRecipeComment.setText("People say("+commentNum+"):");
 	            }
 			}
 		}

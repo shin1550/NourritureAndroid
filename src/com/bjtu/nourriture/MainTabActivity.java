@@ -3,14 +3,10 @@ package com.bjtu.nourriture;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TabHost;
-import android.widget.TextView;
 
 import com.baidu.mobstat.StatService;
 import com.bjtu.nourriture.common.Session;

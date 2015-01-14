@@ -148,7 +148,7 @@ public class SingleRecipeActivity extends Activity{
 	public void showRecipe(){
 		ImageView recipePhotoImageView = (ImageView) findViewById(R.id.singleRecipePhoto);
 		ImageView recipeAuthorHeadImageView = (ImageView) findViewById(R.id.singleRecipeAuthorHead);
-		TextView recipeNameTextView = (TextView) findViewById(R.id.singleRecipeName);
+		//TextView recipeNameTextView = (TextView) findViewById(R.id.singleRecipeName);
 		TextView singleRecipeAuthor = (TextView) findViewById(R.id.singleRecipeAuthor);
 		TextView singleRecipeCollectNum = (TextView) findViewById(R.id.singleRecipeCollectNum);
 		TextView singleRecipeCommentNum = (TextView) findViewById(R.id.singleRecipeCommentNum);
@@ -165,7 +165,7 @@ public class SingleRecipeActivity extends Activity{
 		.displayImage(authorHead, recipeAuthorHeadImageView, optionRound, new SimpleImageLoadingListener() {
 		});
 		
-		recipeNameTextView.setText(recipeName);
+		//recipeNameTextView.setText(recipeName);
 		singleRecipeAuthor.setText(authorAccount);
 		singleRecipeCollectNum.setText(collectNum);
 		singleRecipeCommentNum.setText(commentNum);
@@ -225,7 +225,7 @@ public class SingleRecipeActivity extends Activity{
 	}
 	
 	public void showComment(){
-		TableLayout commentTable = (TableLayout) findViewById(R.id.singleCommentTable);
+		/*TableLayout commentTable = (TableLayout) findViewById(R.id.singleCommentTable);
 		commentTable.removeAllViews();
 		commentTable.setStretchAllColumns(true);
 		if(commentList != null){
@@ -268,7 +268,7 @@ public class SingleRecipeActivity extends Activity{
 				
 				commentTable.addView(tablerow);
 			}
-		}
+		}*/
 	}
 	
 	public void showCollect(){

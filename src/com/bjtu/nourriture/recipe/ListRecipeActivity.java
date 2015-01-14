@@ -252,7 +252,6 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 			}
 			
 			try {
-				
 				JSONObject jsonObject = new JSONObject(recipeRecult);
 				JSONArray jsonArray = jsonObject.getJSONArray("root");
 				if(jsonArray.length() == 0){
@@ -277,10 +276,10 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 				mPullRefreshListView.onRefreshComplete();
 				super.onPostExecute(null);
 			}else{
-				//mPullRefreshListView.setVisibility(View.GONE);  
+				mPullRefreshListView.setVisibility(View.GONE);  
 				mPullRefreshListView.requestLayout();
 				adapter.notifyDataSetChanged();
-				//mPullRefreshListView.setVisibility(View.VISIBLE);
+				mPullRefreshListView.setVisibility(View.VISIBLE);
 				
 				recipeNameAdapter.notifyDataSetInvalidated();
 				

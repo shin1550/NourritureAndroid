@@ -8,17 +8,12 @@ import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -40,7 +34,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-public class SingleRecipeCommentActivity extends FragmentActivity{
+public class SingleRecipeCommentActivity extends Activity{
 
 	DisplayImageOptions options;
 	String recipeName;
@@ -65,7 +59,7 @@ public class SingleRecipeCommentActivity extends FragmentActivity{
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    actionBar.setDisplayUseLogoEnabled(false);
 	    actionBar.setDisplayShowHomeEnabled(false);
-		
+	    
 		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(R.drawable.ic_launcher)
 		.showImageForEmptyUri(R.drawable.ic_launcher)
@@ -113,7 +107,11 @@ public class SingleRecipeCommentActivity extends FragmentActivity{
 		});
 		
 		adapter = new ListCommentAdapter(this,list);
+		mPullRefreshListView.setVisibility(View.GONE);
+		mPullRefreshListView.requestLayout();
 		mPullRefreshListView.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
+		mPullRefreshListView.setVisibility(View.VISIBLE);
 		
 		SingleCommnetTask task = new SingleCommnetTask();
 		task.activity = this;
@@ -130,11 +128,12 @@ public class SingleRecipeCommentActivity extends FragmentActivity{
         return super.onOptionsItemSelected(item);
     }
 	
-	class SingleCommnetTask extends AsyncTask<Object, Object, Object>{
+	class SingleCommnetTask extends AsyncTask<Object, Object, String>{
+		ArrayList<JSONObject> tempList = new ArrayList<JSONObject>();
 		SingleRecipeCommentActivity activity;
 		
 		@Override
-		protected Object doInBackground(Object... arg0) {
+		protected String doInBackground(Object... arg0) {
 			//评论信息
 			String commentRecult = getCommentList();
 			try {
@@ -142,11 +141,13 @@ public class SingleRecipeCommentActivity extends FragmentActivity{
 				JSONArray jsonArray = jsonObject.getJSONArray("root");
 				if(jsonArray.length() == 0){
 					return "No";
+				}else{
+					for(int i=0;i<jsonArray.length();i++){   
+		                JSONObject jo = (JSONObject)jsonArray.opt(i);
+		                tempList.add(jo);
+		            }
+					return null;
 				}
-				for(int i=0;i<jsonArray.length();i++){   
-	                JSONObject jo = (JSONObject)jsonArray.opt(i);
-	                list.add(jo);
-	            }
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -154,19 +155,24 @@ public class SingleRecipeCommentActivity extends FragmentActivity{
 		}
 		
 		@Override
-		public void onPostExecute(Object result){
+		public void onPostExecute(String result){
 			if(result != null && result.equals("No")){
 				Toast.makeText(getApplicationContext(), "No more",
 					     Toast.LENGTH_SHORT).show();
+				mPullRefreshListView.requestLayout();
+				adapter.notifyDataSetChanged();
 				mPullRefreshListView.onRefreshComplete();
 				super.onPostExecute(null);
 			}else{
+				list.addAll(tempList);
+				mPullRefreshListView.setVisibility(View.GONE);
 				mPullRefreshListView.requestLayout();
 				adapter.notifyDataSetChanged();
-				//adapter.notifyDataSetInvalidated();
+				mPullRefreshListView.setVisibility(View.VISIBLE);
 				
+				adapter.notifyDataSetInvalidated();
 				mPullRefreshListView.onRefreshComplete();
-				super.onPostExecute(result);
+				super.onPostExecute(null);
 			}
 		}
 	}
