@@ -44,7 +44,7 @@ public class MainTabActivity extends TabActivity implements OnCheckedChangeListe
 		System.out.println("IsLogin:"+islogin);
 		if(islogin!=null){
 			if(islogin){
-				this.mCIntent = new Intent(this,SettingActivity.class);
+				this.mDIntent = new Intent(this,SettingActivity.class);
 			}
 		}
 		((RadioButton) findViewById(R.id.radio_button0))
@@ -83,13 +83,10 @@ public class MainTabActivity extends TabActivity implements OnCheckedChangeListe
 	private void setupIntent() {
 		this.mTabHost = getTabHost();
 		TabHost localTabHost = this.mTabHost;
-
 		localTabHost.addTab(buildTabSpec("A_TAB", R.string.main_home,
 				R.drawable.icon_1_n, this.mAIntent));
-
 		localTabHost.addTab(buildTabSpec("B_TAB", R.string.main_recipe,
 				R.drawable.icon_2_n, this.mBIntent));
-
 		localTabHost.addTab(buildTabSpec("C_TAB",R.string.main_topic, 
 				R.drawable.icon_3_n,this.mCIntent));
 		localTabHost.addTab(buildTabSpec("D_TAB",R.string.main_publish, 
@@ -98,10 +95,9 @@ public class MainTabActivity extends TabActivity implements OnCheckedChangeListe
 	private void setupIntent2() {
 		this.mTabHost = getTabHost();
 		TabHost localTabHost = this.mTabHost;
-		this.mCIntent=  new Intent(this,SettingActivity.class);
-		localTabHost.addTab(buildTabSpec("C_TAB",
-				R.string.main_publish, R.drawable.icon_3_n,
-				this.mCIntent));
+		this.mDIntent=  new Intent(this,SettingActivity.class);
+		localTabHost.addTab(buildTabSpec("D_TAB",R.string.main_publish, 
+				R.drawable.icon_4_n,this.mDIntent));
 	}
 	
 	private TabHost.TabSpec buildTabSpec(String tag, int resLabel, int resIcon,
