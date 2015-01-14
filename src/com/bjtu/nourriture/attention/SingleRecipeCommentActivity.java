@@ -60,9 +60,9 @@ public class SingleRecipeCommentActivity extends Activity{
 		recipeName = intent.getStringExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_NAME);
 		recipeId = intent.getStringExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID);
 		
-		TextView recipeNameTextView = (TextView) findViewById(R.id.singleRecipeCommentName);
+		//TextView recipeNameTextView = (TextView) findViewById(R.id.singleRecipeCommentName);
 		listView = (ListView) findViewById(R.id.singleRecipeCommentList);
-		recipeNameTextView.append(recipeName);
+		//recipeNameTextView.append(recipeName);
 		
 		adapter = new ListCommentAdapter(this,list);
 		//listView.requestLayout();

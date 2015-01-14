@@ -92,7 +92,7 @@ public class SingleRecipeActivity extends Activity{
 	}
 	
 	public String getCommentList(){
-		return RecipeTalkToServer.recipeGet("recipe/listComment?pageNo=1&pageSize=5&recipeId="+singleRecipeId);
+		return RecipeTalkToServer.recipeGet("recipe/listComment?pageNo=1&pageSize=3&recipeId="+singleRecipeId);
 	}
 	
 	class SingleRecipeTask extends AsyncTask<Object, Object, Object>{

@@ -6,12 +6,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,30 +28,43 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
-import com.bjtu.nourriture.recipe.ListRecipeActivity.ListRecipeTask;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-public class SingleRecipeCommentActivity extends Activity{
+public class SingleRecipeCommentActivity extends FragmentActivity{
 
 	DisplayImageOptions options;
 	String recipeName;
 	String recipeId;
 	ArrayList<JSONObject> list = new ArrayList<JSONObject>();
 	ListCommentAdapter adapter;
-	ListView listView;
-	int totalNumber;
-	int number;
+	PullToRefreshListView mPullRefreshListView;
 	int pageNo = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Intent intent = getIntent();
+		recipeName = intent.getStringExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_NAME);
+		recipeId = intent.getStringExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID);
+		
+		setTitle(recipeName);
+		
 		setContentView(R.layout.activity_recipe_comment_all);
+		final ActionBar actionBar = getActionBar();
+	    actionBar.setDisplayHomeAsUpEnabled(true);
+	    actionBar.setDisplayUseLogoEnabled(false);
+	    actionBar.setDisplayShowHomeEnabled(false);
 		
 		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(R.drawable.ic_launcher)
@@ -55,26 +76,59 @@ public class SingleRecipeCommentActivity extends Activity{
 		.displayer(new RoundedBitmapDisplayer(90))
 		.build();
 		
-		Intent intent = getIntent();
-		recipeName = intent.getStringExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_NAME);
-		recipeId = intent.getStringExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID);
+		mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.singleRecipeCommentList);
 		
-		TextView recipeNameTextView = (TextView) findViewById(R.id.singleRecipeCommentName);
-		listView = (ListView) findViewById(R.id.singleRecipeCommentList);
-		recipeNameTextView.append(recipeName);
+		mPullRefreshListView.setMode(Mode.PULL_UP_TO_REFRESH);
+		mPullRefreshListView.getLoadingLayoutProxy(false, true).setPullLabel(
+				"pull to load");
+		mPullRefreshListView.getLoadingLayoutProxy(false, true)
+				.setRefreshingLabel("loading");
+		mPullRefreshListView.getLoadingLayoutProxy(false, true)
+				.setReleaseLabel("release to load");
+		
+		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+				
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+				// TODO Auto-generated method stub
+				String label = DateUtils.formatDateTime(
+						getApplicationContext(),
+						System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME
+								| DateUtils.FORMAT_SHOW_DATE
+								| DateUtils.FORMAT_ABBREV_ALL);
+
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+
+				// Do work to refresh the list here.
+				pageNo += 1;
+				SingleCommnetTask task = new SingleCommnetTask();
+				task.execute();
+			}
+		});
 		
 		adapter = new ListCommentAdapter(this,list);
-		//listView.requestLayout();
-		listView.setAdapter(adapter);
+		mPullRefreshListView.setAdapter(adapter);
 		
-		/*View loadMoreView;
-		loadMoreView = getLayoutInflater().inflate(R.layout.activity_recipe_comment_loadmore, null);  
-    	listView.addFooterView(loadMoreView);*/
-    	
 		SingleCommnetTask task = new SingleCommnetTask();
 		task.activity = this;
 		task.execute();
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+            	SingleRecipeCommentActivity.this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 	
 	class SingleCommnetTask extends AsyncTask<Object, Object, Object>{
 		SingleRecipeCommentActivity activity;
@@ -86,9 +140,9 @@ public class SingleRecipeCommentActivity extends Activity{
 			try {
 				JSONObject jsonObject = new JSONObject(commentRecult);
 				JSONArray jsonArray = jsonObject.getJSONArray("root");
-				String totalString = jsonObject.getString("total");
-				totalNumber = Integer.parseInt(totalString);
-				number += jsonArray.length();
+				if(jsonArray.length() == 0){
+					return "No";
+				}
 				for(int i=0;i<jsonArray.length();i++){   
 	                JSONObject jo = (JSONObject)jsonArray.opt(i);
 	                list.add(jo);
@@ -101,8 +155,19 @@ public class SingleRecipeCommentActivity extends Activity{
 		
 		@Override
 		public void onPostExecute(Object result){
-			listView.requestLayout();
-			adapter.notifyDataSetChanged();
+			if(result != null && result.equals("No")){
+				Toast.makeText(getApplicationContext(), "No more",
+					     Toast.LENGTH_SHORT).show();
+				mPullRefreshListView.onRefreshComplete();
+				super.onPostExecute(null);
+			}else{
+				mPullRefreshListView.requestLayout();
+				adapter.notifyDataSetChanged();
+				//adapter.notifyDataSetInvalidated();
+				
+				mPullRefreshListView.onRefreshComplete();
+				super.onPostExecute(result);
+			}
 		}
 	}
 	
@@ -177,19 +242,4 @@ public class SingleRecipeCommentActivity extends Activity{
 		}
 	}
 	
-	public void backToRecipe(View view){
-		SingleRecipeCommentActivity.this.finish();
-	}
-	
-	public void loadMoreComment(View view){
-		if(totalNumber <= number){
-			Toast.makeText(getApplicationContext(), "No more",
-				     Toast.LENGTH_SHORT).show();
-		}else{
-			pageNo += 1;
-			SingleCommnetTask task = new SingleCommnetTask();
-			task.activity = this;
-			task.execute();
-		}
-	}
 }

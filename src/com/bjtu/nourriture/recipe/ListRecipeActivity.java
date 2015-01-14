@@ -49,20 +49,8 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	ArrayAdapter<String> recipeNameAdapter;
 	List<String> recipeNames = new ArrayList<String>();
 	int pageNo = 1;
-	/*int totalNumber = -1;
-	int number;*/
 	ListRecipeAdapter adapter;
-	String searchString;
-	
-	/*ArrayList<JSONObject> list = new ArrayList<JSONObject>();
-	ListRecipeAdapter adapter;
-	ListView listview;
-	int pageNo = 1;
-	int totalNumber;
-	int number;
-	List<String> recipeNames = new ArrayList<String>();
-	ArrayAdapter<String> recipeNameAdapter;*/
-	
+	String searchString;	
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,7 +77,6 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 		AutoCompleteTextView searchEditText = (AutoCompleteTextView) findViewById(R.id.listRecipeSearch);
 		recipeNameAdapter = new ArrayAdapter<String>(this,
 					android.R.layout.simple_dropdown_item_1line, recipeNames);
-		//searchString = searchEditText.getText().toString();
 		searchEditText.setAdapter(recipeNameAdapter);
 		searchEditText.setOnKeyListener(new OnKeyListener() {  
             @Override  
@@ -233,21 +220,17 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	}
 	
 	public void searchRecipe1(){
-		//AutoCompleteTextView searchEditText = (AutoCompleteTextView) findViewById(R.id.listRecipeSearch);
-		//String searchString = searchEditText.getText().toString();
 		if(searchString == null || searchString.trim().equals("")){
 			pageNo = 1;
 			list.clear();
 			recipeNames.clear();
 			ListRecipeTask task = new ListRecipeTask();
-			//task.search = null;
 			task.execute();
 		}else{
 			pageNo = 1;
 			list.clear();
 			recipeNames.clear();
 			ListRecipeTask task = new ListRecipeTask();
-			//task.search = searchString;
 			task.execute();
 		}
 	}
@@ -317,12 +300,12 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-		list.get(pos);
+		System.out.println("-----pos----"+pos);
 		Intent intent = new Intent(this, SingleRecipeActivity.class);
 		
 		try {
-			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID, list.get(pos).getString("_id"));
-			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, list.get(pos).toString());
+			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID, list.get(pos-1).getString("_id"));
+			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, list.get(pos-1).toString());
 			startActivity(intent);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
