@@ -5,43 +5,66 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Constants;
+import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.topic.Tools;
+import com.bjtu.nourriture.topic.UploadUtil;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class CreateRecipeActivity extends Activity{
-
-	private String[] items = new String[] { "选择本地图片", "拍照" };
-	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
+	
+	DisplayImageOptions options;
+	Session session = Session.getSession();
+	private String[] items = new String[] { "Choose local photo", "Take a new photo" };
+	private static final String IMAGE_FILE_NAME = "tempImage.jpg";
 	/* 请求码 */
 	private static final int IMAGE_REQUEST_CODE = 0;
 	private static final int CAMERA_REQUEST_CODE = 1;
 	private static final int RESULT_REQUEST_CODE = 2;
-	private String picPath = null;
+	private String localPicPath;
+	private String recipePath = null;
+	private String stepPath = null;
+	private String picType = "";
+	private String RECIPE_PHOTO = "recipePhoto";
+	private String STEP_PHOTO = "stepPhoto";
 	private static final String TAG = "ImageUtils";
 	private String[] difficultity = new String[]{"Junior Level","Middle Level","Senior Level"};
 	private String[] time = new String[] {"About 10 minutes","10 - 30 minutes","30 - 60 minutes","More than 60 minutes"};
+	private File tempFile = new File(Environment.getExternalStorageDirectory(),IMAGE_FILE_NAME);
 	
 	private String recipeName = "";
 	private String difficultityChoose = "";
@@ -49,21 +72,52 @@ public class CreateRecipeActivity extends Activity{
 	private String material = "";
 	private String amount = "";
 	private String description = "";
+	private String stepExplain = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recipe_create_basic);
+		setTitle("Create Recipe");
+		final ActionBar actionBar = getActionBar();
+	    actionBar.setDisplayHomeAsUpEnabled(true);
+	    actionBar.setDisplayUseLogoEnabled(false);
+	    actionBar.setDisplayShowHomeEnabled(false);
+	    
+	    ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				getApplicationContext())
+				.threadPriority(Thread.NORM_PRIORITY - 2)
+				.denyCacheImageMultipleSizesInMemory()
+				.discCacheFileNameGenerator(new Md5FileNameGenerator())
+				.tasksProcessingOrder(QueueProcessingType.LIFO).build();
+		ImageLoader.getInstance().init(config);
+
+		options = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.ic_launcher)
+				.showImageForEmptyUri(R.drawable.ic_launcher)
+				.showImageOnFail(R.drawable.ic_launcher).cacheInMemory(true)
+				.cacheOnDisk(true).considerExifParams(true)
+				.displayer(new RoundedBitmapDisplayer(10)).build();
 	}
 	
-	public void backTo(View view){
-		CreateRecipeActivity.this.finish();
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		getMenuInflater().inflate(R.menu.recipe_create, menu);
+	    return super.onCreateOptionsMenu(menu);
 	}
 	
-	public void forwardTo(View view){
-		Toast.makeText(CreateRecipeActivity.this, "Please finsh the infomation ！",
-				Toast.LENGTH_LONG).show();
-	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+            	CreateRecipeActivity.this.finish();
+                return true;
+            case R.id.menu_publish:
+            	createRecipe();
+            	CreateRecipeActivity.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 	
 	public void chooseDifficultity(View view){   
         new AlertDialog.Builder(this)
@@ -91,7 +145,7 @@ public class CreateRecipeActivity extends Activity{
          }).show();
 	}
 	
-	public void addMoreMaterial(View view){
+	/*public void addMoreMaterial(View view){
 		TableLayout tableLayout = (TableLayout) findViewById(R.id.createRecipeMaterial);
 		TableRow tablerow = new TableRow(CreateRecipeActivity.this);
 		tablerow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
@@ -108,11 +162,21 @@ public class CreateRecipeActivity extends Activity{
 		tablerow.addView(AmountView,10,LayoutParams.WRAP_CONTENT);
 		
 		tableLayout.addView(tablerow);
-	}
+	}*/
 
-	public void showDialog(View view){
+	public void uploadRecipe(View view){
+		picType = RECIPE_PHOTO;
+		showDialog();
+	}
+	
+	public void uploadStep(View view){
+		picType = STEP_PHOTO;
+		showDialog();
+	}
+	
+	private void showDialog() {
 		new AlertDialog.Builder(this)
-		.setTitle("Upload Photo")
+		.setTitle("upload picture")
 		.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -120,27 +184,35 @@ public class CreateRecipeActivity extends Activity{
 				case 0:
 					Intent intentFromGallery = new Intent();
 					intentFromGallery.setType("image/*"); // 设置文件类型
-					intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
-					startActivityForResult(intentFromGallery,IMAGE_REQUEST_CODE);
+					intentFromGallery
+							.setAction(Intent.ACTION_GET_CONTENT);
+					startActivityForResult(intentFromGallery,
+							IMAGE_REQUEST_CODE);
 					break;
 				case 1:
-					Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					Intent intentFromCapture = new Intent(
+							MediaStore.ACTION_IMAGE_CAPTURE);
 					// 判断存储卡是否可以用，可用进行存储
 					if (Tools.hasSdcard()) {
-						intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
-								Uri.fromFile(new File(Environment.getExternalStorageDirectory(),IMAGE_FILE_NAME)));
+						intentFromCapture.putExtra(
+								MediaStore.EXTRA_OUTPUT,
+								Uri.fromFile(tempFile));
+			
 					}
-					startActivityForResult(intentFromCapture,CAMERA_REQUEST_CODE);
+					startActivityForResult(intentFromCapture,
+							CAMERA_REQUEST_CODE);
 					break;
 				}
 			}
 		})
 		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
 		}).show();
+
 	}
 	
 	@Override
@@ -150,26 +222,18 @@ public class CreateRecipeActivity extends Activity{
 			switch (requestCode) {
 			case IMAGE_REQUEST_CODE:
 				startPhotoZoom(data.getData());
-				startActivityForResult(data, 2);
 				break;
 			case CAMERA_REQUEST_CODE:
 				if (Tools.hasSdcard()) {
-					File tempFile = new File(Environment.getExternalStorageDirectory()+IMAGE_FILE_NAME);
-					System.out.println("carame-------uri"+Uri.fromFile(tempFile));
 					startPhotoZoom(Uri.fromFile(tempFile));
-					startActivityForResult(data, 2);
 				} else {
-					System.out.println("-------");
-					/*Toast.makeText(TopicDetailActivity.this, "未找到存储卡，无法存储照片！",
-							Toast.LENGTH_LONG).show();*/
+					Toast.makeText(CreateRecipeActivity.this, "未找到存储卡，无法存储照片！",
+							Toast.LENGTH_LONG).show();
 				}
 				break;
 			case RESULT_REQUEST_CODE:
 				if (data != null) {
-					System.out.println("date----"+data);
-					System.out.println("uri222222222----"+data.getData());
 					getImageToView(data);
-					
 				}
 				break;
 			}
@@ -179,40 +243,65 @@ public class CreateRecipeActivity extends Activity{
 	
 	private void getImageToView(Intent data) {
 		Bundle extras = data.getExtras();
-		if (extras != null) {	
-			
-			Bitmap photo = extras.getParcelable("data");		
-			String path=saveImage(photo,80);
-			picPath=path;
-			
-			toStepActivity();
+		//ImageView showImageView1 = (ImageView) findViewById(R.id.createRecipePhoto);
+		//ImageView showImageView2 = (ImageView) findViewById(R.id.createRecipeStep);
+		if (extras != null) {
+			Bitmap photo = extras.getParcelable("data");
+			String path = saveImage(photo,80);
+			localPicPath = path;
 		}
+		
+		CreateRecipeTask task = new CreateRecipeTask();
+		task.execute();
+		
+		/*if (extras != null) {
+			Bitmap photo = extras.getParcelable("data");		
+			String path = saveImage(photo,80);
+			localPicPath = path;
+			if(picType.equals(RECIPE_PHOTO)){
+				Bitmap bitmap = getLoacalBitmap(path);
+				showImageView1.setImageBitmap(bitmap);
+			}else{
+				Bitmap bitmap = getLoacalBitmap(path);
+				showImageView2.setImageBitmap(bitmap);
+			}
+			
+			CreateRecipeTask task = new CreateRecipeTask();
+			task.execute();*/
+			
+//			Intent intent = new Intent();
+//			intent.setClass(CreateRecipeActivity.this,TopicUploadActivity.class);
+//			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_UPLAOD_PATH, path);
+//			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_TOPIC_ID, idString);
+//			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL, singleData);
+//			startActivity(intent);
+
+			
+		//}
 	}
 	
 	public void startPhotoZoom(Uri uri) {
-
+		System.out.println("ssssss----"+uri);
 		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
+		intent.setDataAndType(uri, "image/*");  
+		//intent.setDataAndType(uri, "image/*");
 		// 设置裁剪
 		intent.putExtra("crop", "true");
 		// aspectX aspectY 是宽高的比例
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1.5);
+		intent.putExtra("aspectX", 3);
+		intent.putExtra("aspectY", 2);
 		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 320);
-		intent.putExtra("outputY", 480);
+		intent.putExtra("outputX", 480);
+		intent.putExtra("outputY", 320);
 		intent.putExtra("return-data", true);
       
 		startActivityForResult(intent, 2);
 	}
 	
 	public static String saveImage(Bitmap bitmap, int quality) {
-		
-		System.out.println("bitmap-----"+bitmap);
-
 		String fileName = "upload_" + System.currentTimeMillis() + ".jpg";
 		String filePath = Environment.getExternalStorageDirectory()+"/"+ fileName;
-		System.out.println("filepath-----"+filePath);
+		
 		String path = null;
 		try {
 			File file = new File(filePath);			
@@ -236,16 +325,58 @@ public class CreateRecipeActivity extends Activity{
 		return path;
 	}
 	
-	public void toStepActivity(){
-		EditText recipeNameEditText = (EditText) findViewById(R.id.createRecipeName);
-		EditText materialEditText = (EditText) findViewById(R.id.createMaterial);
-		EditText amountEditText = (EditText) findViewById(R.id.createAmount);
-		EditText descriptioneEditText = (EditText) findViewById(R.id.createRecipeDescription);
+	public static Bitmap getLoacalBitmap(String url) {
+		try {
+			FileInputStream fis = new FileInputStream(url);
+			return BitmapFactory.decodeStream(fis);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	class CreateRecipeTask extends AsyncTask<Object, Object, Object>{
+		String recipeRecult;
+		String local;
+		String result;
+		String url;
+		ImageView showImageView1 = (ImageView) findViewById(R.id.createRecipePhoto);
+		ImageView showImageView2 = (ImageView) findViewById(R.id.createRecipeStep);
 		
-		recipeName = recipeNameEditText.getText().toString();
-		material = materialEditText.getText().toString();
-		amount = amountEditText.getText().toString();
-		description = descriptioneEditText.getText().toString();
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			local = localPicPath;
+			
+			final File file = new File(local);
+            if (file != null) {
+            	String urlString="http://123.57.38.31:3000/service/recipe/upload";                
+            	String result = UploadUtil.uploadFile(file, urlString);
+            	System.out.println("---path-resule---"+result);
+            	this.result = result;
+			}
+			return null;
+		}
+		
+		@Override
+		public void onPostExecute(Object result){
+			if(picType.equals(RECIPE_PHOTO)){
+				recipePath = this.result;
+				url = "http://123.57.38.31:3000/"+this.result.trim();
+				ImageLoader.getInstance()
+				.displayImage(url, showImageView1, options, new SimpleImageLoadingListener() {
+				});
+			}else{
+				stepPath = this.result;
+				url = "http://123.57.38.31:3000/"+this.result.trim();
+				ImageLoader.getInstance()
+				.displayImage(url, showImageView2, options, new SimpleImageLoadingListener() {
+				});
+			}
+		}
+	}
+	
+	/*public void toStepActivity(){
+		
 		
 		Intent intent = new Intent();
 		intent.setClass(CreateRecipeActivity.this,CreateRecipeDetailActivity.class);
@@ -259,5 +390,45 @@ public class CreateRecipeActivity extends Activity{
 		intent.putExtra(Constants.INTENT_EXTRA_RECIPE_COOK_TIME, cookTime);
 		
 		startActivity(intent);
+	}*/
+
+	public void createRecipe(){
+		EditText recipeNameEditText = (EditText) findViewById(R.id.createRecipeName);
+		EditText materialEditText = (EditText) findViewById(R.id.createMaterial);
+		EditText amountEditText = (EditText) findViewById(R.id.createAmount);
+		EditText descriptioneEditText = (EditText) findViewById(R.id.createRecipeDescription);
+		EditText explainEditText = (EditText) findViewById(R.id.createRecipeStepExplain);
+		
+		recipeName = recipeNameEditText.getText().toString();
+		material = materialEditText.getText().toString();
+		amount = amountEditText.getText().toString();
+		description = descriptioneEditText.getText().toString();
+		stepExplain = explainEditText.getText().toString();
+		
+		List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_RECIPE_NAME, recipeName));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_DIFFICULT, difficultityChoose));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_COOK_TIME, cookTime));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_PHOTO, recipePath));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_DESCRIPTION, description));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_MATERIAL_NAME, material));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_MATERIAL_AMOUNT, amount));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_STEP_PHOTO, stepPath));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_M_NUM, "1"));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_S_NUM, "1"));
+		postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_CREATE_STEP_EXPLAIN, stepExplain));
+		
+        postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ID, (String) session.get("user_id")));
+        postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_ACCOUNT, (String) session.get("username")));
+        postParameters.add(new BasicNameValuePair(Constants.POST_RECIPE_USER_HEAD, (String) session.get("head")));
+        
+        String resultString = RecipeTalkToServer.recipePost("recipe/create",postParameters);
+        if(resultString.equals("create recipe success！")){
+        	Toast.makeText(getApplicationContext(), "create success !",
+				     Toast.LENGTH_SHORT).show();
+        	CreateRecipeActivity.this.finish();
+    		Intent intent = new Intent(this,ListRecipeActivity.class);
+    		startActivity(intent);
+        }
 	}
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.bjtu.nourriture.recipe.CreateRecipeActivity" >
+    
+    <item  
+        android:id="@+id/menu_publish"
+        android:icon="@drawable/go"
+        android:showAsAction="always|withText"
+        android:title="Publish"/>
+
+</menu>

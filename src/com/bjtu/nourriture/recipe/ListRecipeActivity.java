@@ -236,7 +236,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	}
 	
 	class ListRecipeTask extends AsyncTask<Object, Object, String>{
-		//String search;
+		ArrayList<JSONObject> tempList = new ArrayList<JSONObject>();
 		String recipeRecult;
 		
 		@Override
@@ -259,7 +259,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 				}
 				for(int i=0;i<jsonArray.length();i++){   
 	                JSONObject jo = (JSONObject)jsonArray.opt(i);
-	                list.add(jo);
+	                tempList.add(jo);
 	                recipeNames.add(jo.getString("recipeName"));
 	            }
 			} catch (JSONException e) {
@@ -276,6 +276,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 				mPullRefreshListView.onRefreshComplete();
 				super.onPostExecute(null);
 			}else{
+				list.addAll(tempList);
 				mPullRefreshListView.setVisibility(View.GONE);  
 				mPullRefreshListView.requestLayout();
 				adapter.notifyDataSetChanged();

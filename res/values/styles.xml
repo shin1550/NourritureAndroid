@@ -34,10 +34,4 @@
         <item name="android:layout_weight">1.0</item>
     </style>     
         
-    <style name="actionBack">
-   		<item name="android:homeLayout">@android:layout/action_bar_home</item>
-    </style>
-        
-    
-
 </resources>
