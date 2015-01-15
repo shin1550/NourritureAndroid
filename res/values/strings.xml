@@ -18,9 +18,10 @@
     <string name="recipe_difficultity">Difficultity:</string>
     <string name="recipe_cookTime">Time:</string>
     <string name="recipe_material">Material</string>
-    <string name="recipe_step">Follow the steps</string>
+    <string name="recipe_step">Step</string>
     <string name="recipe_comment">People say</string>
     <string name="recipe_comment_hint">Your comment:</string>
+    <string name="recipe_description">Description</string>
     <string name="title_activity_topic_upload">TopicUploadActivity</string>
     <string name="title_activity_upload_topic">UploadTopicActivity</string>
 

@@ -1,163 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#f0f0f0" >
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView 
-            android:id="@+id/createRecipeBackImage"
-            android:padding="5dp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/back_64"
-            android:onClick="backTo"/>
-        
-        <TextView 
-            android:layout_toRightOf="@id/createRecipeBackImage"
-            android:paddingTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload Recipe"
-            />
-        
-        <ImageView 
-            android:layout_alignParentRight="true"
-            android:padding="5dp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/go"
-            android:onClick="forwardTo"/>
-    </RelativeLayout>
-    
+    android:layout_height="match_parent" >
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/createRecipeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Recipe Name"
+            android:paddingTop="20dp" />
+
+        <EditText
+            android:id="@+id/createRecipeDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Your story with it"
+            android:inputType="textMultiLine"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" />
+
+        <TableLayout
+            android:id="@+id/createRecipeMaterial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:stretchColumns="0,2" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <EditText
+                    android:id="@+id/createMaterial"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Material" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="fill_parent"
+                    android:background="#040404" />
+
+                <EditText
+                    android:id="@+id/createAmount"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Amount" />
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:stretchColumns="*" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f5f5f5" >
+
+                <TextView
+                    android:id="@+id/createRecipeDifficultity"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="chooseDifficultity"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="Difficultity:" />
+
+                <TextView
+                    android:id="@+id/createRecipeTime"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="chooseTime"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="Cook Time:" />
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="Recipe Photo" />
+
+            <ImageView
+                android:id="@+id/createRecipePhoto"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:onClick="uploadRecipe"
+                android:src="@drawable/a5" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="Step" />
+
+            <ImageView
+                android:id="@+id/createRecipeStep"
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:onClick="uploadStep"
+                android:src="@drawable/a5" />
+
+            <EditText
+                android:id="@+id/createRecipeStepExplain"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_toRightOf="@id/createRecipeStep"
+                android:hint="step description" />
+        </RelativeLayout>
     </LinearLayout>
 
-    	<EditText
-	        android:id="@+id/createRecipeName"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:paddingTop="20dp"
-	        android:ems="10"
-	        android:hint="Recipe Name" >
-    	</EditText>
-    	
-    	<TableLayout
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:padding="10dp"
-    	    android:stretchColumns="0,2">
-    	    <TableRow 
-    	        android:layout_width="match_parent"
-    	        android:layout_height="wrap_content">
-    	        <TextView
-    	            android:id="@+id/createRecipeDifficultity"
-    	            android:layout_width="30dp"
-    	            android:paddingTop="5dp"
-    	            android:paddingBottom="5dp"
-    	            android:layout_height="wrap_content"
-    	            android:text="Difficultity:"
-    	            android:clickable="true"
-    	            android:onClick="chooseDifficultity"/>
-    	        <View
-                    android:layout_width="0.5dp"
-                    android:layout_height="fill_parent"
-                    android:background="#040404" />
-    	        <TextView
-    	            android:id="@+id/createRecipeTime"
-    	            android:layout_width="30dp"
-    	            android:layout_height="wrap_content"
-    	            android:paddingTop="5dp"
-    	            android:paddingBottom="5dp"
-    	            android:text="Cook Time:"
-    	            android:clickable="true"
-    	            android:onClick="chooseTime"/>
-    	    </TableRow>
-    	</TableLayout>
-
-    	<TableLayout
-    	    android:id="@+id/createRecipeMaterial"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:padding="10dp"
-    	    android:stretchColumns="0,2">
-    	    <TableRow 
-    	        android:layout_width="match_parent"
-    	        android:layout_height="wrap_content">
-    	        <EditText
-    	            android:id="@+id/createMaterial"
-    	            android:layout_width="30dp"
-    	            android:layout_height="wrap_content"
-    	            android:hint="Material"/>
-    	        <View
-                    android:layout_width="0.5dp"
-                    android:layout_height="fill_parent"
-                    android:background="#040404" />
-    	        <EditText
-    	            android:id="@+id/createAmount"
-    	            android:layout_width="30dp"
-    	            android:layout_height="wrap_content"
-    	            android:hint="Amount"/>
-    	    </TableRow>
-    	</TableLayout>
-    	<TableLayout
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:padding="10dp"
-    	    android:stretchColumns="0"
-    	    android:background="#ffffff">
-    	    <TableRow 
-    	        android:layout_width="match_parent"
-    	        android:layout_height="wrap_content">
-    	        <TextView
-    	            android:layout_width="30dp"
-    	            android:layout_height="wrap_content"
-    	            android:text="+Add one more"
-    	            android:clickable="true"
-    	            android:onClick="addMoreMaterial"/>
-    	    </TableRow>
-    	</TableLayout>
-
-    	<EditText
-    	    android:id="@+id/createRecipeDescription"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:ems="10"
-    	    android:paddingTop="15dp"
-    	    android:paddingBottom="15dp"
-    	    android:inputType="textMultiLine"
-    	    android:hint="Your story with it" >
-
-    	</EditText>
-
-    	<RelativeLayout 
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:background="#ffffff"
-    	    android:onClick="showDialog"
-    	    android:paddingTop="10dp"
-    	    android:paddingBottom="10dp">
-    	    <LinearLayout
-    	        android:layout_width="wrap_content"
-    	    	android:layout_height="wrap_content"
-    	    	android:layout_centerHorizontal="true">
-    	        
-    	        <ImageView
-	    	   	    android:layout_width="wrap_content"
-	    	    	android:layout_height="wrap_content" 
-	    	    	android:src="@drawable/c1"/>
-	    	   	<TextView
-	    	   	    android:layout_width="wrap_content"
-	    		    android:layout_height="wrap_content"
-	    		    android:text="Recipe Photo"/>
-    	        
-    	    </LinearLayout>
-    	    
-    	</RelativeLayout>
-
-</LinearLayout>
+</ScrollView>

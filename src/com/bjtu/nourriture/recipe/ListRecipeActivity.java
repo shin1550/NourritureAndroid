@@ -236,7 +236,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 	}
 	
 	class ListRecipeTask extends AsyncTask<Object, Object, String>{
-		//String search;
+		ArrayList<JSONObject> tempList = new ArrayList<JSONObject>();
 		String recipeRecult;
 		
 		@Override
@@ -252,7 +252,6 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 			}
 			
 			try {
-				
 				JSONObject jsonObject = new JSONObject(recipeRecult);
 				JSONArray jsonArray = jsonObject.getJSONArray("root");
 				if(jsonArray.length() == 0){
@@ -260,7 +259,7 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 				}
 				for(int i=0;i<jsonArray.length();i++){   
 	                JSONObject jo = (JSONObject)jsonArray.opt(i);
-	                list.add(jo);
+	                tempList.add(jo);
 	                recipeNames.add(jo.getString("recipeName"));
 	            }
 			} catch (JSONException e) {
@@ -277,10 +276,11 @@ public class ListRecipeActivity extends Activity implements AdapterView.OnItemCl
 				mPullRefreshListView.onRefreshComplete();
 				super.onPostExecute(null);
 			}else{
-				//mPullRefreshListView.setVisibility(View.GONE);  
+				list.addAll(tempList);
+				mPullRefreshListView.setVisibility(View.GONE);  
 				mPullRefreshListView.requestLayout();
 				adapter.notifyDataSetChanged();
-				//mPullRefreshListView.setVisibility(View.VISIBLE);
+				mPullRefreshListView.setVisibility(View.VISIBLE);
 				
 				recipeNameAdapter.notifyDataSetInvalidated();
 				
