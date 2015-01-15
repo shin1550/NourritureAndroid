@@ -30,7 +30,7 @@ public class SettingActivity extends Activity{
 	ImageView headImage;
 	TextView usernameTextView;
 	Bitmap bitmap;
-	RelativeLayout logoutLayout;
+	RelativeLayout logoutLayout,personalCenterLayout;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,5 +90,16 @@ public class SettingActivity extends Activity{
 			dialog.show();
 			}
 		});
+		personalCenterLayout = (RelativeLayout)this.findViewById(R.id.setting_personalcenter_layout);
+		personalCenterLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent personalcenterIntent = new Intent(SettingActivity.this, PersonalCenterActivity.class);
+				SettingActivity.this.startActivity(personalcenterIntent);
+			}
+		});
+		
 	}
 }
