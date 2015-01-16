@@ -9,8 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -28,35 +27,34 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.baidu.mobstat.StatService;
-import com.bjtu.nourriture.common.CheckHttpUtil;
-import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.attention.ListAttentionActivity;
+import com.bjtu.nourriture.common.Constants;
+import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.recipe.CreateRecipeActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
+import com.bjtu.nourriture.topic.ConnectToServer;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 import com.bjtu.nourriture.topic.PublishTopicActivity;
+import com.bjtu.nourriture.topic.TopicDetailActivity;
 import com.bjtu.nourriture.user.LoginActivity;
 import com.bjtu.nourriture.user.MoreActivity;
-
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -67,7 +65,6 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener{
 
-	SlidingMenu mMenu;
 	View layout_1,layout_1_1;
 	TextView menu_1_1;
 	String head;
@@ -76,12 +73,10 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	DisplayImageOptions options;
 	Handler handler;
 	Bitmap bitmap;
+	String resultString;
+	ConnectToServer connect=new ConnectToServer();
+	ArrayList<JSONObject> list = new ArrayList<JSONObject>();
 	
-	//
-	private MovieLayout movieLayout;  
-    private MovieAdapter adapter; 
-	private String texts[] = null;
-    private int images[] = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -125,7 +120,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 				}.start();
 			}
 		}
-		mMenu = (SlidingMenu) findViewById(R.id.id_menu);
+	
 		
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())  
         .threadPriority(Thread.NORM_PRIORITY - 2)
@@ -147,88 +142,39 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		
 		GalleryRecipeTask task = new GalleryRecipeTask();
 		@SuppressWarnings("deprecation")
+	//	LeftGallery gallery=(LeftGallery) findViewById(R.id.homeRecipeGallery);
 		Gallery gallery=(Gallery) findViewById(R.id.homeRecipeGallery);
-		
 		task.list = galleryRecipeList;
-		task.gallery = gallery;
+		task.gallery = gallery;		        
 		task.activity = this;
 		task.execute();
 		
-		gallery.setOnItemClickListener(this);
-		
-		//hh
-//		movieLayout=(MovieLayout)findViewById(R.id.movieLayout);  
-//        adapter=new MovieAdapter(this);  
-//        for(int i=0;i<5;i++){  
-//            Map<String,Object> map=new HashMap<String,Object>();  
-//            map.put("image", getResources().getDrawable(R.drawable.t1));  
-//            map.put("text", "");  
-//            //map.put("text", "电影"+(i+1));  
-//            adapter.addObject(map);  
-//        }  
-//        movieLayout.setAdapter(adapter);
-        
-        
-		images=new int[]{R.drawable.back_64, R.drawable.collect,
-                R.drawable.home_64, R.drawable.more_64};
-        texts = new String[]{ "Menu", "Recipe",
-                "Attention", "Topic"};
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
-        for (int i = 0; i < 4; i++) {
-            HashMap<String, Object> map = new HashMap<String, Object>();
-            map.put("itemImage", images[i]);
-            map.put("itemText", texts[i]);
-            lstImageItem.add(map);
-        }
-        
-        SimpleAdapter saImageItems = new SimpleAdapter(this, 
-                lstImageItem,// 数据源
-                R.layout.night_item,// 显示布局onResume
-                new String[] { "itemImage", "itemText" }, 
-                new int[] { R.id.itemImage, R.id.itemText }); 
-        gridview.setAdapter(saImageItems);
-        gridview.setOnItemClickListener(new ItemClickListener());
-	}
-	
-	class ItemClickListener implements OnItemClickListener {
-        /**
-         * 点击项时触发事件
-         * 
-         * @param parent  发生点击动作的AdapterView
-         * @param view 在AdapterView中被点击的视图(它是由adapter提供的一个视图)。
-         * @param position 视图在adapter中的位置。
-         * @param rowid 被点击元素的行id。
-         */
-        public void onItemClick(AdapterView<?> parent, View view, int position, long rowid) {
-            HashMap<String, Object> item = (HashMap<String, Object>) parent.getItemAtPosition(position);
-            //获取数据源的属性值
-            String itemText=(String)item.get("itemText");
-            Object object=item.get("itemImage");
-            Toast.makeText(MainActivity.this, itemText, Toast.LENGTH_LONG).show();
-            
-            //根据图片进行相应的跳转
-            switch (images[position]) {
-            case R.drawable.back_64:
-                //startActivity(new Intent(MainActivity.this, TestActivity1.class));//启动另一个Activity
-                //finish();//结束此Activity，可回收
-            	toggleMenu(null);
-            	//Toast.makeText(MainActivity.this, R.drawable.go, Toast.LENGTH_SHORT).show();
-                break;
-            case R.drawable.collect:
-            	toListRecipe(null);
-            	//Toast.makeText(MainActivity.this, R.drawable.go, Toast.LENGTH_SHORT).show();
-                break;
-            case R.drawable.home_64:
-            	toListAttention(null);
-            	break;
-            case R.drawable.more_64:
-            	toListTopic(null);
-            	break;
+		ListView listView = (ListView) findViewById(R.id.listView1);
+		try {
+			String url="topic/showTopicList?pageNo=1&pageSize=5";
+			String method ="GET";
+			resultString = connect.testURLConn(url,method);
+			
+			JSONObject jsonObject = new JSONObject(resultString);
+			JSONArray jsonArray = jsonObject.getJSONArray("topics");
+			for(int i=0;i<jsonArray.length();i++){   
+                JSONObject jo = (JSONObject)jsonArray.opt(i);
+                list.add(jo);
             }
-            
-        }
-    }
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		TopicListViewAdapter adapter = new TopicListViewAdapter(this,list);
+		listView.setAdapter(adapter);
+		
+		listView.setOnItemClickListener(new OnItemClickListenerImpl());
+		
+		gallery.setOnItemClickListener(this);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -253,18 +199,28 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	public void onItemClick(AdapterView<?> arg0, View view, int pos, long id){
 		System.out.println("----------click--------------");
 		System.out.println(pos);
+	
 		
-		/*galleryRecipeList.get(pos);
-		Intent intent = new Intent(this, SingleRecipeActivity.class);
-		
-		try {
-			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID, galleryRecipeList.get(pos).getString("_id"));
-			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, galleryRecipeList.get(pos).toString());
+	}
+	
+	private class OnItemClickListenerImpl implements OnItemClickListener{
+
+		@Override
+		public void onItemClick(AdapterView<?>parent, View view, int position,
+				long id) {
+			
+			System.out.println("----------click--------------");
+			System.out.println(list.get(position).toString());
+			
+			list.get(position);
+			Intent intent = new Intent();    
+            intent.setClass(MainActivity.this, TopicDetailActivity.class); 		
+			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL,list.get(position).toString() );
 			startActivity(intent);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		
+			
+			
+		}
 		
 	}
 	
@@ -297,11 +253,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		startActivity(intent);
 	}
 	
-	public void toggleMenu(View view)
-	{
-		mMenu.toggle();
-	}
-	
 	private class RecipeGalleryImageAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		Context context;
@@ -324,7 +275,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		
 		@Override
 		public int getCount(){
-			return list.size();
+				return Integer.MAX_VALUE;  
 		}
 		
 		@Override
@@ -396,6 +347,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		public void onPostExecute(Object result){
 			RecipeGalleryImageAdapter adapter = new RecipeGalleryImageAdapter(activity,list);
 			gallery.setAdapter(adapter);
+			gallery.setSelection(1);
 		}
 	}
 	
@@ -534,4 +486,80 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 			startActivity(intent);
 		}
 	}
+	
+class TopicListViewAdapter extends BaseAdapter {
+		
+		ArrayList<JSONObject> list;
+		DisplayImageOptions options;
+		Context context;
+		private Activity activity;  
+	    //private ArrayList<HashMap<String, String>> data;  
+	    private LayoutInflater inflater=null;  
+	   
+	    
+	    public TopicListViewAdapter(Activity a, ArrayList<JSONObject> d){
+	    	activity = a;  
+	        list=d;
+	        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	       
+	    }
+	    
+		public void setContext(Context context){
+			this.context = context;
+		}
+
+		public void setArrayList(ArrayList<JSONObject> list){
+			this.list = list;
+		}
+		
+		@Override
+		public int getCount(){
+			return list.size();
+		}
+		
+		@Override
+		public JSONObject getItem(int positon){
+			JSONObject item = list.get(positon);
+			return item;
+		}
+		
+		@Override
+		public long getItemId(int position){
+			return position;
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent){
+			
+			View vi=convertView;
+	        if(convertView==null)
+	            vi = inflater.inflate(R.layout.activity_main_topic_list_inner, null);
+	  
+
+	        
+	        TextView name = (TextView)vi.findViewById(R.id.topic_name); 
+	        TextView product_count = (TextView)vi.findViewById(R.id.product_count);
+	        // 缩略图  
+	          
+	        //HashMap<String, String> song = new HashMap<String, String>();  
+	        //item = list.get(position);
+	          
+	        // 设置ListView的相关值   
+	        try {
+	        	name.setText("#"+list.get(position).getString("topicName")+"#");
+	        	String count = list.get(position).getString("upload_count");
+	        
+	        	product_count.setText(count+" upload product");
+	        	
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}  
+	        //hot.setText(song.get(CustomizedListView.KEY_DURATION));
+	        
+	      
+	        return vi;
+		}
+	}
+	
 }
