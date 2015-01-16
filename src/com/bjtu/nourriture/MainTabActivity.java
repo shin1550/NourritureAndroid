@@ -3,6 +3,9 @@ package com.bjtu.nourriture;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioButton;
@@ -115,5 +118,9 @@ public class MainTabActivity extends TabActivity implements OnCheckedChangeListe
 		
 		StatService.onResume(this);
 	}
-
+	@Override
+	public void onBackPressed() {
+	// 这里处理逻辑代码，大家注意：该方法仅适用于2.0或更新版的sdk
+	return;
+	}
 }

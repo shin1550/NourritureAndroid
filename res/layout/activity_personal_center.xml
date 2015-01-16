@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:background="@drawable/title_btn_back"
-            android:text="返回"
+            android:text="Back"
             android:textColor="#fff"
             android:textSize="14sp" />
 
@@ -28,14 +29,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="个人中心"
+            android:text="Personal Center"
             android:textColor="#ffffff"
             android:textSize="20sp"  />
     </RelativeLayout>
     <!-- 顶部详细信息显示结束 -->
 
 
-    <!-- 中间显示好友详细信息开始 -->
+    <!-- 个人信息 -->
 
     <RelativeLayout
         android:id="@+id/relativeLayout1"
@@ -92,52 +93,27 @@
 
       
     </RelativeLayout>
-    <!-- 中间显示好友详细信息结束 -->
-
-
-    <!-- 新消息显示开始 -->
-    
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout1"
-        android:orientation="vertical" >
-        
-         <RelativeLayout
-        android:id="@+id/relativeLayout10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/linearLayout1" >
-        
-         <ImageView
-             android:id="@+id/newMessageLine"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:src="@drawable/line2" />
-        
-        </RelativeLayout>
-        
-         
-         <!-- 所有状态显示开始 -->
-         <!-- 第一条好友状态 -->
-           <ListView android:id="@+id/datalist" 
-       android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:divider="@null"
-         />
-        
-         
-        <!-- 新消息显示结束 -->
-        
-         
-        
-    </LinearLayout>
-    
-    <!-- 新鲜事显示结束 -->
-    
-    <!-- 所有新鲜事显示开始 -->
-    
-    <!-- 所有新鲜事显示结束 -->
+    <!-- 个人细信息结束 -->
+<RelativeLayout
+            android:id="@+id/setting_favorite_layout"
+            android:layout_below="@id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">     
+            
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                android:id="@+id/personalcenter_recipe_listview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:cacheColorHint="#00000000"
+                android:divider="#19000000"
+                android:dividerHeight="4dp"
+                android:fadingEdge="none"
+                android:fastScrollEnabled="false"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                android:smoothScrollbar="true" />   
+        </RelativeLayout>           
     
 
 </RelativeLayout>

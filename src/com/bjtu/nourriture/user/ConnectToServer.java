@@ -39,7 +39,13 @@ public class ConnectToServer {
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setConnectTimeout(5 * 1000);
 		conn.setRequestMethod("GET");	
-		System.out.println("zhuangtaima----"+conn.getResponseCode());
+		conn.setInstanceFollowRedirects(false);
+		Session session = Session.getSession();
+		String sessionid = (String) session.get("sessionId");
+		if(sessionid!=null&&sessionid.length()>0){
+			conn.setRequestProperty("Cookie", "JSPSESSID.732cdf6d=" + sessionid+";"+Constants.POST_SESSIONID);
+		}		
+		System.out.println("Status:"+conn.getResponseCode());
 		if (conn.getResponseCode() != 200)
 			throw new RuntimeException("失败");
 		InputStream is = conn.getInputStream();
@@ -62,12 +68,17 @@ public class ConnectToServer {
 		URL url=new URL(ipaddress+urlAdd);
 		System.out.println("url-----------"+url);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-
+		conn.setInstanceFollowRedirects(false);
+		Session session = Session.getSession();
+		String sessionid = (String) session.get("sessionId");
+		if(sessionid!=null&&sessionid.length()>0){
+			conn.setRequestProperty("Cookie", "JSPSESSID.732cdf6d=" + sessionid+";"+Constants.POST_SESSIONID);
+		}
+		
 		conn.setConnectTimeout(5 * 1000);
 		conn.setRequestMethod("POST");	
 		conn.getOutputStream().write(bytes);// 输入参数
-
+		
 
 		int abc = conn.getResponseCode() ;
 		System. out.println("ResponseCode------"+abc);

@@ -16,8 +16,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.GetChars;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -140,15 +142,12 @@ public class LoginActivity extends Activity {
 		session.put("emal",user_email);
 		session.put("islogin", true);
 		session.put("sessionId",sessionid);
-
-//		//测试isLogin
-//		String url2="service/userinfo/isLogin";
-//		ConnectToServer connect2 = new ConnectToServer();
-//		String message2 = connect2.testURLConn2(url2,bytes);
-//		System.out.println("message2----------" + message2);
-		
-
 	}
-	
+	@Override
+	public void onBackPressed() {
+	// 这里处理逻辑代码，大家注意：该方法仅适用于2.0或更新版的sdk
+		System.out.println("onBackPressed!!!!!!!!!!!!!!!!!!!");
+	return;
+	}
 
 }
