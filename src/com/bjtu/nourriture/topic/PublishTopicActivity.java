@@ -147,7 +147,7 @@ public class PublishTopicActivity extends Activity {
 							messageString, Toast.LENGTH_SHORT).show();
 					
 					if(messageString.equals("publish successful")){
-						
+						PublishTopicActivity.this.finish();
 						Intent intent = new Intent();
 						intent.setClass(PublishTopicActivity.this,ListTopicActivity.class);
 						startActivity(intent);

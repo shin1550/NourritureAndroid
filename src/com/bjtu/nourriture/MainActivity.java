@@ -49,6 +49,7 @@ import com.bjtu.nourriture.common.Constants;
 import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.recipe.CreateRecipeActivity;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
+import com.bjtu.nourriture.recipe.SingleRecipeActivity;
 import com.bjtu.nourriture.topic.ConnectToServer;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 import com.bjtu.nourriture.topic.PublishTopicActivity;
@@ -65,10 +66,10 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener{
 
-	View layout_1,layout_1_1;
-	TextView menu_1_1;
-	String head;
-    ImageView one_oneImageView;
+	//View layout_1,layout_1_1;
+	//TextView menu_1_1;
+	//String head;
+    //ImageView one_oneImageView;
 	ArrayList<JSONObject> galleryRecipeList = new ArrayList<JSONObject>();
 	DisplayImageOptions options;
 	Handler handler;
@@ -88,38 +89,38 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		StatService.setDebugOn(true);
 				
 		handler = new Handler();
-		layout_1 = this.findViewById(R.id.layout_1);
-		layout_1_1 = this.findViewById(R.id.layout_1_1);
-		menu_1_1 = (TextView)this.findViewById(R.id.menu_1_1);
-		one_oneImageView=(ImageView)this.findViewById(R.id.one_one);
+//		layout_1 = this.findViewById(R.id.layout_1);
+//		layout_1_1 = this.findViewById(R.id.layout_1_1);
+//		menu_1_1 = (TextView)this.findViewById(R.id.menu_1_1);
+//		one_oneImageView=(ImageView)this.findViewById(R.id.one_one);
 		//逻辑还存在问题，待修改
 		Session session = Session.getSession();
 		Boolean islogin=(Boolean)session.get("islogin");
 		System.out.println("IsLogin:"+islogin);
-		if(islogin!=null){
-			if(islogin){
-				layout_1.setVisibility(View.GONE);
-				layout_1_1.setVisibility(View.VISIBLE);
-				String username = (String) session.get("username");
-				menu_1_1.setText(username);
-				head = "http://123.57.38.31:3000/"+(String) session.get("head");
-				new Thread(){
-					public void run() {
-						bitmap = getHttpBitmap(head);
-					    		 //从网上取图片
-						handler.post(new Runnable() {
-							
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								one_oneImageView .setImageBitmap(bitmap);	//设置Bitmap
-							}
-						});
-						
-					};
-				}.start();
-			}
-		}
+//		if(islogin!=null){
+//			if(islogin){
+////				layout_1.setVisibility(View.GONE);
+////				layout_1_1.setVisibility(View.VISIBLE);
+//				String username = (String) session.get("username");
+////				menu_1_1.setText(username);
+////				head = "http://123.57.38.31:3000/"+(String) session.get("head");
+//				new Thread(){
+//					public void run() {
+////						bitmap = getHttpBitmap(head);
+//					    		 //从网上取图片
+//						handler.post(new Runnable() {
+//							
+//							@Override
+//							public void run() {
+//								// TODO Auto-generated method stub
+////								one_oneImageView .setImageBitmap(bitmap);	//设置Bitmap
+//							}
+//						});
+//						
+//					};
+//				}.start();
+//			}
+//		}
 	
 		
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())  
@@ -145,7 +146,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 	//	LeftGallery gallery=(LeftGallery) findViewById(R.id.homeRecipeGallery);
 		Gallery gallery=(Gallery) findViewById(R.id.homeRecipeGallery);
 		task.list = galleryRecipeList;
-		task.gallery = gallery;		        
+		task.gallery = gallery;		  
+	
 		task.activity = this;
 		task.execute();
 		
@@ -173,7 +175,33 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		
 		listView.setOnItemClickListener(new OnItemClickListenerImpl());
 		
-		gallery.setOnItemClickListener(this);
+		gallery.setOnItemClickListener(new OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // TODO Auto-generated method stub
+            
+            	if(position >= 10){
+    				position = position%10;
+    			}
+            	
+            	System.out.println("-----pos----"+position);
+            	Intent intent = new Intent();
+        		intent.setClass(MainActivity.this, SingleRecipeActivity.class);
+        		
+        		try {
+        			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE_ID, galleryRecipeList.get(position).getString("_id"));
+        			intent.putExtra(Constants.INTENT_EXTRA_SINGLE_RECIPE, galleryRecipeList.get(position).toString());
+        			startActivity(intent);
+        		} catch (JSONException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        		}
+                    
+            	}
+            
+		});
+		
 	}
 
 	@Override
@@ -414,38 +442,38 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 		super.onResume();
 		System.out.println("FragmentDemoActivity-->onResume");
 		handler = new Handler();
-		layout_1 = this.findViewById(R.id.layout_1);
-		layout_1_1 = this.findViewById(R.id.layout_1_1);
-		menu_1_1 = (TextView)this.findViewById(R.id.menu_1_1);
-		one_oneImageView=(ImageView)this.findViewById(R.id.one_one);
+//		layout_1 = this.findViewById(R.id.layout_1);
+//		layout_1_1 = this.findViewById(R.id.layout_1_1);
+//		menu_1_1 = (TextView)this.findViewById(R.id.menu_1_1);
+//		one_oneImageView=(ImageView)this.findViewById(R.id.one_one);
 		//逻辑还存在问题，待修改
 		Session session = Session.getSession();
 		Boolean islogin=(Boolean)session.get("islogin");
 		System.out.println("IsLogin:"+islogin);
-		if(islogin!=null){
-			if(islogin){
-				layout_1.setVisibility(View.GONE);
-				layout_1_1.setVisibility(View.VISIBLE);
-				String username = (String) session.get("username");
-				menu_1_1.setText(username);
-				head = "http://123.57.38.31:3000/"+(String) session.get("head");
-				new Thread(){
-					public void run() {
-						bitmap = getHttpBitmap(head);
-					    		 //从网上取图片
-						handler.post(new Runnable() {
-							
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								one_oneImageView .setImageBitmap(bitmap);	//设置Bitmap
-							}
-						});
-						
-					};
-				}.start();
-			}
-		}
+//		if(islogin!=null){
+//			if(islogin){
+////				layout_1.setVisibility(View.GONE);
+////				layout_1_1.setVisibility(View.VISIBLE);
+//				String username = (String) session.get("username");
+////				menu_1_1.setText(username);
+////				head = "http://123.57.38.31:3000/"+(String) session.get("head");
+//				new Thread(){
+//					public void run() {
+////						bitmap = getHttpBitmap(head);
+//					    		 //从网上取图片
+//						handler.post(new Runnable() {
+//							
+//							@Override
+//							public void run() {
+//								// TODO Auto-generated method stub
+////								one_oneImageView .setImageBitmap(bitmap);	//设置Bitmap
+//							}
+//						});
+//						
+//					};
+//				}.start();
+//			}
+//		}
 		StatService.onResume(this);
 	}
 

@@ -190,6 +190,7 @@ public class TopicUploadActivity extends Activity {
 				try {
 					status = singleObject.getString("status");
 					if (status.equals("true")) {
+						TopicUploadActivity.this.finish();
 						Intent intent = new Intent();
 						intent.setClass(TopicUploadActivity.this,
 								TopicDetailActivity.class);

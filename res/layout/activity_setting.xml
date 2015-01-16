@@ -186,6 +186,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:clickable="true"
+                        android:id="@+id/publish_topic"
                         android:background="@drawable/preference_last_item" >
                         <TextView
                             android:layout_width="wrap_content" 

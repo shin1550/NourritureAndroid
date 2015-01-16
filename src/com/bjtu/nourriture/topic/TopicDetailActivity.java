@@ -465,11 +465,15 @@ public class TopicDetailActivity extends Activity {
 			picPath=path;
 			
 			
+			
+			
 			Intent intent = new Intent();
 			intent.setClass(TopicDetailActivity.this,TopicUploadActivity.class);
 			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_UPLAOD_PATH, path);
 			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_TOPIC_ID, idString);
 			intent.putExtra(Constants.INTENT_EXTRA_TOPIC_DETAIL, singleData);
+			
+			TopicDetailActivity.this.finish();
 			startActivity(intent);
 
 			

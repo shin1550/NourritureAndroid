@@ -132,6 +132,7 @@ public class SingleRecipeActivity extends Activity{
 				difficult = singleObject.getString("difficult");
 				cookTime = singleObject.getString("cookTime");
 				materialArray = singleObject.getJSONArray("material");
+				System.out.println("length--------"+materialArray.length());
 				stepArray = singleObject.getJSONArray("step");
 			} catch (JSONException e) {
 				e.printStackTrace();
