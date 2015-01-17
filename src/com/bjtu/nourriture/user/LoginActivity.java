@@ -6,6 +6,7 @@ import com.bjtu.nourriture.MainActivity;
 import com.bjtu.nourriture.MainTabActivity;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.CheckHttpUtil;
+import com.bjtu.nourriture.common.Constants;
 import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.topic.ListTopicActivity;
 
@@ -44,6 +45,7 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		CheckHttpUtil.initIntener(this);
+		
 		connect = new ConnectToServer();
 		accountText = (EditText) this.findViewById(R.id.login_user_edit);
 		passText = (EditText) this.findViewById(R.id.login_passwd_edit);
@@ -86,10 +88,15 @@ public class LoginActivity extends Activity {
 						} finally {
 							proDia.dismiss();
 							//回到之前的操作页
-							//LoginActivity.this.finish();
-							Intent intent = new Intent();
-							intent.setClass(LoginActivity.this,MainTabActivity.class);
-							startActivity(intent);
+							Intent fromIntent = getIntent();
+							if(fromIntent.getStringExtra(Constants.INTENT_EXTRA_MAIN_TAB) != null){
+								LoginActivity.this.finish();
+								Intent intent = new Intent();
+								intent.setClass(LoginActivity.this,MainTabActivity.class);
+								startActivity(intent);
+							}else{
+								LoginActivity.this.finish();
+							}
 						}
 					}
 				}.start();
@@ -150,4 +157,14 @@ public class LoginActivity extends Activity {
 	return;
 	}
 
+	protected void onPause(){
+		super.onPause();
+		System.out.println("-----------------------pause");
+		//LoginActivity.this.finish();
+	}
+	
+	protected void onStop() {         
+        super.onStop();  
+        System.out.println("-----------------------stop");
+    }
 }

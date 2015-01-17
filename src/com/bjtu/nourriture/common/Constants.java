@@ -45,4 +45,6 @@ public class Constants {
 	public static final String RECIPE_STEP_PHOTO_PATH = "recipeStepPhotoPath";
 	
 	public static String POST_SESSIONID = null;
+	
+	public static final String INTENT_EXTRA_MAIN_TAB = "fromMainTab";
 }

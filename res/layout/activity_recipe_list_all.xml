@@ -29,7 +29,6 @@
                 android:layout_height="35dp"
                 android:paddingTop="5dp"
                 android:layout_alignParentRight="true"
-                android:layout_toRightOf="@id/listRecipeSearch"
                 android:onClick="searchRecipe"
                 android:scaleType="centerInside"
                 android:src="@drawable/search_64" />

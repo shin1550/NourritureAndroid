@@ -246,9 +246,9 @@
         		android:layout_toRightOf="@id/story"
         		android:layout_centerVertical="true"
         		android:padding="8dp" 
-        		android:text="Publish Topic                                                                  "
+        		android:text="Publish Topic"
         		android:textSize="17sp"		
-				android:textColor="#000" /> 
+				android:textColor="#000"/> 
 			<ImageView
             	android:layout_width="wrap_content"
         		android:layout_height="wrap_content"        	     	

@@ -12,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.TabHost;
 
 import com.baidu.mobstat.StatService;
+import com.bjtu.nourriture.common.Constants;
 import com.bjtu.nourriture.common.Session;
 import com.bjtu.nourriture.recipe.ListRecipeActivity;
 import com.bjtu.nourriture.topic.ListTopicActivity;
@@ -37,6 +38,7 @@ public class MainTabActivity extends TabActivity implements OnCheckedChangeListe
         this.mBIntent = new Intent(this,ListRecipeActivity.class);
         this.mCIntent = new Intent(this,ListTopicActivity.class);
         this.mDIntent = new Intent(this,LoginActivity.class);
+        mDIntent.putExtra(Constants.INTENT_EXTRA_MAIN_TAB, "MainTab");
         
         Session session = Session.getSession();
 		Boolean islogin=(Boolean)session.get("islogin");

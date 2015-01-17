@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bjtu.nourriture.MainTabActivity;
 import com.bjtu.nourriture.R;
 import com.bjtu.nourriture.common.Session;
+import com.bjtu.nourriture.recipe.CreateRecipeActivity;
 import com.bjtu.nourriture.topic.PublishTopicActivity;
 
 public class SettingActivity extends Activity{
@@ -30,10 +31,21 @@ public class SettingActivity extends Activity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
+		
 		Session session =Session.getSession();
+		Boolean islogin=(Boolean)session.get("islogin");
+		System.out.println("IsLogin:"+islogin);
+		if(islogin!=null){
+			if(!islogin){
+				Intent logIntent = new Intent(this,LoginActivity.class);
+				startActivity(logIntent);
+			}
+		}
+		
 		usernameString=(String)session.get("username");
 		headString=(String)session.get("head");
 		handler=new Handler();
@@ -118,5 +130,10 @@ public class SettingActivity extends Activity{
 			}
 		});
 		
+	}
+	
+	public void publishRecipe(View view){
+		Intent intent = new Intent(this, CreateRecipeActivity.class);
+		startActivity(intent);
 	}
 }
